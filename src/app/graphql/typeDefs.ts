@@ -114,6 +114,7 @@ type PersonAttributes {
   emails: [Email]
   addresses: [Address]
   households: [Household]
+  marital_status: [MaritalStatus]
 }
 
 type PersonContactData {
@@ -260,6 +261,20 @@ type HouseholdLinks {
   self: String!
 }
 
+type MaritalStatus {
+  type: String
+  id: String
+  attributes: MaritalStatusAttributes
+  links: MaritalStatusLinks
+}
+
+type MaritalStatusAttributes {
+  value: String
+}
+
+type MaritalStatusLinks {
+  self: String
+}
 `
 
 export default typeDefs
