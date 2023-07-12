@@ -6,10 +6,13 @@ const getRelatedIds = (type, item) =>
     : [item?.relationships?.[type]?.data];
 const getRelatedData = (data = [], Ids = []) =>
   data.included.filter((f) => Ids.includes(f.id)) || null;
-const getRelatedFieldNames = (info, name) =>
-  info?.fieldNodes[0].selectionSet?.selections?.map(
-    (f) => f.name.value === name
-  );
+
+const getRelatedFieldNames = (info, name) => {
+  const attributesArray = info?.fieldNodes[0].selectionSet?.selections?.find(e => e.name.value === "attributes");
+  return attributesArray.selectionSet?.selections?.map(
+    (f) => f.name.value === name ? f.name.value : null
+  ).filter(e => e !== null);
+}
 
 const person_includes = [
     "addresses",
@@ -36,15 +39,17 @@ const getIncludes = (info, includesArray = []) =>
       name,
       data: getRelatedFieldNames(info, name),
     }))
-    .filter((f) => f.data)
+    .filter((f) => f.data.length > 0)
     .map((f) => f.name)
     .join(",");
 
 const zipRelatedData = (data, item, includesArray) => {
   const relatedData = {};
+  //map over the includes options types.
   includesArray.map((type) => {
     const ids = getRelatedIds(type, item);
     relatedData[type] = getRelatedData(data, ids);
+    
   });
   return relatedData;
 };
@@ -60,8 +65,9 @@ const resolvers = {
     people(parent, params, context, info) {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : '&where[status]=active'
-      const orderArg = `&order=${order.sort === 'desc' ? '-' : ''}${order.field}`
+      const orderArg = `&order=${order?.sort === 'desc' ? '-' : ''}${order?.field !== undefined ? order?.field : ''}`
       const includes = getIncludes(info, person_includes);
+      console.log(`https://api.planningcenteronline.com/people/v2/people?per_page=${limit}&include=${includes}${whereArg}${orderArg}`)
       const getUsers = async () => {
         let response = await fetch(
           `https://api.planningcenteronline.com/people/v2/people?per_page=${limit}&include=${includes}${whereArg}${orderArg}`,
