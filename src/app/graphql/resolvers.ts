@@ -1,59 +1,73 @@
-import { GraphQLTypeResolver } from "graphql";
+import {
+  FieldNode,
+  FragmentSpreadNode,
+  GraphQLFieldResolver,
+  GraphQLResolveInfo,
+  GraphQLTypeResolver,
+  SelectionNode,
+  TypedQueryDocumentNode,
+} from "graphql";
 
-const getRelatedIds = (type, item) =>
-  item?.relationships?.[type]?.data?.length
-    ? item?.relationships?.[type]?.data?.map((f) => f.id)
-    : [item?.relationships?.[type]?.data];
+const getRelatedIds = (type, item) => {
+  const data = item?.relationships?.[type]?.data;
+  return data?.length ? data?.map((f) => f.id) : [data.id];
+};
+
 const getRelatedData = (data = [], Ids = []) =>
   data.included.filter((f) => Ids.includes(f.id)) || null;
 
-const getRelatedFieldNames = (info, name) => {
-  const attributesArray = info?.fieldNodes[0].selectionSet?.selections?.find(e => e.name.value === "attributes");
-  return attributesArray.selectionSet?.selections?.map(
-    (f) => f.name.value === name ? f.name.value : null
-  ).filter(e => e !== null);
-}
+const getRelatedFieldNames = (
+  info: GraphQLResolveInfo,
+  includesArray: String[]
+) => {
+  const attributesArray = info?.fieldNodes[0].selectionSet?.selections?.find(
+    (e) => {
+      const node = e as FieldNode;
+      return node.name.value === "attributes";
+    }
+  ) as unknown as FieldNode;
+
+  const selectedNodes = attributesArray.selectionSet?.selections?.filter(
+    (f) => {
+      const node = f as FieldNode;
+      return includesArray.includes(node.name.value);
+    }
+  ) as unknown as FieldNode[];
+
+  return selectedNodes.map((e) => e.name.value);
+};
 
 const person_includes = [
-    "addresses",
-    "emails",
-    "field_data",
-    "households",
-    "inactive_reason",
-    "marital_status",
-    "name_prefix",
-    "name_suffix",
-    "organization",
-    "person_apps",
-    "phone_numbers",
-    "platform_notifications",
-    "primary_campus",
-    "school",
-    "social_profiles"
+  "addresses",
+  "emails",
+  "field_data",
+  "households",
+  "inactive_reason",
+  "marital_status",
+  "name_prefix",
+  "name_suffix",
+  "organization",
+  "person_apps",
+  "phone_numbers",
+  "platform_notifications",
+  "primary_campus",
+  "school",
+  "social_profiles",
 ];
 
 // find out which elements came in through GraphQL, and create an array of includes options
-const getIncludes = (info, includesArray = []) =>
-  includesArray
-    .map((name) => ({
-      name,
-      data: getRelatedFieldNames(info, name),
-    }))
-    .filter((f) => f.data.length > 0)
-    .map((f) => f.name)
-    .join(",");
 
-const zipRelatedData = (data, item, includesArray) => {
-  const relatedData = {};
+const zipRelatedData = (data, item, includesArray: string[]) => {
+  const relatedData:  Record<string, string> = {};
   //map over the includes options types.
   includesArray.map((type) => {
     const ids = getRelatedIds(type, item);
     relatedData[type] = getRelatedData(data, ids);
-    
   });
   return relatedData;
 };
-const formatWhere = (where) =>
+
+const formatWhere = (where: Record<string, string>) =>
   where
     ? Object.entries(where)
         .map(([key, value]) => `&where[${key}]=${value}`)
@@ -64,10 +78,16 @@ const resolvers = {
   Query: {
     people(parent, params, context, info) {
       const { limit = 10, where, order } = params;
-      const whereArg = where ? formatWhere(where) : '&where[status]=active'
-      const orderArg = `&order=${order?.sort === 'desc' ? '-' : ''}${order?.field !== undefined ? order?.field : ''}`
-      const includes = getIncludes(info, person_includes);
-      console.log(`https://api.planningcenteronline.com/people/v2/people?per_page=${limit}&include=${includes}${whereArg}${orderArg}`)
+      const whereArg = where ? formatWhere(where) : "&where[status]=active";
+      const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
+        order?.field !== undefined ? order?.field : ""
+      }`;
+      // const includes = getIncludes(info, person_includes);
+      const includes = getRelatedFieldNames(info, person_includes).join(",");
+
+      console.log(
+        `https://api.planningcenteronline.com/people/v2/people?per_page=${limit}&include=${includes}${whereArg}${orderArg}`
+      );
       const getUsers = async () => {
         let response = await fetch(
           `https://api.planningcenteronline.com/people/v2/people?per_page=${limit}&include=${includes}${whereArg}${orderArg}`,
