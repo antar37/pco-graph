@@ -1,10 +1,9 @@
-import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { ApolloServer } from '@apollo/server';
-import { gql } from 'graphql-tag';
-import { makeExecutableSchema } from '@graphql-tools/schema'
+import { startServerAndCreateNextHandler } from '@as-integrations/next';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { NextRequest } from 'next/server';
-import typeDefs from './typeDefs'
-import resolvers from './resolvers'
+import { resolvers } from './resolversTemplate';
+import typeDefs from './typeDefs';
 // req has the type NextRequest
 
 
