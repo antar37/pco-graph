@@ -34,11 +34,13 @@ enum AddressOrderByEnum {
         zip: String
         
   }
+
   
+
   type AddressAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           city: String
@@ -86,11 +88,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type AnniversaryCouplesAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
   }
 
@@ -121,11 +125,13 @@ enum AddressOrderByEnum {
         url: String
         
   }
+
   
+
   type AppAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -162,16 +168,18 @@ enum AddressOrderByEnum {
   }
   
   
+
   
   type BackgroundCheckRelationships {
   person: [Person]
         
     }
   
+
   type BackgroundCheckAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: true """
           current: Boolean
@@ -216,11 +224,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type BirthdayPeopleAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
   }
 
@@ -269,6 +279,7 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type CampusRelationships {
   lists: [List]
@@ -276,16 +287,17 @@ enum AddressOrderByEnum {
         
     }
   
+
   type CampusAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 1.42 """
-          latitude: String
+          latitude: Float
           
     """ example: 1.42 """
-          longitude: String
+          longitude: Float
           
     """ example: string """
           description: String
@@ -366,11 +378,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type CarrierAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -422,16 +436,18 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type ConditionRelationships {
   created_by: [Person]
         
     }
   
+
   type ConditionAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           application: String
@@ -487,11 +503,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type ConnectedPersonAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           given_name: String
@@ -515,7 +533,7 @@ enum AddressOrderByEnum {
           organization_name: String
           
     """ example: primary_key """
-          organization_id: ID!
+          organization_id: ID
           
   }
 
@@ -554,16 +572,18 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type EmailRelationships {
   person: [Person]
         
     }
   
+
   type EmailAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           address: String
@@ -618,6 +638,7 @@ enum AddressOrderByEnum {
         value: String
         
   }
+
   
   type FieldDatumRelationships {
   field_definition: [FieldDefinition]
@@ -627,10 +648,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type FieldDatumAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -683,9 +705,10 @@ enum AddressOrderByEnum {
         name: String
         sequence: String
         slug: String
-        tab_id: ID!
+        tab_id: ID
         
   }
+
   
   type FieldDefinitionRelationships {
   field_options: [FieldOption]
@@ -693,10 +716,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type FieldDefinitionAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           data_type: String
@@ -717,7 +741,7 @@ enum AddressOrderByEnum {
           deleted_at: String
           
     """ example: primary_key """
-          tab_id: ID!
+          tab_id: ID
           
   }
 
@@ -748,11 +772,13 @@ enum AddressOrderByEnum {
         value: String
         
   }
+
   
+
   type FieldOptionAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -795,9 +821,10 @@ enum AddressOrderByEnum {
   
   input FormWhereAttributes {
     active: Boolean
-        id: ID!
+        id: ID
         
   }
+
   
   type FormRelationships {
   campus: [Campus]
@@ -806,10 +833,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type FormAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -874,16 +902,18 @@ enum AddressOrderByEnum {
   }
   
   
+
   
   type FormFieldRelationships {
   options: [FormFieldOption]
         
     }
   
+
   type FormFieldAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: value """
           field_type: String
@@ -935,11 +965,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type FormFieldOptionAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           label: String
@@ -978,6 +1010,7 @@ enum AddressOrderByEnum {
   }
   
   
+
   
   type FormSubmissionRelationships {
   form: [Form]
@@ -987,10 +1020,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type FormSubmissionAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: true """
           verified: Boolean
@@ -1025,11 +1059,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type FormSubmissionValueAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           display_value: String
@@ -1074,6 +1110,7 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type HouseholdRelationships {
   household_memberships: [HouseholdMembership]
@@ -1081,10 +1118,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type HouseholdAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -1105,7 +1143,7 @@ enum AddressOrderByEnum {
           avatar: String
           
     """ example: primary_key """
-          primary_contact_id: ID!
+          primary_contact_id: ID
           
   }
 
@@ -1136,6 +1174,7 @@ enum AddressOrderByEnum {
         person_name: String
         
   }
+
   
   type HouseholdMembershipRelationships {
   household: [Household]
@@ -1143,10 +1182,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type HouseholdMembershipAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           person_name: String
@@ -1181,11 +1221,13 @@ enum AddressOrderByEnum {
     value: String
         
   }
+
   
+
   type InactiveReasonAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -1236,11 +1278,12 @@ enum AddressOrderByEnum {
   input ListWhereAttributes {
     batch_completed_at: String
         created_at: String
-        id: ID!
+        id: ID
         name: String
         updated_at: String
         
   }
+
   
   type ListRelationships {
   campus: [Campus]
@@ -1256,10 +1299,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type ListAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -1353,20 +1397,22 @@ enum AddressOrderByEnum {
   input ListCategoryWhereAttributes {
     created_at: String
         name: String
-        organization_id: ID!
+        organization_id: ID
         updated_at: String
         
   }
+
   
   type ListCategoryRelationships {
   lists: [List]
         
     }
   
+
   type ListCategoryAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -1378,7 +1424,7 @@ enum AddressOrderByEnum {
           updated_at: String
           
     """ example: primary_key """
-          organization_id: ID!
+          organization_id: ID
           
   }
 
@@ -1404,11 +1450,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type ListResultAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 2000-01-01T12:00:00Z """
           created_at: String
@@ -1449,16 +1497,18 @@ enum AddressOrderByEnum {
         permission: String
         
   }
+
   
   type ListShareRelationships {
   person: [Person]
         
     }
   
+
   type ListShareAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: value """
           permission: String
@@ -1495,11 +1545,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type ListStarAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 2000-01-01T12:00:00Z """
           created_at: String
@@ -1531,11 +1583,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type MailchimpSyncStatusAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           status: String
@@ -1579,11 +1633,13 @@ enum AddressOrderByEnum {
     value: String
         
   }
+
   
+
   type MaritalStatusAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -1640,6 +1696,7 @@ enum AddressOrderByEnum {
         to_addresses: String
         
   }
+
   
   type MessageRelationships {
   message_group: [MessageGroup]
@@ -1647,10 +1704,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type MessageAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: value """
           kind: String
@@ -1736,6 +1794,7 @@ enum AddressOrderByEnum {
         uuid: String
         
   }
+
   
   type MessageGroupRelationships {
   app: [App]
@@ -1744,10 +1803,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type MessageGroupAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           uuid: String
@@ -1797,11 +1857,13 @@ enum AddressOrderByEnum {
     value: String
         
   }
+
   
+
   type NamePrefixAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -1833,11 +1895,13 @@ enum AddressOrderByEnum {
     value: String
         
   }
+
   
+
   type NameSuffixAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -1874,9 +1938,10 @@ enum AddressOrderByEnum {
   
   input NoteWhereAttributes {
     note: String
-        note_category_id: ID!
+        note_category_id: ID
         
   }
+
   
   type NoteRelationships {
   category: [NoteCategory]
@@ -1885,10 +1950,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type NoteAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           note: String
@@ -1903,16 +1969,16 @@ enum AddressOrderByEnum {
           display_date: String
           
     """ example: primary_key """
-          note_category_id: ID!
+          note_category_id: ID
           
     """ example: primary_key """
-          organization_id: ID!
+          organization_id: ID
           
     """ example: primary_key """
-          person_id: ID!
+          person_id: ID
           
     """ example: primary_key """
-          created_by_id: ID!
+          created_by_id: ID
           
   }
 
@@ -1945,10 +2011,11 @@ enum AddressOrderByEnum {
     created_at: String
         locked: Boolean
         name: String
-        organization_id: ID!
+        organization_id: ID
         updated_at: String
         
   }
+
   
   type NoteCategoryRelationships {
   shares: [NoteCategoryShare]
@@ -1957,10 +2024,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type NoteCategoryAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -1975,7 +2043,7 @@ enum AddressOrderByEnum {
           updated_at: String
           
     """ example: primary_key """
-          organization_id: ID!
+          organization_id: ID
           
   }
 
@@ -2006,16 +2074,18 @@ enum AddressOrderByEnum {
     permission: String
         
   }
+
   
   type NoteCategoryShareRelationships {
   person: [Person]
         
     }
   
+
   type NoteCategoryShareAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: value """
           group: String
@@ -2024,7 +2094,7 @@ enum AddressOrderByEnum {
           permission: String
           
     """ example: primary_key """
-          person_id: ID!
+          person_id: ID
           
   }
 
@@ -2055,11 +2125,13 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
+
   type NoteCategorySubscriptionAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 2000-01-01T12:00:00Z """
           created_at: String
@@ -2096,6 +2168,7 @@ enum AddressOrderByEnum {
   }
   
   
+
   
   type OrganizationRelationships {
   addresses: [Address]
@@ -2134,10 +2207,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type OrganizationAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -2182,11 +2256,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type OrganizationStatisticsAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
   }
 
@@ -2220,6 +2296,7 @@ enum AddressOrderByEnum {
     status: String
         
   }
+
   
   type PeopleImportRelationships {
   conflicts: [PeopleImportConflict]
@@ -2227,10 +2304,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type PeopleImportAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           attribs: String
@@ -2285,11 +2363,13 @@ enum AddressOrderByEnum {
         name: String
         
   }
+
   
+
   type PeopleImportConflictAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           kind: String
@@ -2346,6 +2426,7 @@ enum AddressOrderByEnum {
     name: String
         
   }
+
   
   type PeopleImportHistoryRelationships {
   household: [Household]
@@ -2353,10 +2434,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type PeopleImportHistoryAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -2435,7 +2517,7 @@ enum AddressOrderByEnum {
         given_name: String
         grade: String
         graduation_year: String
-        id: ID!
+        id: ID
         inactivated_at: String
         last_name: String
         medical_notes: String
@@ -2454,6 +2536,7 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type PersonRelationships {
   addresses: [Address]
@@ -2483,10 +2566,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type PersonAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           given_name: String
@@ -2599,16 +2683,18 @@ enum AddressOrderByEnum {
   }
   
   
+
   
   type PersonAppRelationships {
   app: [App]
         
     }
   
+
   type PersonAppAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: true """
           allow_pco_login: Boolean
@@ -2643,24 +2729,26 @@ enum AddressOrderByEnum {
   
   input PersonMergerWhereAttributes {
     created_at: String
-        person_to_keep_id: ID!
-        person_to_remove_id: ID!
+        person_to_keep_id: ID
+        person_to_remove_id: ID
         
   }
+
   
+
   type PersonMergerAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 2000-01-01T12:00:00Z """
           created_at: String
           
     """ example: primary_key """
-          person_to_keep_id: ID!
+          person_to_keep_id: ID
           
     """ example: primary_key """
-          person_to_remove_id: ID!
+          person_to_remove_id: ID
           
   }
 
@@ -2704,11 +2792,13 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
+
   type PhoneNumberAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           number: String
@@ -2766,11 +2856,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type PlatformNotificationAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           html: String
@@ -2808,6 +2900,7 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type ReportRelationships {
   created_by: [Person]
@@ -2815,10 +2908,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type ReportAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -2863,16 +2957,18 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type RuleRelationships {
   conditions: [Condition]
         
     }
   
+
   type RuleAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           subset: String
@@ -2918,16 +3014,18 @@ enum AddressOrderByEnum {
         value: String
         
   }
+
   
   type SchoolOptionRelationships {
   promotes_to_school: [SchoolOption]
         
     }
   
+
   type SchoolOptionAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           value: String
@@ -2969,11 +3067,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type ServiceTimeAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 1 """
           start_time: String
@@ -3019,16 +3119,18 @@ enum AddressOrderByEnum {
         verified: Boolean
         
   }
+
   
   type SocialProfileRelationships {
   person: [Person]
         
     }
   
+
   type SocialProfileAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           site: String
@@ -3076,6 +3178,7 @@ enum AddressOrderByEnum {
         slug: String
         
   }
+
   
   type TabRelationships {
   field_definitions: [FieldDefinition]
@@ -3083,10 +3186,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type TabAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -3134,15 +3238,16 @@ enum AddressOrderByEnum {
   
   
   input WorkflowWhereAttributes {
-    campus_id: ID!
+    campus_id: ID
         created_at: String
         deleted_at: String
-        id: ID!
+        id: ID
         name: String
         updated_at: String
-        workflow_category_id: ID!
+        workflow_category_id: ID
         
   }
+
   
   type WorkflowRelationships {
   cards: [WorkflowCard]
@@ -3153,10 +3258,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type WorkflowAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -3186,10 +3292,10 @@ enum AddressOrderByEnum {
           deleted_at: String
           
     """ example: primary_key """
-          campus_id: ID!
+          campus_id: ID
           
     """ example: primary_key """
-          workflow_category_id: ID!
+          workflow_category_id: ID
           
     """ example: 1 """
           my_overdue_card_count: String
@@ -3237,6 +3343,7 @@ enum AddressOrderByEnum {
     stage: String
         
   }
+
   
   type WorkflowCardRelationships {
   activities: [WorkflowCardActivity]
@@ -3248,10 +3355,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type WorkflowCardAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 2000-01-01T12:00:00Z """
           snooze_until: String
@@ -3319,11 +3427,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type WorkflowCardActivityAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           comment: String
@@ -3382,11 +3492,13 @@ enum AddressOrderByEnum {
   }
   
   
+
   
+
   type WorkflowCardNoteAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           note: String
@@ -3425,11 +3537,13 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
+
   type WorkflowCategoryAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: string """
           name: String
@@ -3469,16 +3583,18 @@ enum AddressOrderByEnum {
     permission: String
         
   }
+
   
   type WorkflowShareRelationships {
   person: [Person]
         
     }
   
+
   type WorkflowShareAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: value """
           group: String
@@ -3487,7 +3603,7 @@ enum AddressOrderByEnum {
           permission: String
           
     """ example: primary_key """
-          person_id: ID!
+          person_id: ID
           
   }
 
@@ -3529,6 +3645,7 @@ enum AddressOrderByEnum {
         updated_at: String
         
   }
+
   
   type WorkflowStepRelationships {
   assignee_summaries: [WorkflowStepAssigneeSummary]
@@ -3536,10 +3653,11 @@ enum AddressOrderByEnum {
         
     }
   
+
   type WorkflowStepAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 2000-01-01T12:00:00Z """
           created_at: String
@@ -3575,7 +3693,7 @@ enum AddressOrderByEnum {
           total_ready_card_count: String
           
     """ example: primary_key """
-          default_assignee_id: ID!
+          default_assignee_id: ID
           
   }
 
@@ -3601,16 +3719,18 @@ enum AddressOrderByEnum {
   }
   
   
+
   
   type WorkflowStepAssigneeSummaryRelationships {
   person: [Person]
         
     }
   
+
   type WorkflowStepAssigneeSummaryAttributes {
     
     """ example: primary_key """
-          id: ID!
+          id: ID
           
     """ example: 1 """
           ready_count: String
@@ -4055,6 +4175,7 @@ enum AddressOrderByEnum {
       desc
     }
     
+  
   
 `
 
