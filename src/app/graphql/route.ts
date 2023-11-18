@@ -1,24 +1,22 @@
-import { ApolloServer } from '@apollo/server';
-import { startServerAndCreateNextHandler } from '@as-integrations/next';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { NextRequest } from 'next/server';
-import { resolvers } from './resolversTemplate';
-import typeDefs from './typeDefs';
-// req has the type NextRequest
+import { createSchema, createYoga } from "graphql-yoga";
+import { resolvers } from "./resolversTemplate";
+import typeDefs from "./typeDefs";
 
+const { handleRequest } = createYoga({
+  schema: createSchema({
+    typeDefs,
+    resolvers,
+  }),
 
-export const schema = makeExecutableSchema({ typeDefs, resolvers })
+  // While using Next.js file convention for routing, we need to configure Yoga to use the correct endpoint
+  graphqlEndpoint: "/graphql",
 
-const server = new ApolloServer({
-  schema
+  // Yoga needs to know how to create a valid Next response
+  fetchAPI: { Response },
 });
 
-const handler = startServerAndCreateNextHandler<NextRequest>(server, { context: async req => ({ req }) });
-
-export async function GET(request: any) {
-  return handler(request);
-}
-
-export async function POST(request: any) {
-  return handler(request);
-}
+export {
+  handleRequest as GET,
+  handleRequest as OPTIONS,
+  handleRequest as POST,
+};

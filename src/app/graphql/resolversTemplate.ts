@@ -1,12 +1,18 @@
 const PCO_BASE_URL = "https://api.planningcenteronline.com";
 
-const getRelatedIds = (type, item) => {
+const getRelatedIds = (
+  type: string | number,
+  item: { relationships: { [x: string]: { data: any } } }
+) => {
   const data = item?.relationships?.[type]?.data;
   if (!data) return null;
-  return data?.length ? data?.map((f) => f.id) : [data.id];
+  return data?.length ? data?.map((f: { id: any }) => f.id) : [data.id];
 };
 
-const getJSONfromUrl = async (url, options) => {
+const getJSONfromUrl = async (
+  url: RequestInfo | URL,
+  options: RequestInit | undefined
+) => {
   const response = await fetch(url, options)
     .then((res) => res.json())
     .catch((err) => {
@@ -27,12 +33,21 @@ const getJSONfromUrl = async (url, options) => {
   return response;
 };
 
-const getRelatedData = (data = [], Ids = []) =>
-  (Ids && data.included.filter((f) => Ids?.includes(f.id))) || null;
+type RelatedData = {
+  included: {
+    id: string;
+  }[];
+};
 
-const getRelatedFieldNames = (info, includesArray) => {
+const getRelatedData = (data: RelatedData, Ids: string[] = []) =>
+  (Ids && data.included.filter(({ id }) => Ids?.includes(id))) || null;
+
+const getRelatedFieldNames = (
+  info: { fieldNodes: { selectionSet: { selections: any[] } }[] },
+  includesArray: string | any[]
+) => {
   const attributesArray = info?.fieldNodes[0].selectionSet?.selections?.find(
-    (e) => {
+    (e: any) => {
       const node = e;
       return node.name.value === "relationships";
     }
@@ -40,26 +55,28 @@ const getRelatedFieldNames = (info, includesArray) => {
 
   if (!attributesArray) return [];
   const selectedNodes = attributesArray.selectionSet?.selections?.filter(
-    (f) => {
+    (f: any) => {
       const node = f;
       return includesArray.includes(node.name.value);
     }
   );
 
-  return selectedNodes.map((e) => e.name.value);
+  return selectedNodes.map((e: { name: { value: any } }) => e.name.value);
 };
 
-const zipRelatedData = (data, item, includesArray) => {
-  const relatedData = {};
+const zipRelatedData = (data: RelatedData, item: any, includesArray: any[]) => {
+  const relatedData: {
+    [key: string]: any;
+  } = {};
   //map over the includes options types.
-  includesArray.map((type) => {
+  includesArray.map((type: string | number) => {
     const ids = getRelatedIds(type, item);
     relatedData[type] = getRelatedData(data, ids) || [];
   });
   return relatedData;
 };
 
-const formatWhere = (where) =>
+const formatWhere = (where: { [s: string]: unknown } | ArrayLike<unknown>) =>
   where
     ? Object.entries(where)
         .map(([key, value]) => `&where[${key}]=${value}`)
@@ -68,7 +85,12 @@ const formatWhere = (where) =>
 
 export const resolvers = {
   Query: {
-    Address: async (parent, params, context, info) => {
+    Address: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -88,7 +110,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -102,8 +124,13 @@ export const resolvers = {
 
       return result || [];
     },
-    AddressById: async (parent, params, context, info) => {
-      const { id } = params;
+    AddressById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/addresses/${id}?per_page=${limit}&include=${includes}`,
@@ -117,7 +144,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -132,7 +159,12 @@ export const resolvers = {
       return result || null;
     },
 
-    AnniversaryCouples: async (parent, params, context, info) => {
+    AnniversaryCouples: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -152,7 +184,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -166,8 +198,13 @@ export const resolvers = {
 
       return result || [];
     },
-    AnniversaryCouplesById: async (parent, params, context, info) => {
-      const { id } = params;
+    AnniversaryCouplesById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/anniversary_couples/${id}?per_page=${limit}&include=${includes}`,
@@ -181,7 +218,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -196,7 +233,12 @@ export const resolvers = {
       return result || null;
     },
 
-    App: async (parent, params, context, info) => {
+    App: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -216,7 +258,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -230,8 +272,13 @@ export const resolvers = {
 
       return result || [];
     },
-    AppById: async (parent, params, context, info) => {
-      const { id } = params;
+    AppById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/apps/${id}?per_page=${limit}&include=${includes}`,
@@ -245,7 +292,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -260,7 +307,12 @@ export const resolvers = {
       return result || null;
     },
 
-    BackgroundCheck: async (parent, params, context, info) => {
+    BackgroundCheck: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -280,7 +332,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -294,8 +346,13 @@ export const resolvers = {
 
       return result || [];
     },
-    BackgroundCheckById: async (parent, params, context, info) => {
-      const { id } = params;
+    BackgroundCheckById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["person"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/background_checks/${id}?per_page=${limit}&include=${includes}`,
@@ -309,7 +366,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -324,7 +381,12 @@ export const resolvers = {
       return result || null;
     },
 
-    BirthdayPeople: async (parent, params, context, info) => {
+    BirthdayPeople: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -344,7 +406,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -358,8 +420,13 @@ export const resolvers = {
 
       return result || [];
     },
-    BirthdayPeopleById: async (parent, params, context, info) => {
-      const { id } = params;
+    BirthdayPeopleById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/birthday_people/${id}?per_page=${limit}&include=${includes}`,
@@ -373,7 +440,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -388,7 +455,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Campus: async (parent, params, context, info) => {
+    Campus: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -411,7 +483,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "lists",
           "service_times",
@@ -428,8 +500,13 @@ export const resolvers = {
 
       return result || [];
     },
-    CampusById: async (parent, params, context, info) => {
-      const { id } = params;
+    CampusById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "lists",
         "service_times",
@@ -446,7 +523,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "lists",
           "service_times",
@@ -464,7 +541,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Carrier: async (parent, params, context, info) => {
+    Carrier: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -484,7 +566,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -498,8 +580,13 @@ export const resolvers = {
 
       return result || [];
     },
-    CarrierById: async (parent, params, context, info) => {
-      const { id } = params;
+    CarrierById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/carriers/${id}?per_page=${limit}&include=${includes}`,
@@ -513,7 +600,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -528,7 +615,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Condition: async (parent, params, context, info) => {
+    Condition: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -548,7 +640,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["created_by"]);
         return {
           ...e,
@@ -562,8 +654,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ConditionById: async (parent, params, context, info) => {
-      const { id } = params;
+    ConditionById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["created_by"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/lists/1/rules/1/conditions/${id}?per_page=${limit}&include=${includes}`,
@@ -577,7 +674,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["created_by"]);
         return {
           ...e,
@@ -592,7 +689,12 @@ export const resolvers = {
       return result || null;
     },
 
-    ConnectedPerson: async (parent, params, context, info) => {
+    ConnectedPerson: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -612,7 +714,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -626,8 +728,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ConnectedPersonById: async (parent, params, context, info) => {
-      const { id } = params;
+    ConnectedPersonById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people/1/connected_people/${id}?per_page=${limit}&include=${includes}`,
@@ -641,7 +748,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -656,7 +763,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Email: async (parent, params, context, info) => {
+    Email: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -676,7 +788,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -690,8 +802,13 @@ export const resolvers = {
 
       return result || [];
     },
-    EmailById: async (parent, params, context, info) => {
-      const { id } = params;
+    EmailById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/emails/${id}?per_page=${limit}&include=${includes}`,
@@ -705,7 +822,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -720,7 +837,12 @@ export const resolvers = {
       return result || null;
     },
 
-    FieldDatum: async (parent, params, context, info) => {
+    FieldDatum: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -744,7 +866,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "field_definition",
           "field_option",
@@ -762,8 +884,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FieldDatumById: async (parent, params, context, info) => {
-      const { id } = params;
+    FieldDatumById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "field_definition",
         "field_option",
@@ -781,7 +908,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "field_definition",
           "field_option",
@@ -800,7 +927,12 @@ export const resolvers = {
       return result || null;
     },
 
-    FieldDefinition: async (parent, params, context, info) => {
+    FieldDefinition: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -823,7 +955,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "field_options",
           "tab",
@@ -840,8 +972,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FieldDefinitionById: async (parent, params, context, info) => {
-      const { id } = params;
+    FieldDefinitionById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "field_options",
         "tab",
@@ -858,7 +995,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "field_options",
           "tab",
@@ -876,7 +1013,12 @@ export const resolvers = {
       return result || null;
     },
 
-    FieldOption: async (parent, params, context, info) => {
+    FieldOption: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -896,7 +1038,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -910,8 +1052,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FieldOptionById: async (parent, params, context, info) => {
-      const { id } = params;
+    FieldOptionById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/field_definitions/1/field_options/${id}?per_page=${limit}&include=${includes}`,
@@ -925,7 +1072,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -940,7 +1087,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Form: async (parent, params, context, info) => {
+    Form: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -960,7 +1112,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["campus"]);
         return {
           ...e,
@@ -974,8 +1126,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FormById: async (parent, params, context, info) => {
-      const { id } = params;
+    FormById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["campus"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/forms/${id}?per_page=${limit}&include=${includes}`,
@@ -989,7 +1146,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["campus"]);
         return {
           ...e,
@@ -1004,7 +1161,12 @@ export const resolvers = {
       return result || null;
     },
 
-    FormField: async (parent, params, context, info) => {
+    FormField: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1024,7 +1186,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["options"]);
         return {
           ...e,
@@ -1038,8 +1200,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FormFieldById: async (parent, params, context, info) => {
-      const { id } = params;
+    FormFieldById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["options"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/forms/1/fields/${id}?per_page=${limit}&include=${includes}`,
@@ -1053,7 +1220,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["options"]);
         return {
           ...e,
@@ -1068,7 +1235,12 @@ export const resolvers = {
       return result || null;
     },
 
-    FormFieldOption: async (parent, params, context, info) => {
+    FormFieldOption: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1088,7 +1260,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1102,8 +1274,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FormFieldOptionById: async (parent, params, context, info) => {
-      const { id } = params;
+    FormFieldOptionById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/forms/1/fields/1/options/${id}?per_page=${limit}&include=${includes}`,
@@ -1117,7 +1294,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1132,7 +1309,12 @@ export const resolvers = {
       return result || null;
     },
 
-    FormSubmission: async (parent, params, context, info) => {
+    FormSubmission: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1157,7 +1339,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "form",
           "form_fields",
@@ -1176,8 +1358,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FormSubmissionById: async (parent, params, context, info) => {
-      const { id } = params;
+    FormSubmissionById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "form",
         "form_fields",
@@ -1196,7 +1383,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "form",
           "form_fields",
@@ -1216,7 +1403,12 @@ export const resolvers = {
       return result || null;
     },
 
-    FormSubmissionValue: async (parent, params, context, info) => {
+    FormSubmissionValue: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1236,7 +1428,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1250,8 +1442,13 @@ export const resolvers = {
 
       return result || [];
     },
-    FormSubmissionValueById: async (parent, params, context, info) => {
-      const { id } = params;
+    FormSubmissionValueById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/forms/1/form_submissions/1/form_submission_values/${id}?per_page=${limit}&include=${includes}`,
@@ -1265,7 +1462,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1280,7 +1477,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Household: async (parent, params, context, info) => {
+    Household: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1300,7 +1502,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["people"]);
         return {
           ...e,
@@ -1314,8 +1516,13 @@ export const resolvers = {
 
       return result || [];
     },
-    HouseholdById: async (parent, params, context, info) => {
-      const { id } = params;
+    HouseholdById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["people"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/households/${id}?per_page=${limit}&include=${includes}`,
@@ -1329,7 +1536,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["people"]);
         return {
           ...e,
@@ -1344,7 +1551,12 @@ export const resolvers = {
       return result || null;
     },
 
-    HouseholdMembership: async (parent, params, context, info) => {
+    HouseholdMembership: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1366,7 +1578,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "household",
           "person",
@@ -1383,8 +1595,13 @@ export const resolvers = {
 
       return result || [];
     },
-    HouseholdMembershipById: async (parent, params, context, info) => {
-      const { id } = params;
+    HouseholdMembershipById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["household", "person"]).join(
         ","
       );
@@ -1400,7 +1617,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "household",
           "person",
@@ -1418,7 +1635,12 @@ export const resolvers = {
       return result || null;
     },
 
-    InactiveReason: async (parent, params, context, info) => {
+    InactiveReason: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1438,7 +1660,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1452,8 +1674,13 @@ export const resolvers = {
 
       return result || [];
     },
-    InactiveReasonById: async (parent, params, context, info) => {
-      const { id } = params;
+    InactiveReasonById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/inactive_reasons/${id}?per_page=${limit}&include=${includes}`,
@@ -1467,7 +1694,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1482,7 +1709,12 @@ export const resolvers = {
       return result || null;
     },
 
-    List: async (parent, params, context, info) => {
+    List: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1511,7 +1743,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "campus",
           "category",
@@ -1534,8 +1766,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ListById: async (parent, params, context, info) => {
-      const { id } = params;
+    ListById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "campus",
         "category",
@@ -1558,7 +1795,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "campus",
           "category",
@@ -1582,7 +1819,12 @@ export const resolvers = {
       return result || null;
     },
 
-    ListCategory: async (parent, params, context, info) => {
+    ListCategory: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1602,7 +1844,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["lists"]);
         return {
           ...e,
@@ -1616,8 +1858,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ListCategoryById: async (parent, params, context, info) => {
-      const { id } = params;
+    ListCategoryById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["lists"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/list_categories/${id}?per_page=${limit}&include=${includes}`,
@@ -1631,7 +1878,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["lists"]);
         return {
           ...e,
@@ -1646,7 +1893,12 @@ export const resolvers = {
       return result || null;
     },
 
-    ListResult: async (parent, params, context, info) => {
+    ListResult: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1666,7 +1918,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1680,8 +1932,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ListResultById: async (parent, params, context, info) => {
-      const { id } = params;
+    ListResultById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/lists/1/list_results/${id}?per_page=${limit}&include=${includes}`,
@@ -1695,7 +1952,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1710,7 +1967,12 @@ export const resolvers = {
       return result || null;
     },
 
-    ListShare: async (parent, params, context, info) => {
+    ListShare: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1730,7 +1992,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -1744,8 +2006,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ListShareById: async (parent, params, context, info) => {
-      const { id } = params;
+    ListShareById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["person"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/lists/1/shares/${id}?per_page=${limit}&include=${includes}`,
@@ -1759,7 +2026,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -1774,7 +2041,12 @@ export const resolvers = {
       return result || null;
     },
 
-    ListStar: async (parent, params, context, info) => {
+    ListStar: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1794,7 +2066,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1808,8 +2080,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ListStarById: async (parent, params, context, info) => {
-      const { id } = params;
+    ListStarById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/lists/1/star/${id}?per_page=${limit}&include=${includes}`,
@@ -1823,7 +2100,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1838,7 +2115,12 @@ export const resolvers = {
       return result || null;
     },
 
-    MailchimpSyncStatus: async (parent, params, context, info) => {
+    MailchimpSyncStatus: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1858,7 +2140,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1872,8 +2154,13 @@ export const resolvers = {
 
       return result || [];
     },
-    MailchimpSyncStatusById: async (parent, params, context, info) => {
-      const { id } = params;
+    MailchimpSyncStatusById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/lists/1/mailchimp_sync_status/${id}?per_page=${limit}&include=${includes}`,
@@ -1887,7 +2174,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1902,7 +2189,12 @@ export const resolvers = {
       return result || null;
     },
 
-    MaritalStatus: async (parent, params, context, info) => {
+    MaritalStatus: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1922,7 +2214,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1936,8 +2228,13 @@ export const resolvers = {
 
       return result || [];
     },
-    MaritalStatusById: async (parent, params, context, info) => {
-      const { id } = params;
+    MaritalStatusById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/marital_statuses/${id}?per_page=${limit}&include=${includes}`,
@@ -1951,7 +2248,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -1966,7 +2263,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Message: async (parent, params, context, info) => {
+    Message: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -1988,7 +2290,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "message_group",
           "to",
@@ -2005,8 +2307,13 @@ export const resolvers = {
 
       return result || [];
     },
-    MessageById: async (parent, params, context, info) => {
-      const { id } = params;
+    MessageById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["message_group", "to"]).join(
         ","
       );
@@ -2022,7 +2329,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "message_group",
           "to",
@@ -2040,7 +2347,12 @@ export const resolvers = {
       return result || null;
     },
 
-    MessageGroup: async (parent, params, context, info) => {
+    MessageGroup: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2064,7 +2376,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "app",
           "from",
@@ -2082,8 +2394,13 @@ export const resolvers = {
 
       return result || [];
     },
-    MessageGroupById: async (parent, params, context, info) => {
-      const { id } = params;
+    MessageGroupById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "app",
         "from",
@@ -2101,7 +2418,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "app",
           "from",
@@ -2120,7 +2437,12 @@ export const resolvers = {
       return result || null;
     },
 
-    NamePrefix: async (parent, params, context, info) => {
+    NamePrefix: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2140,7 +2462,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2154,8 +2476,13 @@ export const resolvers = {
 
       return result || [];
     },
-    NamePrefixById: async (parent, params, context, info) => {
-      const { id } = params;
+    NamePrefixById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/name_prefixes/${id}?per_page=${limit}&include=${includes}`,
@@ -2169,7 +2496,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2184,7 +2511,12 @@ export const resolvers = {
       return result || null;
     },
 
-    NameSuffix: async (parent, params, context, info) => {
+    NameSuffix: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2204,7 +2536,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2218,8 +2550,13 @@ export const resolvers = {
 
       return result || [];
     },
-    NameSuffixById: async (parent, params, context, info) => {
-      const { id } = params;
+    NameSuffixById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/name_suffixes/${id}?per_page=${limit}&include=${includes}`,
@@ -2233,7 +2570,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2248,7 +2585,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Note: async (parent, params, context, info) => {
+    Note: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2272,7 +2614,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "category",
           "created_by",
@@ -2290,8 +2632,13 @@ export const resolvers = {
 
       return result || [];
     },
-    NoteById: async (parent, params, context, info) => {
-      const { id } = params;
+    NoteById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "category",
         "created_by",
@@ -2309,7 +2656,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "category",
           "created_by",
@@ -2328,7 +2675,12 @@ export const resolvers = {
       return result || null;
     },
 
-    NoteCategory: async (parent, params, context, info) => {
+    NoteCategory: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2352,7 +2704,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "shares",
           "subscribers",
@@ -2370,8 +2722,13 @@ export const resolvers = {
 
       return result || [];
     },
-    NoteCategoryById: async (parent, params, context, info) => {
-      const { id } = params;
+    NoteCategoryById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "shares",
         "subscribers",
@@ -2389,7 +2746,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "shares",
           "subscribers",
@@ -2408,7 +2765,12 @@ export const resolvers = {
       return result || null;
     },
 
-    NoteCategoryShare: async (parent, params, context, info) => {
+    NoteCategoryShare: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2428,7 +2790,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -2442,8 +2804,13 @@ export const resolvers = {
 
       return result || [];
     },
-    NoteCategoryShareById: async (parent, params, context, info) => {
-      const { id } = params;
+    NoteCategoryShareById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["person"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/note_categories/1/shares/${id}?per_page=${limit}&include=${includes}`,
@@ -2457,7 +2824,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -2472,7 +2839,12 @@ export const resolvers = {
       return result || null;
     },
 
-    NoteCategorySubscription: async (parent, params, context, info) => {
+    NoteCategorySubscription: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2492,7 +2864,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2506,8 +2878,13 @@ export const resolvers = {
 
       return result || [];
     },
-    NoteCategorySubscriptionById: async (parent, params, context, info) => {
-      const { id } = params;
+    NoteCategorySubscriptionById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/note_category_subscriptions/${id}?per_page=${limit}&include=${includes}`,
@@ -2521,7 +2898,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2536,7 +2913,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Organization: async (parent, params, context, info) => {
+    Organization: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2556,7 +2938,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2570,8 +2952,13 @@ export const resolvers = {
 
       return result || [];
     },
-    OrganizationById: async (parent, params, context, info) => {
-      const { id } = params;
+    OrganizationById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/${id}?per_page=${limit}&include=${includes}`,
@@ -2585,7 +2972,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2600,7 +2987,12 @@ export const resolvers = {
       return result || null;
     },
 
-    OrganizationStatistics: async (parent, params, context, info) => {
+    OrganizationStatistics: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2620,7 +3012,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2634,8 +3026,13 @@ export const resolvers = {
 
       return result || [];
     },
-    OrganizationStatisticsById: async (parent, params, context, info) => {
-      const { id } = params;
+    OrganizationStatisticsById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/organization_statistics/${id}?per_page=${limit}&include=${includes}`,
@@ -2649,7 +3046,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2664,7 +3061,12 @@ export const resolvers = {
       return result || null;
     },
 
-    PeopleImport: async (parent, params, context, info) => {
+    PeopleImport: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2684,7 +3086,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2698,8 +3100,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PeopleImportById: async (parent, params, context, info) => {
-      const { id } = params;
+    PeopleImportById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people_imports/${id}?per_page=${limit}&include=${includes}`,
@@ -2713,7 +3120,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2728,7 +3135,12 @@ export const resolvers = {
       return result || null;
     },
 
-    PeopleImportConflict: async (parent, params, context, info) => {
+    PeopleImportConflict: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2748,7 +3160,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2762,8 +3174,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PeopleImportConflictById: async (parent, params, context, info) => {
-      const { id } = params;
+    PeopleImportConflictById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people_imports/1/conflicts/${id}?per_page=${limit}&include=${includes}`,
@@ -2777,7 +3194,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -2792,7 +3209,12 @@ export const resolvers = {
       return result || null;
     },
 
-    PeopleImportHistory: async (parent, params, context, info) => {
+    PeopleImportHistory: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2814,7 +3236,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "household",
           "person",
@@ -2831,8 +3253,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PeopleImportHistoryById: async (parent, params, context, info) => {
-      const { id } = params;
+    PeopleImportHistoryById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["household", "person"]).join(
         ","
       );
@@ -2848,7 +3275,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "household",
           "person",
@@ -2866,7 +3293,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Person: async (parent, params, context, info) => {
+    Person: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -2902,7 +3334,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "addresses",
           "emails",
@@ -2932,8 +3364,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PersonById: async (parent, params, context, info) => {
-      const { id } = params;
+    PersonById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "addresses",
         "emails",
@@ -2963,7 +3400,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "addresses",
           "emails",
@@ -2994,7 +3431,12 @@ export const resolvers = {
       return result || null;
     },
 
-    PersonApp: async (parent, params, context, info) => {
+    PersonApp: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3014,7 +3456,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["app"]);
         return {
           ...e,
@@ -3028,8 +3470,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PersonAppById: async (parent, params, context, info) => {
-      const { id } = params;
+    PersonAppById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["app"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people/1/person_apps/${id}?per_page=${limit}&include=${includes}`,
@@ -3043,7 +3490,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["app"]);
         return {
           ...e,
@@ -3058,7 +3505,12 @@ export const resolvers = {
       return result || null;
     },
 
-    PersonMerger: async (parent, params, context, info) => {
+    PersonMerger: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3078,7 +3530,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3092,8 +3544,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PersonMergerById: async (parent, params, context, info) => {
-      const { id } = params;
+    PersonMergerById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/person_mergers/${id}?per_page=${limit}&include=${includes}`,
@@ -3107,7 +3564,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3122,7 +3579,12 @@ export const resolvers = {
       return result || null;
     },
 
-    PhoneNumber: async (parent, params, context, info) => {
+    PhoneNumber: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3142,7 +3604,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3156,8 +3618,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PhoneNumberById: async (parent, params, context, info) => {
-      const { id } = params;
+    PhoneNumberById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/phone_numbers/${id}?per_page=${limit}&include=${includes}`,
@@ -3171,7 +3638,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3186,7 +3653,12 @@ export const resolvers = {
       return result || null;
     },
 
-    PlatformNotification: async (parent, params, context, info) => {
+    PlatformNotification: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3206,7 +3678,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3220,8 +3692,13 @@ export const resolvers = {
 
       return result || [];
     },
-    PlatformNotificationById: async (parent, params, context, info) => {
-      const { id } = params;
+    PlatformNotificationById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people/1/platform_notifications/${id}?per_page=${limit}&include=${includes}`,
@@ -3235,7 +3712,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3250,7 +3727,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Report: async (parent, params, context, info) => {
+    Report: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3273,7 +3755,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "created_by",
           "updated_by",
@@ -3290,8 +3772,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ReportById: async (parent, params, context, info) => {
-      const { id } = params;
+    ReportById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "created_by",
         "updated_by",
@@ -3308,7 +3795,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "created_by",
           "updated_by",
@@ -3326,7 +3813,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Rule: async (parent, params, context, info) => {
+    Rule: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3346,7 +3838,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["conditions"]);
         return {
           ...e,
@@ -3360,8 +3852,13 @@ export const resolvers = {
 
       return result || [];
     },
-    RuleById: async (parent, params, context, info) => {
-      const { id } = params;
+    RuleById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["conditions"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/lists/1/rules/${id}?per_page=${limit}&include=${includes}`,
@@ -3375,7 +3872,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["conditions"]);
         return {
           ...e,
@@ -3390,7 +3887,12 @@ export const resolvers = {
       return result || null;
     },
 
-    SchoolOption: async (parent, params, context, info) => {
+    SchoolOption: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3410,7 +3912,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3424,8 +3926,13 @@ export const resolvers = {
 
       return result || [];
     },
-    SchoolOptionById: async (parent, params, context, info) => {
-      const { id } = params;
+    SchoolOptionById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/school_options/${id}?per_page=${limit}&include=${includes}`,
@@ -3439,7 +3946,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3454,7 +3961,12 @@ export const resolvers = {
       return result || null;
     },
 
-    ServiceTime: async (parent, params, context, info) => {
+    ServiceTime: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3474,7 +3986,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3488,8 +4000,13 @@ export const resolvers = {
 
       return result || [];
     },
-    ServiceTimeById: async (parent, params, context, info) => {
-      const { id } = params;
+    ServiceTimeById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/campuses/1/service_times/${id}?per_page=${limit}&include=${includes}`,
@@ -3503,7 +4020,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3518,7 +4035,12 @@ export const resolvers = {
       return result || null;
     },
 
-    SocialProfile: async (parent, params, context, info) => {
+    SocialProfile: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3538,7 +4060,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -3552,8 +4074,13 @@ export const resolvers = {
 
       return result || [];
     },
-    SocialProfileById: async (parent, params, context, info) => {
-      const { id } = params;
+    SocialProfileById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["person"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/social_profiles/${id}?per_page=${limit}&include=${includes}`,
@@ -3567,7 +4094,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -3582,7 +4109,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Tab: async (parent, params, context, info) => {
+    Tab: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3605,7 +4137,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "field_definitions",
           "field_options",
@@ -3622,8 +4154,13 @@ export const resolvers = {
 
       return result || [];
     },
-    TabById: async (parent, params, context, info) => {
-      const { id } = params;
+    TabById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "field_definitions",
         "field_options",
@@ -3640,7 +4177,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "field_definitions",
           "field_options",
@@ -3658,7 +4195,12 @@ export const resolvers = {
       return result || null;
     },
 
-    Workflow: async (parent, params, context, info) => {
+    Workflow: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3682,7 +4224,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "category",
           "shares",
@@ -3700,8 +4242,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "category",
         "shares",
@@ -3719,7 +4266,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "category",
           "shares",
@@ -3738,7 +4285,12 @@ export const resolvers = {
       return result || null;
     },
 
-    WorkflowCard: async (parent, params, context, info) => {
+    WorkflowCard: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3763,7 +4315,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "assignee",
           "current_step",
@@ -3782,8 +4334,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowCardById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowCardById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, [
         "assignee",
         "current_step",
@@ -3802,7 +4359,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, [
           "assignee",
           "current_step",
@@ -3822,7 +4379,12 @@ export const resolvers = {
       return result || null;
     },
 
-    WorkflowCardActivity: async (parent, params, context, info) => {
+    WorkflowCardActivity: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3842,7 +4404,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3856,8 +4418,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowCardActivityById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowCardActivityById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people/1/workflow_cards/1/activities/${id}?per_page=${limit}&include=${includes}`,
@@ -3871,7 +4438,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3886,7 +4453,12 @@ export const resolvers = {
       return result || null;
     },
 
-    WorkflowCardNote: async (parent, params, context, info) => {
+    WorkflowCardNote: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3906,7 +4478,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3920,8 +4492,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowCardNoteById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowCardNoteById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people/1/workflow_cards/1/notes/${id}?per_page=${limit}&include=${includes}`,
@@ -3935,7 +4512,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3950,7 +4527,12 @@ export const resolvers = {
       return result || null;
     },
 
-    WorkflowCategory: async (parent, params, context, info) => {
+    WorkflowCategory: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -3970,7 +4552,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -3984,8 +4566,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowCategoryById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowCategoryById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, []).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/workflow_categories/${id}?per_page=${limit}&include=${includes}`,
@@ -3999,7 +4586,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, []);
         return {
           ...e,
@@ -4014,7 +4601,12 @@ export const resolvers = {
       return result || null;
     },
 
-    WorkflowShare: async (parent, params, context, info) => {
+    WorkflowShare: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -4034,7 +4626,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -4048,8 +4640,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowShareById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowShareById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["person"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/people/1/workflow_shares/${id}?per_page=${limit}&include=${includes}`,
@@ -4063,7 +4660,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -4078,7 +4675,12 @@ export const resolvers = {
       return result || null;
     },
 
-    WorkflowStep: async (parent, params, context, info) => {
+    WorkflowStep: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -4100,7 +4702,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["default_assignee"]);
         return {
           ...e,
@@ -4114,8 +4716,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowStepById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowStepById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["default_assignee"]).join(
         ","
       );
@@ -4131,7 +4738,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["default_assignee"]);
         return {
           ...e,
@@ -4146,7 +4753,12 @@ export const resolvers = {
       return result || null;
     },
 
-    WorkflowStepAssigneeSummary: async (parent, params, context, info) => {
+    WorkflowStepAssigneeSummary: async (
+      parent: any,
+      params: { limit?: 10 | undefined; where: any; order: any },
+      context: any,
+      info: any
+    ) => {
       const { limit = 10, where, order } = params;
       const whereArg = where ? formatWhere(where) : "&where[status]=active";
       const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${
@@ -4166,7 +4778,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,
@@ -4180,8 +4792,13 @@ export const resolvers = {
 
       return result || [];
     },
-    WorkflowStepAssigneeSummaryById: async (parent, params, context, info) => {
-      const { id } = params;
+    WorkflowStepAssigneeSummaryById: async (
+      parent: any,
+      params: { id: any; limit: number },
+      context: any,
+      info: any
+    ) => {
+      const { id, limit = 10 } = params;
       const includes = getRelatedFieldNames(info, ["person"]).join(",");
       let response = await getJSONfromUrl(
         `https://api.planningcenteronline.com/people/v2/workflows/1/steps/1/assignee_summaries/${id}?per_page=${limit}&include=${includes}`,
@@ -4195,7 +4812,7 @@ export const resolvers = {
         }
       );
 
-      let result = response.data.map((e) => {
+      let result = response.data.map((e: { attributes: any; id: any }) => {
         const relatedData = zipRelatedData(response, e, ["person"]);
         return {
           ...e,

@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@apollo/server": "^4.7.5",
-    "@as-integrations/next": "^2.0.1",
+    "@apollo/server": "^4.9.5",
+    "@as-integrations/next": "^3.0.0",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -20,6 +20,7 @@
     "eslint-config-next": "13.4.9",
     "graphql": "^16.7.1",
     "graphql-tag": "^2.12.6",
+    "graphql-yoga": "^5.0.0",
     "next": "13.4.9",
     "postcss": "8.4.25",
     "react": "18.2.0",

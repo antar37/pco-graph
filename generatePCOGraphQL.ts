@@ -2,7 +2,7 @@ const { buildSchema } = require("graphql");
 const fs = require("fs");
 const vertices = require("./vertices.json");
 
-function getGraphQLType(value) {
+function getGraphQLType(value: string) {
   if (value === "string") {
     return "String";
   } else if (value === "number") {
@@ -16,25 +16,29 @@ function getGraphQLType(value) {
   }
 }
 
-const generateQueries = (jsonApiSpec) => {
+const generateQueries = (jsonApiSpec: { resources: any[] }) => {
   // const queries = {};
   const queries = jsonApiSpec.resources
-    .map((resource) => {
-      const includesArray = resource.relationships.can_include.data.map(
-        (e) => e.attributes.name
-      );
+    .map(
+      (resource: {
+        relationships: { can_include: { data: any[] } };
+        attributes: { path: any; name: any };
+      }) => {
+        const includesArray = resource.relationships.can_include.data.map(
+          (e: { attributes: { name: any } }) => e.attributes.name
+        );
 
-      const orderString =
-        'const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${order?.field !== undefined ? order?.field : ""}`';
-      const urlString =
-        "`" +
-        `${resource.attributes.path}` +
-        "?per_page=${limit}&include=${includes}${whereArg}${orderArg}`,";
-      const urlByIdString =
-        "`" +
-        `${resource.attributes.path}` +
-        "/${id}?per_page=${limit}&include=${includes}`,";
-      const query = `
+        const orderString =
+          'const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${order?.field !== undefined ? order?.field : ""}`';
+        const urlString =
+          "`" +
+          `${resource.attributes.path}` +
+          "?per_page=${limit}&include=${includes}${whereArg}${orderArg}`,";
+        const urlByIdString =
+          "`" +
+          `${resource.attributes.path}` +
+          "/${id}?per_page=${limit}&include=${includes}`,";
+        const query = `
           ${
             resource.attributes.name
           }: async (parent, params, context, info) => {
@@ -75,7 +79,7 @@ const generateQueries = (jsonApiSpec) => {
             ${
               resource.attributes.name
             }ById: async (parent, params, context, info) => {
-              const { id } = params;
+              const { id, limit = 10 } = params;
               const includes = getRelatedFieldNames(info, ${JSON.stringify(
                 includesArray
               )}).join(",");
@@ -108,14 +112,15 @@ const generateQueries = (jsonApiSpec) => {
               return result || null;
             },
       `;
-      return query;
-    })
+        return query;
+      }
+    )
     .join("\n");
 
   return queries;
 };
 
-const sanitizeTypes = (type) => {
+const sanitizeTypes = (type: any) => {
   switch (type) {
     case "Optionable":
       return "Boolean";
@@ -142,7 +147,14 @@ const sanitizeTypes = (type) => {
       return type;
   }
 };
-const generateTypes = (entity) => {
+const generateTypes = (entity: {
+  attributes: { name: any };
+  relationships: {
+    attributes: { data: any };
+    outbound_edges: { data: any };
+    can_query: { data: any };
+  };
+}) => {
   const name = entity.attributes.name;
   const attributes = entity.relationships.attributes.data;
   const relationships = entity.relationships.outbound_edges.data;
@@ -151,9 +163,15 @@ const generateTypes = (entity) => {
     ? `
     type ${name}Relationships {
     ${relationships
-      .filter(({ attributes }) => attributes.name)
+      .filter(({ attributes }: { attributes: any }) => attributes.name)
       .map(
-        ({ relationships, attributes }) =>
+        ({
+          relationships,
+          attributes,
+        }: {
+          relationships: any;
+          attributes: any;
+        }) =>
           `${attributes.name}: [${relationships.head.data.attributes.name}]
           `
       )
@@ -167,9 +185,9 @@ const generateTypes = (entity) => {
     input ${name}WhereAttributes {
       ${queryParams
         .map(
-          ({ attributes }) => `${attributes.name}: ${getGraphQLType(
-            attributes.type
-          )}
+          ({ attributes }: { attributes: any }) => `${
+            attributes.name
+          }: ${getGraphQLType(attributes.type)}
           `
         )
         .join("")}
@@ -180,7 +198,7 @@ const generateTypes = (entity) => {
     enum ${name}OrderByEnum {
       ${attributes
         .map(
-          ({ attributes }) => `${attributes.name}
+          ({ attributes }: { attributes: any }) => `${attributes.name}
       `
         )
         .join("")}
@@ -197,7 +215,7 @@ const generateTypes = (entity) => {
     type ${name}Attributes {
       ${attributes
         .map(
-          ({ attributes }) =>
+          ({ attributes }: { attributes: any }) =>
             `
       """ example: ${attributes.type_annotation.example} """
             ${attributes.name}: ${getGraphQLType(
@@ -216,21 +234,27 @@ const generateTypes = (entity) => {
     `;
 };
 
-function generateGraphQLSchema(jsonApiSpec) {
+function generateGraphQLSchema(jsonApiSpec: { resources: any }) {
   const types = jsonApiSpec.resources
     .map(
-      (entity) => `
+      (entity: any) => `
         ${generateTypes(entity)}`
     )
     .join("");
 
-  const whereString = (entity) =>
+  const whereString = (entity: {
+    relationships: { can_query: { data: string | any[] } };
+    attributes: { name: any };
+  }) =>
     entity.relationships.can_query.data.length
       ? `where: ${entity.attributes.name}WhereAttributes,`
       : "";
   const queries = jsonApiSpec.resources
     .map(
-      (entity) => `
+      (entity: {
+        relationships: { can_query: { data: string | any[] } };
+        attributes: { name: any };
+      }) => `
       ${entity.attributes.name}ById(id: ID!): ${entity.attributes.name}
       ${entity.attributes.name}(
           limit: Int, 
@@ -261,8 +285,11 @@ function generateGraphQLSchema(jsonApiSpec) {
   return { schema, resolvers: generatedResolvers, schemaDefinition };
 }
 
-const getJSONfromUrl = async (url) => {
-  const response = await fetch(url);
+const getJSONfromUrl = async (
+  url: RequestInfo | URL,
+  init?: RequestInit | undefined
+) => {
+  const response = await fetch(url, init);
   const json = await response.json();
   return json.data;
 };
