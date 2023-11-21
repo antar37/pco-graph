@@ -1,70 +1,1843 @@
 import gql from "graphql-tag";
 
 const typeDefs = gql`
-  enum AddressOrderByEnum {
+  enum CalendarAttachmentOrderByEnum {
     id
-    city
-    state
-    zip
-    street
-    location
-    primary
+    content_type
     created_at
+    description
+    file_size
+    name
     updated_at
+    url
   }
 
-  input AddressOrderInput {
+  input CalendarAttachmentOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: AddressOrderByEnum
+    field: CalendarAttachmentOrderByEnum
   }
 
-  input AddressWhereAttributes {
-    city: String
-    location: String
-    primary: Boolean
-    state: String
-    street: String
-    zip: String
+  input CalendarAttachmentWhereAttributes {
+    content_type: String
+    created_at: String
+    description: String
+    file_size: String
+    name: String
+    updated_at: String
   }
 
-  type AddressAttributes {
+  type CalendarAttachmentRelationships {
+    CalendarEvent: [CalendarEvent]
+  }
+
+  type CalendarAttachmentAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
     """
-    city: String
+    content_type: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
 
     """
     example: string
     """
-    state: String
+    description: String
+
+    """
+    example: 1
+    """
+    file_size: String
 
     """
     example: string
     """
-    zip: String
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
 
     """
     example: string
     """
-    street: String
+    url: String
+  }
+
+  type CalendarAttachment {
+    id: ID!
+    attributes: CalendarAttachmentAttributes
+    relationships: CalendarAttachmentRelationships
+  }
+
+  enum CalendarConflictOrderByEnum {
+    id
+    created_at
+    note
+    resolved_at
+    updated_at
+  }
+
+  input CalendarConflictOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarConflictOrderByEnum
+  }
+
+  type CalendarConflictRelationships {
+    CalendarResolved_by: [CalendarPerson]
+    CalendarResource: [CalendarResource]
+    CalendarWinner: [CalendarEvent]
+  }
+
+  type CalendarConflictAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
 
     """
     example: string
     """
-    location: String
+    note: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    resolved_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type CalendarConflict {
+    id: ID!
+    attributes: CalendarConflictAttributes
+    relationships: CalendarConflictRelationships
+  }
+
+  enum CalendarEventOrderByEnum {
+    id
+    approval_status
+    created_at
+    description
+    image_url
+    name
+    percent_approved
+    percent_rejected
+    registration_url
+    summary
+    updated_at
+    visible_in_church_center
+  }
+
+  input CalendarEventOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarEventOrderByEnum
+  }
+
+  input CalendarEventWhereAttributes {
+    approval_status: String
+    created_at: String
+    name: String
+    percent_approved: String
+    percent_rejected: String
+    updated_at: String
+    visible_in_church_center: Boolean
+  }
+
+  type CalendarEventRelationships {
+    CalendarAttachments: [CalendarAttachment]
+    CalendarConflicts: [CalendarConflict]
+    CalendarEvent_connections: [CalendarEventConnection]
+    CalendarEvent_instances: [CalendarEventInstance]
+    CalendarEvent_resource_requests: [CalendarEventResourceRequest]
+    CalendarFeed: [CalendarFeed]
+    CalendarOwner: [CalendarPerson]
+    CalendarResource_bookings: [CalendarResourceBooking]
+    CalendarTags: [CalendarTag]
+  }
+
+  type CalendarEventAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    approval_status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    image_url: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    percent_approved: String
+
+    """
+    example: 1
+    """
+    percent_rejected: String
+
+    """
+    example: string
+    """
+    registration_url: String
+
+    """
+    example: string
+    """
+    summary: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
 
     """
     example: true
     """
-    primary: Boolean
+    visible_in_church_center: Boolean
+  }
+
+  type CalendarEvent {
+    id: ID!
+    attributes: CalendarEventAttributes
+    relationships: CalendarEventRelationships
+  }
+
+  enum CalendarEventConnectionOrderByEnum {
+    id
+    connected_to_id
+    connected_to_name
+    connected_to_type
+    product_name
+    connected_to_url
+  }
+
+  input CalendarEventConnectionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarEventConnectionOrderByEnum
+  }
+
+  input CalendarEventConnectionWhereAttributes {
+    product_name: String
+  }
+
+  type CalendarEventConnectionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: primary_key
+    """
+    connected_to_id: ID!
+
+    """
+    example: string
+    """
+    connected_to_name: String
+
+    """
+    example: string
+    """
+    connected_to_type: String
+
+    """
+    example: string
+    """
+    product_name: String
+
+    """
+    example: string
+    """
+    connected_to_url: String
+  }
+
+  type CalendarEventConnection {
+    id: ID!
+    attributes: CalendarEventConnectionAttributes
+  }
+
+  enum CalendarEventInstanceOrderByEnum {
+    id
+    all_day_event
+    compact_recurrence_description
+    created_at
+    ends_at
+    location
+    recurrence
+    recurrence_description
+    starts_at
+    updated_at
+    church_center_url
+  }
+
+  input CalendarEventInstanceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarEventInstanceOrderByEnum
+  }
+
+  input CalendarEventInstanceWhereAttributes {
+    created_at: String
+    ends_at: String
+    starts_at: String
+    updated_at: String
+  }
+
+  type CalendarEventInstanceRelationships {
+    CalendarEvent: [CalendarEvent]
+    CalendarEvent_times: [CalendarEventTime]
+    CalendarResource_bookings: [CalendarResourceBooking]
+    CalendarTags: [CalendarTag]
+  }
+
+  type CalendarEventInstanceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    all_day_event: Boolean
+
+    """
+    example: string
+    """
+    compact_recurrence_description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: string
+    """
+    location: String
+
+    """
+    example: string
+    """
+    recurrence: String
+
+    """
+    example: string
+    """
+    recurrence_description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    church_center_url: String
+  }
+
+  type CalendarEventInstance {
+    id: ID!
+    attributes: CalendarEventInstanceAttributes
+    relationships: CalendarEventInstanceRelationships
+  }
+
+  enum CalendarEventResourceRequestOrderByEnum {
+    id
+    approval_sent
+    approval_status
+    created_at
+    updated_at
+    notes
+    quantity
+  }
+
+  input CalendarEventResourceRequestOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarEventResourceRequestOrderByEnum
+  }
+
+  input CalendarEventResourceRequestWhereAttributes {
+    approval_sent: Boolean
+    approval_status: String
+    created_at: String
+    updated_at: String
+  }
+
+  type CalendarEventResourceRequestRelationships {
+    CalendarCreated_by: [CalendarPerson]
+    CalendarEvent: [CalendarEvent]
+    CalendarResource_bookings: [CalendarResourceBooking]
+    CalendarResource: [CalendarResource]
+    CalendarRoom_setup: [CalendarRoomSetup]
+    CalendarUpdated_by: [CalendarPerson]
+  }
+
+  type CalendarEventResourceRequestAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    approval_sent: Boolean
+
+    """
+    example: string
+    """
+    approval_status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    notes: String
+
+    """
+    example: 1
+    """
+    quantity: String
+  }
+
+  type CalendarEventResourceRequest {
+    id: ID!
+    attributes: CalendarEventResourceRequestAttributes
+    relationships: CalendarEventResourceRequestRelationships
+  }
+
+  enum CalendarEventTimeOrderByEnum {
+    id
+    ends_at
+    starts_at
+    name
+    visible_on_kiosks
+    visible_on_widget_and_ical
+  }
+
+  input CalendarEventTimeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarEventTimeOrderByEnum
+  }
+
+  input CalendarEventTimeWhereAttributes {
+    ends_at: String
+    name: String
+    starts_at: String
+    visible_on_kiosks: Boolean
+    visible_on_widget_and_ical: Boolean
+  }
+
+  type CalendarEventTimeRelationships {
+    CalendarEvent: [CalendarEvent]
+  }
+
+  type CalendarEventTimeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    name: String
+
+    """
+    example: true
+    """
+    visible_on_kiosks: Boolean
+
+    """
+    example: true
+    """
+    visible_on_widget_and_ical: Boolean
+  }
+
+  type CalendarEventTime {
+    id: ID!
+    attributes: CalendarEventTimeAttributes
+    relationships: CalendarEventTimeRelationships
+  }
+
+  enum CalendarFeedOrderByEnum {
+    id
+    default_church_center_visibility
+    feed_type
+    name
+    imported_at
+    can_delete
+  }
+
+  input CalendarFeedOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarFeedOrderByEnum
+  }
+
+  input CalendarFeedWhereAttributes {
+    feed_type: String
+  }
+
+  type CalendarFeedAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: value
+    """
+    default_church_center_visibility: String
+
+    """
+    example: value
+    """
+    feed_type: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    imported_at: String
+
+    """
+    example: true
+    """
+    can_delete: Boolean
+  }
+
+  type CalendarFeed {
+    id: ID!
+    attributes: CalendarFeedAttributes
+  }
+
+  enum CalendarOrganizationOrderByEnum {
+    id
+    name
+    time_zone
+    twenty_four_hour_time
+    date_format
+    onboarding
+  }
+
+  input CalendarOrganizationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarOrganizationOrderByEnum
+  }
+
+  type CalendarOrganizationRelationships {
+    CalendarAttachments: [CalendarAttachment]
+    CalendarConflicts: [CalendarConflict]
+    CalendarEvent_instances: [CalendarEventInstance]
+    CalendarEvent_resource_requests: [CalendarEventResourceRequest]
+    CalendarEvents: [CalendarEvent]
+    CalendarFeeds: [CalendarFeed]
+    CalendarPeople: [CalendarPerson]
+    CalendarReport_templates: [CalendarReportTemplate]
+    CalendarResource_approval_groups: [CalendarResourceApprovalGroup]
+    CalendarResource_bookings: [CalendarResourceBooking]
+    CalendarResource_folders: [CalendarResourceFolder]
+    CalendarResource_questions: [CalendarResourceQuestion]
+    CalendarResources: [CalendarResource]
+    CalendarRoom_setups: [CalendarRoomSetup]
+    CalendarTag_groups: [CalendarTagGroup]
+    CalendarTags: [CalendarTag]
+  }
+
+  type CalendarOrganizationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    time_zone: String
+
+    """
+    example: true
+    """
+    twenty_four_hour_time: Boolean
+
+    """
+    example: string
+    """
+    date_format: String
+
+    """
+    example: true
+    """
+    onboarding: Boolean
+  }
+
+  type CalendarOrganization {
+    id: ID!
+    attributes: CalendarOrganizationAttributes
+    relationships: CalendarOrganizationRelationships
+  }
+
+  enum CalendarPersonOrderByEnum {
+    id
+    created_at
+    first_name
+    last_name
+    middle_name
+    updated_at
+    avatar_url
+    child
+    contact_data
+    gender
+    has_access
+    name_prefix
+    name_suffix
+    pending_request_count
+    permissions
+    resolves_conflicts
+    site_administrator
+    status
+    event_permissions_type
+    people_permissions_type
+    room_permissions_type
+    resources_permissions_type
+  }
+
+  input CalendarPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarPersonOrderByEnum
+  }
+
+  input CalendarPersonWhereAttributes {
+    created_at: String
+    first_name: String
+    last_name: String
+    middle_name: String
+    updated_at: String
+  }
+
+  type CalendarPersonRelationships {
+    CalendarEvent_resource_requests: [CalendarEventResourceRequest]
+    CalendarOrganization: [CalendarOrganization]
+  }
+
+  type CalendarPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: string
+    """
+    middle_name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    avatar_url: String
+
+    """
+    example: true
+    """
+    child: Boolean
+
+    """
+    example: string
+    """
+    contact_data: String
+
+    """
+    example: string
+    """
+    gender: String
+
+    """
+    example: true
+    """
+    has_access: Boolean
+
+    """
+    example: string
+    """
+    name_prefix: String
+
+    """
+    example: string
+    """
+    name_suffix: String
+
+    """
+    example: 1
+    """
+    pending_request_count: String
+
+    """
+    example: 1
+    """
+    permissions: String
+
+    """
+    example: true
+    """
+    resolves_conflicts: Boolean
+
+    """
+    example: true
+    """
+    site_administrator: Boolean
+
+    """
+    example: value
+    """
+    status: String
+
+    """
+    example: string
+    """
+    event_permissions_type: String
+
+    """
+    example: string
+    """
+    people_permissions_type: String
+
+    """
+    example: string
+    """
+    room_permissions_type: String
+
+    """
+    example: string
+    """
+    resources_permissions_type: String
+  }
+
+  type CalendarPerson {
+    id: ID!
+    attributes: CalendarPersonAttributes
+    relationships: CalendarPersonRelationships
+  }
+
+  enum CalendarReportTemplateOrderByEnum {
+    id
+    body
+    created_at
+    description
+    title
+    updated_at
+  }
+
+  input CalendarReportTemplateOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarReportTemplateOrderByEnum
+  }
+
+  type CalendarReportTemplateAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+
+    """
+    example: string
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: string
+    """
+    updated_at: String
+  }
+
+  type CalendarReportTemplate {
+    id: ID!
+    attributes: CalendarReportTemplateAttributes
+  }
+
+  enum CalendarRequiredApprovalOrderByEnum {
+    id
+  }
+
+  input CalendarRequiredApprovalOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarRequiredApprovalOrderByEnum
+  }
+
+  type CalendarRequiredApprovalRelationships {
+    CalendarResource: [CalendarResource]
+  }
+
+  type CalendarRequiredApprovalAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+  }
+
+  type CalendarRequiredApproval {
+    id: ID!
+    attributes: CalendarRequiredApprovalAttributes
+    relationships: CalendarRequiredApprovalRelationships
+  }
+
+  enum CalendarResourceOrderByEnum {
+    id
+    created_at
+    kind
+    name
+    serial_number
+    updated_at
+    description
+    expires_at
+    home_location
+    image
+    quantity
+    path_name
+  }
+
+  input CalendarResourceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarResourceOrderByEnum
+  }
+
+  input CalendarResourceWhereAttributes {
+    created_at: String
+    kind: String
+    name: String
+    path_name: String
+    serial_number: String
+    updated_at: String
+  }
+
+  type CalendarResourceRelationships {
+    CalendarConflicts: [CalendarConflict]
+    CalendarEvent_resource_requests: [CalendarEventResourceRequest]
+    CalendarRequired_approvals: [CalendarRequiredApproval]
+    CalendarResource_approval_groups: [CalendarResourceApprovalGroup]
+    CalendarResource_bookings: [CalendarResourceBooking]
+    CalendarResource_folder: [CalendarResourceFolder]
+    CalendarResource_questions: [CalendarResourceQuestion]
+    CalendarRoom_setups: [CalendarRoomSetup]
+  }
+
+  type CalendarResourceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    serial_number: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    expires_at: String
+
+    """
+    example: string
+    """
+    home_location: String
+
+    """
+    example: string
+    """
+    image: String
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: string
+    """
+    path_name: String
+  }
+
+  type CalendarResource {
+    id: ID!
+    attributes: CalendarResourceAttributes
+    relationships: CalendarResourceRelationships
+  }
+
+  enum CalendarResourceApprovalGroupOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    form_count
+    resource_count
+    room_count
+  }
+
+  input CalendarResourceApprovalGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarResourceApprovalGroupOrderByEnum
+  }
+
+  input CalendarResourceApprovalGroupWhereAttributes {
+    created_at: String
+    name: String
+    updated_at: String
+  }
+
+  type CalendarResourceApprovalGroupRelationships {
+    CalendarEvent_resource_requests: [CalendarEventResourceRequest]
+    CalendarPeople: [CalendarPerson]
+    CalendarRequired_approvals: [CalendarRequiredApproval]
+    CalendarResources: [CalendarResource]
+  }
+
+  type CalendarResourceApprovalGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    form_count: String
+
+    """
+    example: 1
+    """
+    resource_count: String
+
+    """
+    example: 1
+    """
+    room_count: String
+  }
+
+  type CalendarResourceApprovalGroup {
+    id: ID!
+    attributes: CalendarResourceApprovalGroupAttributes
+    relationships: CalendarResourceApprovalGroupRelationships
+  }
+
+  enum CalendarResourceBookingOrderByEnum {
+    id
+    created_at
+    ends_at
+    starts_at
+    updated_at
+    quantity
+  }
+
+  input CalendarResourceBookingOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarResourceBookingOrderByEnum
+  }
+
+  input CalendarResourceBookingWhereAttributes {
+    created_at: String
+    ends_at: String
+    starts_at: String
+    updated_at: String
+  }
+
+  type CalendarResourceBookingRelationships {
+    CalendarEvent_instance: [CalendarEventInstance]
+    CalendarEvent_resource_request: [CalendarEventResourceRequest]
+    CalendarResource: [CalendarResource]
+  }
+
+  type CalendarResourceBookingAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    quantity: String
+  }
+
+  type CalendarResourceBooking {
+    id: ID!
+    attributes: CalendarResourceBookingAttributes
+    relationships: CalendarResourceBookingRelationships
+  }
+
+  enum CalendarResourceFolderOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    ancestry
+    kind
+    path_name
+  }
+
+  input CalendarResourceFolderOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarResourceFolderOrderByEnum
+  }
+
+  input CalendarResourceFolderWhereAttributes {
+    ancestry: String
+    created_at: String
+    name: String
+    path_name: String
+    updated_at: String
+  }
+
+  type CalendarResourceFolderRelationships {
+    CalendarResources: [CalendarResource]
+  }
+
+  type CalendarResourceFolderAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    ancestry: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: string
+    """
+    path_name: String
+  }
+
+  type CalendarResourceFolder {
+    id: ID!
+    attributes: CalendarResourceFolderAttributes
+    relationships: CalendarResourceFolderRelationships
+  }
+
+  enum CalendarResourceQuestionOrderByEnum {
+    id
+    created_at
+    kind
+    updated_at
+    choices
+    description
+    multiple_select
+    optional
+    position
+    question
+  }
+
+  input CalendarResourceQuestionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarResourceQuestionOrderByEnum
+  }
+
+  input CalendarResourceQuestionWhereAttributes {
+    created_at: String
+    kind: String
+    updated_at: String
+  }
+
+  type CalendarResourceQuestionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    choices: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: true
+    """
+    multiple_select: Boolean
+
+    """
+    example: true
+    """
+    optional: Boolean
+
+    """
+    example: 1
+    """
+    position: String
+
+    """
+    example: string
+    """
+    question: String
+  }
+
+  type CalendarResourceQuestion {
+    id: ID!
+    attributes: CalendarResourceQuestionAttributes
+  }
+
+  enum CalendarResourceSuggestionOrderByEnum {
+    id
+    created_at
+    quantity
+    updated_at
+  }
+
+  input CalendarResourceSuggestionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarResourceSuggestionOrderByEnum
+  }
+
+  type CalendarResourceSuggestionRelationships {
+    CalendarResource: [CalendarResource]
+  }
+
+  type CalendarResourceSuggestionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type CalendarResourceSuggestion {
+    id: ID!
+    attributes: CalendarResourceSuggestionAttributes
+    relationships: CalendarResourceSuggestionRelationships
+  }
+
+  enum CalendarRoomSetupOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    description
+    diagram
+    diagram_url
+    diagram_thumbnail_url
+  }
+
+  input CalendarRoomSetupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarRoomSetupOrderByEnum
+  }
+
+  input CalendarRoomSetupWhereAttributes {
+    created_at: String
+    name: String
+    updated_at: String
+  }
+
+  type CalendarRoomSetupRelationships {
+    CalendarContaining_resource: [CalendarResource]
+    CalendarResource_suggestions: [CalendarResourceSuggestion]
+  }
+
+  type CalendarRoomSetupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    diagram: String
+
+    """
+    example: string
+    """
+    diagram_url: String
+
+    """
+    example: string
+    """
+    diagram_thumbnail_url: String
+  }
+
+  type CalendarRoomSetup {
+    id: ID!
+    attributes: CalendarRoomSetupAttributes
+    relationships: CalendarRoomSetupRelationships
+  }
+
+  enum CalendarTagOrderByEnum {
+    id
+    church_center_category
+    color
+    created_at
+    name
+    position
+    updated_at
+  }
+
+  input CalendarTagOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarTagOrderByEnum
+  }
+
+  input CalendarTagWhereAttributes {
+    church_center_category: Boolean
+    color: String
+    created_at: String
+    id: ID!
+    name: String
+    position: String
+    updated_at: String
+  }
+
+  type CalendarTagRelationships {
+    CalendarEvent_instances: [CalendarEventInstance]
+    CalendarEvents: [CalendarEvent]
+    CalendarTag_group: [CalendarTagGroup]
+  }
+
+  type CalendarTagAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    church_center_category: Boolean
+
+    """
+    example: string
+    """
+    color: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1.42
+    """
+    position: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type CalendarTag {
+    id: ID!
+    attributes: CalendarTagAttributes
+    relationships: CalendarTagRelationships
+  }
+
+  enum CalendarTagGroupOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    required
+  }
+
+  input CalendarTagGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: CalendarTagGroupOrderByEnum
+  }
+
+  input CalendarTagGroupWhereAttributes {
+    created_at: String
+    name: String
+    updated_at: String
+  }
+
+  type CalendarTagGroupRelationships {
+    CalendarEvents: [CalendarEvent]
+    CalendarTags: [CalendarTag]
+  }
+
+  type CalendarTagGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: true
+    """
+    required: Boolean
+  }
+
+  type CalendarTagGroup {
+    id: ID!
+    attributes: CalendarTagGroupAttributes
+    relationships: CalendarTagGroupRelationships
+  }
+
+  enum Check_insAttendanceTypeOrderByEnum {
+    id
+    name
+    color
+    created_at
+    updated_at
+    limit
+  }
+
+  input Check_insAttendanceTypeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insAttendanceTypeOrderByEnum
+  }
+
+  input Check_insAttendanceTypeWhereAttributes {
+    id: ID!
+    name: String
+  }
+
+  type Check_insAttendanceTypeRelationships {
+    Check_insEvent: [Check_insEvent]
+    Check_insHeadcounts: [Check_insHeadcount]
+  }
+
+  type Check_insAttendanceTypeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    color: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    limit: String
+  }
+
+  type Check_insAttendanceType {
+    id: ID!
+    attributes: Check_insAttendanceTypeAttributes
+    relationships: Check_insAttendanceTypeRelationships
+  }
+
+  enum Check_insCheckInOrderByEnum {
+    id
+    first_name
+    last_name
+    medical_notes
+    number
+    security_code
+    created_at
+    updated_at
+    checked_out_at
+    confirmed_at
+    emergency_contact_name
+    emergency_contact_phone_number
+    one_time_guest
+    kind
+  }
+
+  input Check_insCheckInOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insCheckInOrderByEnum
+  }
+
+  input Check_insCheckInWhereAttributes {
+    created_at: String
+    security_code: String
+    updated_at: String
+  }
+
+  type Check_insCheckInRelationships {
+    Check_insCheck_in_group: [Check_insCheckInGroup]
+    Check_insCheck_in_times: [Check_insCheckInTime]
+    Check_insChecked_in_at: [Check_insStation]
+    Check_insChecked_in_by: [Check_insPerson]
+    Check_insChecked_out_by: [Check_insPerson]
+    Check_insEvent: [Check_insEvent]
+    Check_insEvent_period: [Check_insEventPeriod]
+    Check_insEvent_times: [Check_insEventTime]
+    Check_insLocations: [Check_insLocation]
+    Check_insOptions: [Check_insOption]
+    Check_insPerson: [Check_insPerson]
+  }
+
+  type Check_insCheckInAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: string
+    """
+    medical_notes: String
+
+    """
+    example: 1
+    """
+    number: String
+
+    """
+    example: string
+    """
+    security_code: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    checked_out_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    confirmed_at: String
+
+    """
+    example: string
+    """
+    emergency_contact_name: String
+
+    """
+    example: string
+    """
+    emergency_contact_phone_number: String
+
+    """
+    example: true
+    """
+    one_time_guest: Boolean
+
+    """
+    example: string
+    """
+    kind: String
+  }
+
+  type Check_insCheckIn {
+    id: ID!
+    attributes: Check_insCheckInAttributes
+    relationships: Check_insCheckInRelationships
+  }
+
+  enum Check_insCheckInGroupOrderByEnum {
+    id
+    name_labels_count
+    security_labels_count
+    check_ins_count
+    print_status
+    created_at
+    updated_at
+  }
+
+  input Check_insCheckInGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insCheckInGroupOrderByEnum
+  }
+
+  type Check_insCheckInGroupRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insEvent_period: [Check_insEventPeriod]
+    Check_insPrint_station: [Check_insStation]
+  }
+
+  type Check_insCheckInGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    name_labels_count: String
+
+    """
+    example: 1
+    """
+    security_labels_count: String
+
+    """
+    example: 1
+    """
+    check_ins_count: String
+
+    """
+    example: value
+    """
+    print_status: String
 
     """
     example: 2000-01-01T12:00:00Z
@@ -77,59 +1850,2653 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type Address {
+  type Check_insCheckInGroup {
     id: ID!
-    attributes: AddressAttributes
+    attributes: Check_insCheckInGroupAttributes
+    relationships: Check_insCheckInGroupRelationships
   }
 
-  enum AnniversaryCouplesOrderByEnum {
+  enum Check_insCheckInTimeOrderByEnum {
     id
+    kind
+    has_validated
+    services_integrated
+    alerts
   }
 
-  input AnniversaryCouplesOrderInput {
+  input Check_insCheckInTimeOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: AnniversaryCouplesOrderByEnum
+    field: Check_insCheckInTimeOrderByEnum
   }
 
-  type AnniversaryCouplesAttributes {
+  type Check_insCheckInTimeAttributes {
     """
     example: primary_key
     """
-    id: ID
-  }
-
-  type AnniversaryCouples {
     id: ID!
-    attributes: AnniversaryCouplesAttributes
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: true
+    """
+    has_validated: Boolean
+
+    """
+    example: true
+    """
+    services_integrated: Boolean
+
+    """
+    example:
+    """
+    alerts: String
   }
 
-  enum AppOrderByEnum {
+  type Check_insCheckInTime {
+    id: ID!
+    attributes: Check_insCheckInTimeAttributes
+  }
+
+  enum Check_insEventOrderByEnum {
+    id
+    name
+    frequency
+    enable_services_integration
+    created_at
+    updated_at
+    archived_at
+    integration_key
+    location_times_enabled
+    pre_select_enabled
+    app_source
+  }
+
+  input Check_insEventOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insEventOrderByEnum
+  }
+
+  input Check_insEventWhereAttributes {
+    id: ID!
+    name: String
+  }
+
+  type Check_insEventRelationships {
+    Check_insAttendance_types: [Check_insAttendanceType]
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insCurrent_event_times: [Check_insEventTime]
+    Check_insEvent_labels: [Check_insEventLabel]
+    Check_insEvent_periods: [Check_insEventPeriod]
+    Check_insLocations: [Check_insLocation]
+    Check_insPerson_events: [Check_insPersonEvent]
+  }
+
+  type Check_insEventAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    frequency: String
+
+    """
+    example: true
+    """
+    enable_services_integration: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    archived_at: String
+
+    """
+    example: string
+    """
+    integration_key: String
+
+    """
+    example: true
+    """
+    location_times_enabled: Boolean
+
+    """
+    example: true
+    """
+    pre_select_enabled: Boolean
+
+    """
+    example: string
+    """
+    app_source: String
+  }
+
+  type Check_insEvent {
+    id: ID!
+    attributes: Check_insEventAttributes
+    relationships: Check_insEventRelationships
+  }
+
+  enum Check_insEventLabelOrderByEnum {
+    id
+    quantity
+    for_regular
+    for_guest
+    for_volunteer
+    created_at
+    updated_at
+  }
+
+  input Check_insEventLabelOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insEventLabelOrderByEnum
+  }
+
+  type Check_insEventLabelRelationships {
+    Check_insEvent: [Check_insEvent]
+    Check_insLabel: [Check_insLabel]
+  }
+
+  type Check_insEventLabelAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: true
+    """
+    for_regular: Boolean
+
+    """
+    example: true
+    """
+    for_guest: Boolean
+
+    """
+    example: true
+    """
+    for_volunteer: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insEventLabel {
+    id: ID!
+    attributes: Check_insEventLabelAttributes
+    relationships: Check_insEventLabelRelationships
+  }
+
+  enum Check_insEventPeriodOrderByEnum {
+    id
+    starts_at
+    ends_at
+    regular_count
+    guest_count
+    volunteer_count
+    note
+    created_at
+    updated_at
+  }
+
+  input Check_insEventPeriodOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insEventPeriodOrderByEnum
+  }
+
+  type Check_insEventPeriodRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insEvent: [Check_insEvent]
+    Check_insEvent_times: [Check_insEventTime]
+    Check_insLocation_event_periods: [Check_insLocationEventPeriod]
+  }
+
+  type Check_insEventPeriodAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 1
+    """
+    regular_count: String
+
+    """
+    example: 1
+    """
+    guest_count: String
+
+    """
+    example: 1
+    """
+    volunteer_count: String
+
+    """
+    example: string
+    """
+    note: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insEventPeriod {
+    id: ID!
+    attributes: Check_insEventPeriodAttributes
+    relationships: Check_insEventPeriodRelationships
+  }
+
+  enum Check_insEventTimeOrderByEnum {
+    id
+    total_count
+    starts_at
+    shows_at
+    hides_at
+    regular_count
+    guest_count
+    volunteer_count
+    created_at
+    updated_at
+    name
+    hour
+    minute
+    day_of_week
+  }
+
+  input Check_insEventTimeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insEventTimeOrderByEnum
+  }
+
+  input Check_insEventTimeWhereAttributes {
+    created_at: String
+    updated_at: String
+  }
+
+  type Check_insEventTimeRelationships {
+    Check_insAvailable_locations: [Check_insLocation]
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insEvent: [Check_insEvent]
+    Check_insEvent_period: [Check_insEventPeriod]
+    Check_insHeadcounts: [Check_insHeadcount]
+    Check_insLocation_event_times: [Check_insLocationEventTime]
+  }
+
+  type Check_insEventTimeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    total_count: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    shows_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    hides_at: String
+
+    """
+    example: 1
+    """
+    regular_count: String
+
+    """
+    example: 1
+    """
+    guest_count: String
+
+    """
+    example: 1
+    """
+    volunteer_count: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    hour: String
+
+    """
+    example: 1
+    """
+    minute: String
+
+    """
+    example: 1
+    """
+    day_of_week: String
+  }
+
+  type Check_insEventTime {
+    id: ID!
+    attributes: Check_insEventTimeAttributes
+    relationships: Check_insEventTimeRelationships
+  }
+
+  enum Check_insHeadcountOrderByEnum {
+    id
+    total
+    updated_at
+    created_at
+  }
+
+  input Check_insHeadcountOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insHeadcountOrderByEnum
+  }
+
+  input Check_insHeadcountWhereAttributes {
+    created_at: String
+    updated_at: String
+  }
+
+  type Check_insHeadcountRelationships {
+    Check_insAttendance_type: [Check_insAttendanceType]
+    Check_insEvent_time: [Check_insEventTime]
+  }
+
+  type Check_insHeadcountAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    total: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+  }
+
+  type Check_insHeadcount {
+    id: ID!
+    attributes: Check_insHeadcountAttributes
+    relationships: Check_insHeadcountRelationships
+  }
+
+  enum Check_insLabelOrderByEnum {
+    id
+    name
+    xml
+    prints_for
+    roll
+    created_at
+    updated_at
+  }
+
+  input Check_insLabelOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insLabelOrderByEnum
+  }
+
+  type Check_insLabelRelationships {
+    Check_insEvent_labels: [Check_insEventLabel]
+    Check_insLocation_labels: [Check_insLocationLabel]
+  }
+
+  type Check_insLabelAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    xml: String
+
+    """
+    example: string
+    """
+    prints_for: String
+
+    """
+    example: string
+    """
+    roll: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insLabel {
+    id: ID!
+    attributes: Check_insLabelAttributes
+    relationships: Check_insLabelRelationships
+  }
+
+  enum Check_insLocationOrderByEnum {
+    id
+    name
+    kind
+    opened
+    questions
+    age_min_in_months
+    age_max_in_months
+    age_range_by
+    age_on
+    child_or_adult
+    effective_date
+    gender
+    grade_min
+    grade_max
+    max_occupancy
+    min_volunteers
+    attendees_per_volunteer
+    position
+    updated_at
+    created_at
+  }
+
+  input Check_insLocationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insLocationOrderByEnum
+  }
+
+  type Check_insLocationRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insEvent: [Check_insEvent]
+    Check_insLocation_event_periods: [Check_insLocationEventPeriod]
+    Check_insLocation_event_times: [Check_insLocationEventTime]
+    Check_insLocation_labels: [Check_insLocationLabel]
+    Check_insLocations: [Check_insLocation]
+    Check_insOptions: [Check_insOption]
+    Check_insParent: [Check_insLocation]
+  }
+
+  type Check_insLocationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: true
+    """
+    opened: Boolean
+
+    """
+    example: string
+    """
+    questions: String
+
+    """
+    example: 1
+    """
+    age_min_in_months: String
+
+    """
+    example: 1
+    """
+    age_max_in_months: String
+
+    """
+    example: string
+    """
+    age_range_by: String
+
+    """
+    example: 2000-01-01
+    """
+    age_on: String
+
+    """
+    example: string
+    """
+    child_or_adult: String
+
+    """
+    example: 2000-01-01
+    """
+    effective_date: String
+
+    """
+    example: string
+    """
+    gender: String
+
+    """
+    example: 1
+    """
+    grade_min: String
+
+    """
+    example: 1
+    """
+    grade_max: String
+
+    """
+    example: 1
+    """
+    max_occupancy: String
+
+    """
+    example: 1
+    """
+    min_volunteers: String
+
+    """
+    example: 1
+    """
+    attendees_per_volunteer: String
+
+    """
+    example: 1
+    """
+    position: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+  }
+
+  type Check_insLocation {
+    id: ID!
+    attributes: Check_insLocationAttributes
+    relationships: Check_insLocationRelationships
+  }
+
+  enum Check_insLocationEventPeriodOrderByEnum {
+    id
+    regular_count
+    guest_count
+    volunteer_count
+    created_at
+    updated_at
+  }
+
+  input Check_insLocationEventPeriodOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insLocationEventPeriodOrderByEnum
+  }
+
+  type Check_insLocationEventPeriodRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insEvent_period: [Check_insEventPeriod]
+    Check_insLocation: [Check_insLocation]
+  }
+
+  type Check_insLocationEventPeriodAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    regular_count: String
+
+    """
+    example: 1
+    """
+    guest_count: String
+
+    """
+    example: 1
+    """
+    volunteer_count: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insLocationEventPeriod {
+    id: ID!
+    attributes: Check_insLocationEventPeriodAttributes
+    relationships: Check_insLocationEventPeriodRelationships
+  }
+
+  enum Check_insLocationEventTimeOrderByEnum {
+    id
+    regular_count
+    guest_count
+    volunteer_count
+    created_at
+    updated_at
+  }
+
+  input Check_insLocationEventTimeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insLocationEventTimeOrderByEnum
+  }
+
+  input Check_insLocationEventTimeWhereAttributes {
+    created_at: String
+    updated_at: String
+  }
+
+  type Check_insLocationEventTimeRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insEvent_time: [Check_insEventTime]
+    Check_insLocation: [Check_insLocation]
+  }
+
+  type Check_insLocationEventTimeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    regular_count: String
+
+    """
+    example: 1
+    """
+    guest_count: String
+
+    """
+    example: 1
+    """
+    volunteer_count: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insLocationEventTime {
+    id: ID!
+    attributes: Check_insLocationEventTimeAttributes
+    relationships: Check_insLocationEventTimeRelationships
+  }
+
+  enum Check_insLocationLabelOrderByEnum {
+    id
+    quantity
+    for_regular
+    for_guest
+    for_volunteer
+    created_at
+    updated_at
+  }
+
+  input Check_insLocationLabelOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insLocationLabelOrderByEnum
+  }
+
+  type Check_insLocationLabelRelationships {
+    Check_insLabel: [Check_insLabel]
+    Check_insLocation: [Check_insLocation]
+  }
+
+  type Check_insLocationLabelAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: true
+    """
+    for_regular: Boolean
+
+    """
+    example: true
+    """
+    for_guest: Boolean
+
+    """
+    example: true
+    """
+    for_volunteer: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insLocationLabel {
+    id: ID!
+    attributes: Check_insLocationLabelAttributes
+    relationships: Check_insLocationLabelRelationships
+  }
+
+  enum Check_insOptionOrderByEnum {
+    id
+    body
+    quantity
+    created_at
+    updated_at
+  }
+
+  input Check_insOptionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insOptionOrderByEnum
+  }
+
+  type Check_insOptionRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insLabel: [Check_insLabel]
+  }
+
+  type Check_insOptionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insOption {
+    id: ID!
+    attributes: Check_insOptionAttributes
+    relationships: Check_insOptionRelationships
+  }
+
+  enum Check_insOrganizationOrderByEnum {
+    id
+    date_format_pattern
+    time_zone_olson
+    name
+    daily_check_ins
+    time_zone
+    avatar_url
+    created_at
+    updated_at
+  }
+
+  input Check_insOrganizationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insOrganizationOrderByEnum
+  }
+
+  type Check_insOrganizationRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insEvent_times: [Check_insEventTime]
+    Check_insEvents: [Check_insEvent]
+    Check_insHeadcounts: [Check_insHeadcount]
+    Check_insLabels: [Check_insLabel]
+    Check_insOptions: [Check_insOption]
+    Check_insPasses: [Check_insPass]
+    Check_insPeople: [Check_insPerson]
+    Check_insStations: [Check_insStation]
+    Check_insThemes: [Check_insTheme]
+  }
+
+  type Check_insOrganizationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    date_format_pattern: String
+
+    """
+    example: string
+    """
+    time_zone_olson: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    daily_check_ins: String
+
+    """
+    example: string
+    """
+    time_zone: String
+
+    """
+    example: string
+    """
+    avatar_url: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insOrganization {
+    id: ID!
+    attributes: Check_insOrganizationAttributes
+    relationships: Check_insOrganizationRelationships
+  }
+
+  enum Check_insPassOrderByEnum {
+    id
+    code
+    kind
+    created_at
+    updated_at
+  }
+
+  input Check_insPassOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insPassOrderByEnum
+  }
+
+  input Check_insPassWhereAttributes {
+    code: String
+  }
+
+  type Check_insPassRelationships {
+    Check_insPerson: [Check_insPerson]
+  }
+
+  type Check_insPassAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    code: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type Check_insPass {
+    id: ID!
+    attributes: Check_insPassAttributes
+    relationships: Check_insPassRelationships
+  }
+
+  enum Check_insPersonOrderByEnum {
+    id
+    addresses
+    email_addresses
+    phone_numbers
+    avatar_url
+    name_prefix
+    first_name
+    middle_name
+    last_name
+    name_suffix
+    birthdate
+    grade
+    gender
+    medical_notes
+    child
+    permission
+    headcounter
+    last_checked_in_at
+    check_in_count
+    created_at
+    updated_at
+    passed_background_check
+    demographic_avatar_url
+    name
+    top_permission
+    ignore_filters
+  }
+
+  input Check_insPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insPersonOrderByEnum
+  }
+
+  input Check_insPersonWhereAttributes {
+    headcounter: Boolean
+    ignore_filters: Boolean
+    permission: String
+    search_name: String
+  }
+
+  type Check_insPersonRelationships {
+    Check_insCheck_ins: [Check_insCheckIn]
+    Check_insOrganization: [Check_insOrganization]
+    Check_insPasses: [Check_insPass]
+    Check_insPerson_events: [Check_insPersonEvent]
+  }
+
+  type Check_insPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example:
+    """
+    addresses: String
+
+    """
+    example:
+    """
+    email_addresses: String
+
+    """
+    example:
+    """
+    phone_numbers: String
+
+    """
+    example: string
+    """
+    avatar_url: String
+
+    """
+    example: string
+    """
+    name_prefix: String
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    middle_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: string
+    """
+    name_suffix: String
+
+    """
+    example: 2000-01-01
+    """
+    birthdate: String
+
+    """
+    example: 1
+    """
+    grade: String
+
+    """
+    example: string
+    """
+    gender: String
+
+    """
+    example: string
+    """
+    medical_notes: String
+
+    """
+    example: true
+    """
+    child: Boolean
+
+    """
+    example: string
+    """
+    permission: String
+
+    """
+    example: true
+    """
+    headcounter: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    last_checked_in_at: String
+
+    """
+    example: 1
+    """
+    check_in_count: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: true
+    """
+    passed_background_check: Boolean
+
+    """
+    example: string
+    """
+    demographic_avatar_url: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    top_permission: String
+
+    """
+    example: true
+    """
+    ignore_filters: Boolean
+  }
+
+  type Check_insPerson {
+    id: ID!
+    attributes: Check_insPersonAttributes
+    relationships: Check_insPersonRelationships
+  }
+
+  enum Check_insPersonEventOrderByEnum {
+    id
+    check_in_count
+    updated_at
+    created_at
+  }
+
+  input Check_insPersonEventOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insPersonEventOrderByEnum
+  }
+
+  type Check_insPersonEventRelationships {
+    Check_insEvent: [Check_insEvent]
+    Check_insFirst_check_in: [Check_insCheckIn]
+    Check_insLast_check_in: [Check_insCheckIn]
+    Check_insPerson: [Check_insPerson]
+  }
+
+  type Check_insPersonEventAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    check_in_count: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+  }
+
+  type Check_insPersonEvent {
+    id: ID!
+    attributes: Check_insPersonEventAttributes
+    relationships: Check_insPersonEventRelationships
+  }
+
+  enum Check_insRosterListPersonOrderByEnum {
+    id
+    first_name
+    last_name
+    name
+    demographic_avatar_url
+    grade
+    gender
+    medical_notes
+    birthdate
+  }
+
+  input Check_insRosterListPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insRosterListPersonOrderByEnum
+  }
+
+  type Check_insRosterListPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    demographic_avatar_url: String
+
+    """
+    example: string
+    """
+    grade: String
+
+    """
+    example: string
+    """
+    gender: String
+
+    """
+    example: string
+    """
+    medical_notes: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    birthdate: String
+  }
+
+  type Check_insRosterListPerson {
+    id: ID!
+    attributes: Check_insRosterListPersonAttributes
+  }
+
+  enum Check_insStationOrderByEnum {
+    id
+    online
+    mode
+    name
+    timeout_seconds
+    input_type
+    input_type_options
+    created_at
+    updated_at
+    next_shows_at
+    open_for_check_in
+    closes_at
+    check_in_count
+  }
+
+  input Check_insStationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insStationOrderByEnum
+  }
+
+  type Check_insStationRelationships {
+    Check_insCheck_in_groups: [Check_insCheckInGroup]
+    Check_insChecked_in_at_check_ins: [Check_insCheckIn]
+    Check_insEvent: [Check_insEvent]
+    Check_insLocation: [Check_insLocation]
+    Check_insPrint_station: [Check_insStation]
+    Check_insTheme: [Check_insTheme]
+  }
+
+  type Check_insStationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    online: Boolean
+
+    """
+    example: 1
+    """
+    mode: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    timeout_seconds: String
+
+    """
+    example: value
+    """
+    input_type: String
+
+    """
+    example: value
+    """
+    input_type_options: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    next_shows_at: String
+
+    """
+    example: true
+    """
+    open_for_check_in: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    closes_at: String
+
+    """
+    example: 1
+    """
+    check_in_count: String
+  }
+
+  type Check_insStation {
+    id: ID!
+    attributes: Check_insStationAttributes
+    relationships: Check_insStationRelationships
+  }
+
+  enum Check_insThemeOrderByEnum {
+    id
+    image_thumbnail
+    name
+    color
+    text_color
+    image
+    created_at
+    updated_at
+    background_color
+    mode
+  }
+
+  input Check_insThemeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: Check_insThemeOrderByEnum
+  }
+
+  type Check_insThemeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    image_thumbnail: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    color: String
+
+    """
+    example: string
+    """
+    text_color: String
+
+    """
+    example: string
+    """
+    image: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    background_color: String
+
+    """
+    example: string
+    """
+    mode: String
+  }
+
+  type Check_insTheme {
+    id: ID!
+    attributes: Check_insThemeAttributes
+  }
+
+  enum GroupsAttendanceOrderByEnum {
+    id
+    attended
+    role
+  }
+
+  input GroupsAttendanceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsAttendanceOrderByEnum
+  }
+
+  input GroupsAttendanceWhereAttributes {
+    role: String
+  }
+
+  type GroupsAttendanceRelationships {
+    GroupsPerson: [GroupsPerson]
+  }
+
+  type GroupsAttendanceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    attended: Boolean
+
+    """
+    example: value
+    """
+    role: String
+  }
+
+  type GroupsAttendance {
+    id: ID!
+    attributes: GroupsAttendanceAttributes
+    relationships: GroupsAttendanceRelationships
+  }
+
+  enum GroupsEnrollmentOrderByEnum {
+    id
+    auto_closed
+    auto_closed_reason
+    date_limit
+    date_limit_reached
+    member_limit
+    member_limit_reached
+    status
+    strategy
+  }
+
+  input GroupsEnrollmentOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsEnrollmentOrderByEnum
+  }
+
+  type GroupsEnrollmentAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    auto_closed: Boolean
+
+    """
+    example: string
+    """
+    auto_closed_reason: String
+
+    """
+    example: string
+    """
+    date_limit: String
+
+    """
+    example: true
+    """
+    date_limit_reached: Boolean
+
+    """
+    example: 1
+    """
+    member_limit: String
+
+    """
+    example: true
+    """
+    member_limit_reached: Boolean
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: string
+    """
+    strategy: String
+  }
+
+  type GroupsEnrollment {
+    id: ID!
+    attributes: GroupsEnrollmentAttributes
+  }
+
+  enum GroupsEventOrderByEnum {
+    id
+    attendance_requests_enabled
+    automated_reminder_enabled
+    canceled
+    canceled_at
+    description
+    ends_at
+    location_type_preference
+    multi_day
+    name
+    reminders_sent
+    reminders_sent_at
+    repeating
+    starts_at
+    virtual_location_url
+    visitors_count
+  }
+
+  input GroupsEventOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsEventOrderByEnum
+  }
+
+  input GroupsEventWhereAttributes {
+    ends_at: String
+    name: String
+    starts_at: String
+  }
+
+  type GroupsEventRelationships {
+    GroupsAttendances: [GroupsAttendance]
+    GroupsGroup: [GroupsGroup]
+    GroupsLocation: [GroupsLocation]
+    GroupsNotes: [GroupsEventNote]
+  }
+
+  type GroupsEventAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    attendance_requests_enabled: Boolean
+
+    """
+    example: true
+    """
+    automated_reminder_enabled: Boolean
+
+    """
+    example: true
+    """
+    canceled: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    canceled_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: string
+    """
+    location_type_preference: String
+
+    """
+    example: true
+    """
+    multi_day: Boolean
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: true
+    """
+    reminders_sent: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    reminders_sent_at: String
+
+    """
+    example: true
+    """
+    repeating: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: string
+    """
+    virtual_location_url: String
+
+    """
+    example: 1
+    """
+    visitors_count: String
+  }
+
+  type GroupsEvent {
+    id: ID!
+    attributes: GroupsEventAttributes
+    relationships: GroupsEventRelationships
+  }
+
+  enum GroupsEventNoteOrderByEnum {
+    id
+    body
+  }
+
+  input GroupsEventNoteOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsEventNoteOrderByEnum
+  }
+
+  type GroupsEventNoteRelationships {
+    GroupsOwner: [GroupsOwner]
+  }
+
+  type GroupsEventNoteAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+  }
+
+  type GroupsEventNote {
+    id: ID!
+    attributes: GroupsEventNoteAttributes
+    relationships: GroupsEventNoteRelationships
+  }
+
+  enum GroupsGroupOrderByEnum {
+    id
+    archived_at
+    contact_email
+    created_at
+    description
+    events_visibility
+    header_image
+    location_type_preference
+    memberships_count
+    name
+    public_church_center_web_url
+    schedule
+    virtual_location_url
+    widget_status
+  }
+
+  input GroupsGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsGroupOrderByEnum
+  }
+
+  input GroupsGroupWhereAttributes {
+    archive_status: String
+    name: String
+  }
+
+  type GroupsGroupRelationships {
+    GroupsEnrollment: [GroupsEnrollment]
+    GroupsEvents: [GroupsEvent]
+    GroupsGroup_type: [GroupsGroupType]
+    GroupsLocation: [GroupsLocation]
+    GroupsMemberships: [GroupsMembership]
+    GroupsPeople: [GroupsPerson]
+    GroupsResources: [GroupsResource]
+    GroupsTags: [GroupsTag]
+  }
+
+  type GroupsGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    archived_at: String
+
+    """
+    example: string
+    """
+    contact_email: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: value
+    """
+    events_visibility: String
+
+    """
+    example: [object Object]
+    """
+    header_image: String
+
+    """
+    example: value
+    """
+    location_type_preference: String
+
+    """
+    example: 1
+    """
+    memberships_count: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    public_church_center_web_url: String
+
+    """
+    example: string
+    """
+    schedule: String
+
+    """
+    example: string
+    """
+    virtual_location_url: String
+
+    """
+    example: [object Object]
+    """
+    widget_status: String
+  }
+
+  type GroupsGroup {
+    id: ID!
+    attributes: GroupsGroupAttributes
+    relationships: GroupsGroupRelationships
+  }
+
+  enum GroupsGroupTypeOrderByEnum {
+    id
+    church_center_visible
+    church_center_map_visible
+    color
+    default_group_settings
+    description
+    name
+    position
+  }
+
+  input GroupsGroupTypeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsGroupTypeOrderByEnum
+  }
+
+  input GroupsGroupTypeWhereAttributes {
+    id: ID!
+  }
+
+  type GroupsGroupTypeRelationships {
+    GroupsEvents: [GroupsEvent]
+    GroupsGroups: [GroupsGroup]
+    GroupsResources: [GroupsResource]
+  }
+
+  type GroupsGroupTypeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    church_center_visible: Boolean
+
+    """
+    example: true
+    """
+    church_center_map_visible: Boolean
+
+    """
+    example: string
+    """
+    color: String
+
+    """
+    example: string
+    """
+    default_group_settings: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    position: String
+  }
+
+  type GroupsGroupType {
+    id: ID!
+    attributes: GroupsGroupTypeAttributes
+    relationships: GroupsGroupTypeRelationships
+  }
+
+  enum GroupsLocationOrderByEnum {
+    id
+    display_preference
+    full_formatted_address
+    latitude
+    longitude
+    name
+    radius
+    strategy
+  }
+
+  input GroupsLocationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsLocationOrderByEnum
+  }
+
+  type GroupsLocationRelationships {
+    GroupsGroup: [GroupsGroup]
+  }
+
+  type GroupsLocationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: value
+    """
+    display_preference: String
+
+    """
+    example: string
+    """
+    full_formatted_address: String
+
+    """
+    example: 1.42
+    """
+    latitude: String
+
+    """
+    example: 1.42
+    """
+    longitude: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    radius: String
+
+    """
+    example: string
+    """
+    strategy: String
+  }
+
+  type GroupsLocation {
+    id: ID!
+    attributes: GroupsLocationAttributes
+    relationships: GroupsLocationRelationships
+  }
+
+  enum GroupsMembershipOrderByEnum {
+    id
+    joined_at
+    role
+  }
+
+  input GroupsMembershipOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsMembershipOrderByEnum
+  }
+
+  input GroupsMembershipWhereAttributes {
+    role: String
+  }
+
+  type GroupsMembershipRelationships {
+    GroupsGroup: [GroupsGroup]
+    GroupsPerson: [GroupsPerson]
+  }
+
+  type GroupsMembershipAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    joined_at: String
+
+    """
+    example: string
+    """
+    role: String
+  }
+
+  type GroupsMembership {
+    id: ID!
+    attributes: GroupsMembershipAttributes
+    relationships: GroupsMembershipRelationships
+  }
+
+  enum GroupsOrganizationOrderByEnum {
+    id
+    name
+    time_zone
+  }
+
+  input GroupsOrganizationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsOrganizationOrderByEnum
+  }
+
+  type GroupsOrganizationRelationships {
+    GroupsEvents: [GroupsEvent]
+    GroupsGroup_types: [GroupsGroupType]
+    GroupsGroups: [GroupsGroup]
+    GroupsPeople: [GroupsPerson]
+    GroupsTag_groups: [GroupsTagGroup]
+  }
+
+  type GroupsOrganizationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    time_zone: String
+  }
+
+  type GroupsOrganization {
+    id: ID!
+    attributes: GroupsOrganizationAttributes
+    relationships: GroupsOrganizationRelationships
+  }
+
+  enum GroupsOwnerOrderByEnum {
+    id
+    avatar_url
+    first_name
+    last_name
+  }
+
+  input GroupsOwnerOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsOwnerOrderByEnum
+  }
+
+  type GroupsOwnerAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    avatar_url: String
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+  }
+
+  type GroupsOwner {
+    id: ID!
+    attributes: GroupsOwnerAttributes
+  }
+
+  enum GroupsPersonOrderByEnum {
+    id
+    addresses
+    avatar_url
+    created_at
+    email_addresses
+    first_name
+    last_name
+    permissions
+    phone_numbers
+  }
+
+  input GroupsPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsPersonOrderByEnum
+  }
+
+  input GroupsPersonWhereAttributes {
+    first_name: String
+    last_name: String
+  }
+
+  type GroupsPersonRelationships {
+    GroupsEvents: [GroupsEvent]
+    GroupsGroups: [GroupsGroup]
+    GroupsMemberships: [GroupsMembership]
+  }
+
+  type GroupsPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example:
+    """
+    addresses: String
+
+    """
+    example: string
+    """
+    avatar_url: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example:
+    """
+    email_addresses: String
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: string
+    """
+    permissions: String
+
+    """
+    example:
+    """
+    phone_numbers: String
+  }
+
+  type GroupsPerson {
+    id: ID!
+    attributes: GroupsPersonAttributes
+    relationships: GroupsPersonRelationships
+  }
+
+  enum GroupsResourceOrderByEnum {
+    id
+    description
+    last_updated
+    name
+    type
+    visibility
+  }
+
+  input GroupsResourceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsResourceOrderByEnum
+  }
+
+  type GroupsResourceRelationships {
+    GroupsDownload: [GroupsResource]
+    GroupsVisit: [GroupsResource]
+  }
+
+  type GroupsResourceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    last_updated: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    type: String
+
+    """
+    example: value
+    """
+    visibility: String
+  }
+
+  type GroupsResource {
+    id: ID!
+    attributes: GroupsResourceAttributes
+    relationships: GroupsResourceRelationships
+  }
+
+  enum GroupsTagOrderByEnum {
+    id
+    name
+    position
+  }
+
+  input GroupsTagOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsTagOrderByEnum
+  }
+
+  input GroupsTagWhereAttributes {
+    id: ID!
+    name: String
+  }
+
+  type GroupsTagRelationships {
+    GroupsGroups: [GroupsGroup]
+  }
+
+  type GroupsTagAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    position: String
+  }
+
+  type GroupsTag {
+    id: ID!
+    attributes: GroupsTagAttributes
+    relationships: GroupsTagRelationships
+  }
+
+  enum GroupsTagGroupOrderByEnum {
+    id
+    display_publicly
+    multiple_options_enabled
+    name
+    position
+  }
+
+  input GroupsTagGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GroupsTagGroupOrderByEnum
+  }
+
+  input GroupsTagGroupWhereAttributes {
+    name: String
+  }
+
+  type GroupsTagGroupRelationships {
+    GroupsTags: [GroupsTag]
+  }
+
+  type GroupsTagGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    display_publicly: Boolean
+
+    """
+    example: true
+    """
+    multiple_options_enabled: Boolean
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    position: String
+  }
+
+  type GroupsTagGroup {
+    id: ID!
+    attributes: GroupsTagGroupAttributes
+    relationships: GroupsTagGroupRelationships
+  }
+
+  enum PeopleAddressOrderByEnum {
+    id
+    city
+    state
+    zip
+    country_code
+    location
+    primary
+    street_line_1
+    street_line_2
+    created_at
+    updated_at
+    country_name
+  }
+
+  input PeopleAddressOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: PeopleAddressOrderByEnum
+  }
+
+  input PeopleAddressWhereAttributes {
+    city: String
+    country_code: String
+    location: String
+    primary: Boolean
+    state: String
+    street_line_1: String
+    street_line_2: String
+    zip: String
+  }
+
+  type PeopleAddressAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    city: String
+
+    """
+    example: string
+    """
+    state: String
+
+    """
+    example: string
+    """
+    zip: String
+
+    """
+    example: string
+    """
+    country_code: String
+
+    """
+    example: string
+    """
+    location: String
+
+    """
+    example: true
+    """
+    primary: Boolean
+
+    """
+    example: string
+    """
+    street_line_1: String
+
+    """
+    example: string
+    """
+    street_line_2: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    country_name: String
+  }
+
+  type PeopleAddress {
+    id: ID!
+    attributes: PeopleAddressAttributes
+  }
+
+  enum PeopleAnniversaryCouplesOrderByEnum {
+    id
+  }
+
+  input PeopleAnniversaryCouplesOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: PeopleAnniversaryCouplesOrderByEnum
+  }
+
+  type PeopleAnniversaryCouplesAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+  }
+
+  type PeopleAnniversaryCouples {
+    id: ID!
+    attributes: PeopleAnniversaryCouplesAttributes
+  }
+
+  enum PeopleAppOrderByEnum {
     id
     name
     url
   }
 
-  input AppOrderInput {
+  input PeopleAppOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: AppOrderByEnum
+    field: PeopleAppOrderByEnum
   }
 
-  input AppWhereAttributes {
+  input PeopleAppWhereAttributes {
     name: String
     url: String
   }
 
-  type AppAttributes {
+  type PeopleAppAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -142,12 +4509,12 @@ const typeDefs = gql`
     url: String
   }
 
-  type App {
+  type PeopleApp {
     id: ID!
-    attributes: AppAttributes
+    attributes: PeopleAppAttributes
   }
 
-  enum BackgroundCheckOrderByEnum {
+  enum PeopleBackgroundCheckOrderByEnum {
     id
     current
     note
@@ -158,23 +4525,23 @@ const typeDefs = gql`
     completed_at
   }
 
-  input BackgroundCheckOrderInput {
+  input PeopleBackgroundCheckOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: BackgroundCheckOrderByEnum
+    field: PeopleBackgroundCheckOrderByEnum
   }
 
-  type BackgroundCheckRelationships {
-    person: [Person]
+  type PeopleBackgroundCheckRelationships {
+    PeoplePerson: [PeoplePerson]
   }
 
-  type BackgroundCheckAttributes {
+  type PeopleBackgroundCheckAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: true
@@ -212,37 +4579,37 @@ const typeDefs = gql`
     completed_at: String
   }
 
-  type BackgroundCheck {
+  type PeopleBackgroundCheck {
     id: ID!
-    attributes: BackgroundCheckAttributes
-    relationships: BackgroundCheckRelationships
+    attributes: PeopleBackgroundCheckAttributes
+    relationships: PeopleBackgroundCheckRelationships
   }
 
-  enum BirthdayPeopleOrderByEnum {
+  enum PeopleBirthdayPeopleOrderByEnum {
     id
   }
 
-  input BirthdayPeopleOrderInput {
+  input PeopleBirthdayPeopleOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: BirthdayPeopleOrderByEnum
+    field: PeopleBirthdayPeopleOrderByEnum
   }
 
-  type BirthdayPeopleAttributes {
+  type PeopleBirthdayPeopleAttributes {
     """
     example: primary_key
     """
-    id: ID
-  }
-
-  type BirthdayPeople {
     id: ID!
-    attributes: BirthdayPeopleAttributes
   }
 
-  enum CampusOrderByEnum {
+  type PeopleBirthdayPeople {
+    id: ID!
+    attributes: PeopleBirthdayPeopleAttributes
+  }
+
+  enum PeopleCampusOrderByEnum {
     id
     latitude
     longitude
@@ -260,45 +4627,47 @@ const typeDefs = gql`
     contact_email_address
     time_zone
     geolocation_set_manually
+    time_zone_raw
     name
     created_at
     updated_at
     avatar_url
   }
 
-  input CampusOrderInput {
+  input PeopleCampusOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: CampusOrderByEnum
+    field: PeopleCampusOrderByEnum
   }
 
-  input CampusWhereAttributes {
+  input PeopleCampusWhereAttributes {
     created_at: String
+    id: ID!
     updated_at: String
   }
 
-  type CampusRelationships {
-    lists: [List]
-    service_times: [ServiceTime]
+  type PeopleCampusRelationships {
+    PeopleLists: [PeopleList]
+    PeopleService_times: [PeopleServiceTime]
   }
 
-  type CampusAttributes {
+  type PeopleCampusAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 1.42
     """
-    latitude: Float
+    latitude: String
 
     """
     example: 1.42
     """
-    longitude: Float
+    longitude: String
 
     """
     example: string
@@ -373,6 +4742,11 @@ const typeDefs = gql`
     """
     example: string
     """
+    time_zone_raw: String
+
+    """
+    example: string
+    """
     name: String
 
     """
@@ -391,32 +4765,32 @@ const typeDefs = gql`
     avatar_url: String
   }
 
-  type Campus {
+  type PeopleCampus {
     id: ID!
-    attributes: CampusAttributes
-    relationships: CampusRelationships
+    attributes: PeopleCampusAttributes
+    relationships: PeopleCampusRelationships
   }
 
-  enum CarrierOrderByEnum {
+  enum PeopleCarrierOrderByEnum {
     id
     value
     name
     international
   }
 
-  input CarrierOrderInput {
+  input PeopleCarrierOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: CarrierOrderByEnum
+    field: PeopleCarrierOrderByEnum
   }
 
-  type CarrierAttributes {
+  type PeopleCarrierAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -434,12 +4808,12 @@ const typeDefs = gql`
     international: Boolean
   }
 
-  type Carrier {
+  type PeopleCarrier {
     id: ID!
-    attributes: CarrierAttributes
+    attributes: PeopleCarrierAttributes
   }
 
-  enum ConditionOrderByEnum {
+  enum PeopleConditionOrderByEnum {
     id
     application
     definition_class
@@ -451,15 +4825,15 @@ const typeDefs = gql`
     updated_at
   }
 
-  input ConditionOrderInput {
+  input PeopleConditionOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ConditionOrderByEnum
+    field: PeopleConditionOrderByEnum
   }
 
-  input ConditionWhereAttributes {
+  input PeopleConditionWhereAttributes {
     application: String
     comparison: String
     created_at: String
@@ -470,15 +4844,15 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type ConditionRelationships {
-    created_by: [Person]
+  type PeopleConditionRelationships {
+    PeopleCreated_by: [PeoplePerson]
   }
 
-  type ConditionAttributes {
+  type PeopleConditionAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -521,13 +4895,13 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type Condition {
+  type PeopleCondition {
     id: ID!
-    attributes: ConditionAttributes
-    relationships: ConditionRelationships
+    attributes: PeopleConditionAttributes
+    relationships: PeopleConditionRelationships
   }
 
-  enum ConnectedPersonOrderByEnum {
+  enum PeopleConnectedPersonOrderByEnum {
     id
     given_name
     first_name
@@ -539,19 +4913,19 @@ const typeDefs = gql`
     organization_id
   }
 
-  input ConnectedPersonOrderInput {
+  input PeopleConnectedPersonOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ConnectedPersonOrderByEnum
+    field: PeopleConnectedPersonOrderByEnum
   }
 
-  type ConnectedPersonAttributes {
+  type PeopleConnectedPersonAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -591,15 +4965,15 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    organization_id: ID
+    organization_id: ID!
   }
 
-  type ConnectedPerson {
+  type PeopleConnectedPerson {
     id: ID!
-    attributes: ConnectedPersonAttributes
+    attributes: PeopleConnectedPersonAttributes
   }
 
-  enum EmailOrderByEnum {
+  enum PeopleEmailOrderByEnum {
     id
     address
     location
@@ -609,15 +4983,15 @@ const typeDefs = gql`
     blocked
   }
 
-  input EmailOrderInput {
+  input PeopleEmailOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: EmailOrderByEnum
+    field: PeopleEmailOrderByEnum
   }
 
-  input EmailWhereAttributes {
+  input PeopleEmailWhereAttributes {
     address: String
     blocked: Boolean
     created_at: String
@@ -626,15 +5000,15 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type EmailRelationships {
-    person: [Person]
+  type PeopleEmailRelationships {
+    PeoplePerson: [PeoplePerson]
   }
 
-  type EmailAttributes {
+  type PeopleEmailAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -667,13 +5041,13 @@ const typeDefs = gql`
     blocked: Boolean
   }
 
-  type Email {
+  type PeopleEmail {
     id: ID!
-    attributes: EmailAttributes
-    relationships: EmailRelationships
+    attributes: PeopleEmailAttributes
+    relationships: PeopleEmailRelationships
   }
 
-  enum FieldDatumOrderByEnum {
+  enum PeopleFieldDatumOrderByEnum {
     id
     value
     file
@@ -682,15 +5056,15 @@ const typeDefs = gql`
     file_name
   }
 
-  input FieldDatumOrderInput {
+  input PeopleFieldDatumOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FieldDatumOrderByEnum
+    field: PeopleFieldDatumOrderByEnum
   }
 
-  input FieldDatumWhereAttributes {
+  input PeopleFieldDatumWhereAttributes {
     file: String
     file_content_type: String
     file_name: String
@@ -698,18 +5072,18 @@ const typeDefs = gql`
     value: String
   }
 
-  type FieldDatumRelationships {
-    field_definition: [FieldDefinition]
-    field_option: [FieldOption]
-    person: [Person]
-    tab: [Tab]
+  type PeopleFieldDatumRelationships {
+    PeopleField_definition: [PeopleFieldDefinition]
+    PeopleField_option: [PeopleFieldOption]
+    PeoplePerson: [PeoplePerson]
+    PeopleTab: [PeopleTab]
   }
 
-  type FieldDatumAttributes {
+  type PeopleFieldDatumAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -737,13 +5111,13 @@ const typeDefs = gql`
     file_name: String
   }
 
-  type FieldDatum {
+  type PeopleFieldDatum {
     id: ID!
-    attributes: FieldDatumAttributes
-    relationships: FieldDatumRelationships
+    attributes: PeopleFieldDatumAttributes
+    relationships: PeopleFieldDatumRelationships
   }
 
-  enum FieldDefinitionOrderByEnum {
+  enum PeopleFieldDefinitionOrderByEnum {
     id
     data_type
     name
@@ -754,34 +5128,34 @@ const typeDefs = gql`
     tab_id
   }
 
-  input FieldDefinitionOrderInput {
+  input PeopleFieldDefinitionOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FieldDefinitionOrderByEnum
+    field: PeopleFieldDefinitionOrderByEnum
   }
 
-  input FieldDefinitionWhereAttributes {
+  input PeopleFieldDefinitionWhereAttributes {
     config: String
     data_type: String
     deleted_at: String
     name: String
     sequence: String
     slug: String
-    tab_id: ID
+    tab_id: ID!
   }
 
-  type FieldDefinitionRelationships {
-    field_options: [FieldOption]
-    tab: [Tab]
+  type PeopleFieldDefinitionRelationships {
+    PeopleField_options: [PeopleFieldOption]
+    PeopleTab: [PeopleTab]
   }
 
-  type FieldDefinitionAttributes {
+  type PeopleFieldDefinitionAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -816,39 +5190,39 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    tab_id: ID
+    tab_id: ID!
   }
 
-  type FieldDefinition {
+  type PeopleFieldDefinition {
     id: ID!
-    attributes: FieldDefinitionAttributes
-    relationships: FieldDefinitionRelationships
+    attributes: PeopleFieldDefinitionAttributes
+    relationships: PeopleFieldDefinitionRelationships
   }
 
-  enum FieldOptionOrderByEnum {
+  enum PeopleFieldOptionOrderByEnum {
     id
     value
     sequence
   }
 
-  input FieldOptionOrderInput {
+  input PeopleFieldOptionOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FieldOptionOrderByEnum
+    field: PeopleFieldOptionOrderByEnum
   }
 
-  input FieldOptionWhereAttributes {
+  input PeopleFieldOptionWhereAttributes {
     sequence: String
     value: String
   }
 
-  type FieldOptionAttributes {
+  type PeopleFieldOptionAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -861,12 +5235,12 @@ const typeDefs = gql`
     sequence: String
   }
 
-  type FieldOption {
+  type PeopleFieldOption {
     id: ID!
-    attributes: FieldOptionAttributes
+    attributes: PeopleFieldOptionAttributes
   }
 
-  enum FormOrderByEnum {
+  enum PeopleFormOrderByEnum {
     id
     name
     description
@@ -881,30 +5255,30 @@ const typeDefs = gql`
     archived
   }
 
-  input FormOrderInput {
+  input PeopleFormOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FormOrderByEnum
+    field: PeopleFormOrderByEnum
   }
 
-  input FormWhereAttributes {
+  input PeopleFormWhereAttributes {
     active: Boolean
-    id: ID
+    id: ID!
   }
 
-  type FormRelationships {
-    campus: [Campus]
-    fields: [FormField]
-    form_submissions: [FormSubmission]
+  type PeopleFormRelationships {
+    PeopleCampus: [PeopleCampus]
+    PeopleFields: [PeopleFormField]
+    PeopleForm_submissions: [PeopleFormSubmission]
   }
 
-  type FormAttributes {
+  type PeopleFormAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -962,13 +5336,13 @@ const typeDefs = gql`
     archived: Boolean
   }
 
-  type Form {
+  type PeopleForm {
     id: ID!
-    attributes: FormAttributes
-    relationships: FormRelationships
+    attributes: PeopleFormAttributes
+    relationships: PeopleFormRelationships
   }
 
-  enum FormFieldOrderByEnum {
+  enum PeopleFormFieldOrderByEnum {
     id
     field_type
     label
@@ -980,23 +5354,23 @@ const typeDefs = gql`
     updated_at
   }
 
-  input FormFieldOrderInput {
+  input PeopleFormFieldOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FormFieldOrderByEnum
+    field: PeopleFormFieldOrderByEnum
   }
 
-  type FormFieldRelationships {
-    options: [FormFieldOption]
+  type PeopleFormFieldRelationships {
+    PeopleOptions: [PeopleFormFieldOption]
   }
 
-  type FormFieldAttributes {
+  type PeopleFormFieldAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: value
@@ -1039,13 +5413,13 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type FormField {
+  type PeopleFormField {
     id: ID!
-    attributes: FormFieldAttributes
-    relationships: FormFieldRelationships
+    attributes: PeopleFormFieldAttributes
+    relationships: PeopleFormFieldRelationships
   }
 
-  enum FormFieldOptionOrderByEnum {
+  enum PeopleFormFieldOptionOrderByEnum {
     id
     label
     sequence
@@ -1053,19 +5427,19 @@ const typeDefs = gql`
     updated_at
   }
 
-  input FormFieldOptionOrderInput {
+  input PeopleFormFieldOptionOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FormFieldOptionOrderByEnum
+    field: PeopleFormFieldOptionOrderByEnum
   }
 
-  type FormFieldOptionAttributes {
+  type PeopleFormFieldOptionAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1088,38 +5462,38 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type FormFieldOption {
+  type PeopleFormFieldOption {
     id: ID!
-    attributes: FormFieldOptionAttributes
+    attributes: PeopleFormFieldOptionAttributes
   }
 
-  enum FormSubmissionOrderByEnum {
+  enum PeopleFormSubmissionOrderByEnum {
     id
     verified
     requires_verification
     created_at
   }
 
-  input FormSubmissionOrderInput {
+  input PeopleFormSubmissionOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FormSubmissionOrderByEnum
+    field: PeopleFormSubmissionOrderByEnum
   }
 
-  type FormSubmissionRelationships {
-    form: [Form]
-    form_fields: [FormField]
-    form_submission_values: [FormSubmissionValue]
-    person: [Person]
+  type PeopleFormSubmissionRelationships {
+    PeopleForm: [PeopleForm]
+    PeopleForm_fields: [PeopleFormField]
+    PeopleForm_submission_values: [PeopleFormSubmissionValue]
+    PeoplePerson: [PeoplePerson]
   }
 
-  type FormSubmissionAttributes {
+  type PeopleFormSubmissionAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: true
@@ -1137,31 +5511,31 @@ const typeDefs = gql`
     created_at: String
   }
 
-  type FormSubmission {
+  type PeopleFormSubmission {
     id: ID!
-    attributes: FormSubmissionAttributes
-    relationships: FormSubmissionRelationships
+    attributes: PeopleFormSubmissionAttributes
+    relationships: PeopleFormSubmissionRelationships
   }
 
-  enum FormSubmissionValueOrderByEnum {
+  enum PeopleFormSubmissionValueOrderByEnum {
     id
     display_value
     attachments
   }
 
-  input FormSubmissionValueOrderInput {
+  input PeopleFormSubmissionValueOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: FormSubmissionValueOrderByEnum
+    field: PeopleFormSubmissionValueOrderByEnum
   }
 
-  type FormSubmissionValueAttributes {
+  type PeopleFormSubmissionValueAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1174,12 +5548,12 @@ const typeDefs = gql`
     attachments: String
   }
 
-  type FormSubmissionValue {
+  type PeopleFormSubmissionValue {
     id: ID!
-    attributes: FormSubmissionValueAttributes
+    attributes: PeopleFormSubmissionValueAttributes
   }
 
-  enum HouseholdOrderByEnum {
+  enum PeopleHouseholdOrderByEnum {
     id
     name
     member_count
@@ -1190,15 +5564,15 @@ const typeDefs = gql`
     primary_contact_id
   }
 
-  input HouseholdOrderInput {
+  input PeopleHouseholdOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: HouseholdOrderByEnum
+    field: PeopleHouseholdOrderByEnum
   }
 
-  input HouseholdWhereAttributes {
+  input PeopleHouseholdWhereAttributes {
     created_at: String
     member_count: String
     name: String
@@ -1206,16 +5580,16 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type HouseholdRelationships {
-    household_memberships: [HouseholdMembership]
-    people: [Person]
+  type PeopleHouseholdRelationships {
+    PeopleHousehold_memberships: [PeopleHouseholdMembership]
+    PeoplePeople: [PeoplePerson]
   }
 
-  type HouseholdAttributes {
+  type PeopleHouseholdAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1250,44 +5624,44 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    primary_contact_id: ID
+    primary_contact_id: ID!
   }
 
-  type Household {
+  type PeopleHousehold {
     id: ID!
-    attributes: HouseholdAttributes
-    relationships: HouseholdRelationships
+    attributes: PeopleHouseholdAttributes
+    relationships: PeopleHouseholdRelationships
   }
 
-  enum HouseholdMembershipOrderByEnum {
+  enum PeopleHouseholdMembershipOrderByEnum {
     id
     person_name
     pending
   }
 
-  input HouseholdMembershipOrderInput {
+  input PeopleHouseholdMembershipOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: HouseholdMembershipOrderByEnum
+    field: PeopleHouseholdMembershipOrderByEnum
   }
 
-  input HouseholdMembershipWhereAttributes {
+  input PeopleHouseholdMembershipWhereAttributes {
     pending: Boolean
     person_name: String
   }
 
-  type HouseholdMembershipRelationships {
-    household: [Household]
-    person: [Person]
+  type PeopleHouseholdMembershipRelationships {
+    PeopleHousehold: [PeopleHousehold]
+    PeoplePerson: [PeoplePerson]
   }
 
-  type HouseholdMembershipAttributes {
+  type PeopleHouseholdMembershipAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1300,34 +5674,34 @@ const typeDefs = gql`
     pending: Boolean
   }
 
-  type HouseholdMembership {
+  type PeopleHouseholdMembership {
     id: ID!
-    attributes: HouseholdMembershipAttributes
-    relationships: HouseholdMembershipRelationships
+    attributes: PeopleHouseholdMembershipAttributes
+    relationships: PeopleHouseholdMembershipRelationships
   }
 
-  enum InactiveReasonOrderByEnum {
+  enum PeopleInactiveReasonOrderByEnum {
     id
     value
   }
 
-  input InactiveReasonOrderInput {
+  input PeopleInactiveReasonOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: InactiveReasonOrderByEnum
+    field: PeopleInactiveReasonOrderByEnum
   }
 
-  input InactiveReasonWhereAttributes {
+  input PeopleInactiveReasonWhereAttributes {
     value: String
   }
 
-  type InactiveReasonAttributes {
+  type PeopleInactiveReasonAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1335,12 +5709,12 @@ const typeDefs = gql`
     value: String
   }
 
-  type InactiveReason {
+  type PeopleInactiveReason {
     id: ID!
-    attributes: InactiveReasonAttributes
+    attributes: PeopleInactiveReasonAttributes
   }
 
-  enum ListOrderByEnum {
+  enum PeopleListOrderByEnum {
     id
     name
     auto_refresh
@@ -1365,40 +5739,40 @@ const typeDefs = gql`
     updated_at
   }
 
-  input ListOrderInput {
+  input PeopleListOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ListOrderByEnum
+    field: PeopleListOrderByEnum
   }
 
-  input ListWhereAttributes {
+  input PeopleListWhereAttributes {
     batch_completed_at: String
     created_at: String
-    id: ID
+    id: ID!
     name: String
     updated_at: String
   }
 
-  type ListRelationships {
-    campus: [Campus]
-    category: [ListCategory]
-    created_by: [Person]
-    list_results: [ListResult]
-    mailchimp_sync_status: [MailchimpSyncStatus]
-    people: [Person]
-    rules: [Rule]
-    shares: [ListShare]
-    star: [ListStar]
-    updated_by: [Person]
+  type PeopleListRelationships {
+    PeopleCampus: [PeopleCampus]
+    PeopleCategory: [PeopleListCategory]
+    PeopleCreated_by: [PeoplePerson]
+    PeopleList_results: [PeopleListResult]
+    PeopleMailchimp_sync_status: [PeopleMailchimpSyncStatus]
+    PeoplePeople: [PeoplePerson]
+    PeopleRules: [PeopleRule]
+    PeopleShares: [PeopleListShare]
+    PeopleStar: [PeopleListStar]
+    PeopleUpdated_by: [PeoplePerson]
   }
 
-  type ListAttributes {
+  type PeopleListAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1506,13 +5880,13 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type List {
+  type PeopleList {
     id: ID!
-    attributes: ListAttributes
-    relationships: ListRelationships
+    attributes: PeopleListAttributes
+    relationships: PeopleListRelationships
   }
 
-  enum ListCategoryOrderByEnum {
+  enum PeopleListCategoryOrderByEnum {
     id
     name
     created_at
@@ -1520,30 +5894,30 @@ const typeDefs = gql`
     organization_id
   }
 
-  input ListCategoryOrderInput {
+  input PeopleListCategoryOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ListCategoryOrderByEnum
+    field: PeopleListCategoryOrderByEnum
   }
 
-  input ListCategoryWhereAttributes {
+  input PeopleListCategoryWhereAttributes {
     created_at: String
     name: String
-    organization_id: ID
+    organization_id: ID!
     updated_at: String
   }
 
-  type ListCategoryRelationships {
-    lists: [List]
+  type PeopleListCategoryRelationships {
+    PeopleLists: [PeopleList]
   }
 
-  type ListCategoryAttributes {
+  type PeopleListCategoryAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1563,34 +5937,34 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    organization_id: ID
+    organization_id: ID!
   }
 
-  type ListCategory {
+  type PeopleListCategory {
     id: ID!
-    attributes: ListCategoryAttributes
-    relationships: ListCategoryRelationships
+    attributes: PeopleListCategoryAttributes
+    relationships: PeopleListCategoryRelationships
   }
 
-  enum ListResultOrderByEnum {
+  enum PeopleListResultOrderByEnum {
     id
     created_at
     updated_at
   }
 
-  input ListResultOrderInput {
+  input PeopleListResultOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ListResultOrderByEnum
+    field: PeopleListResultOrderByEnum
   }
 
-  type ListResultAttributes {
+  type PeopleListResultAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 2000-01-01T12:00:00Z
@@ -1603,12 +5977,12 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type ListResult {
+  type PeopleListResult {
     id: ID!
-    attributes: ListResultAttributes
+    attributes: PeopleListResultAttributes
   }
 
-  enum ListShareOrderByEnum {
+  enum PeopleListShareOrderByEnum {
     id
     permission
     group
@@ -1616,30 +5990,30 @@ const typeDefs = gql`
     name
   }
 
-  input ListShareOrderInput {
+  input PeopleListShareOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ListShareOrderByEnum
+    field: PeopleListShareOrderByEnum
   }
 
-  input ListShareWhereAttributes {
+  input PeopleListShareWhereAttributes {
     created_at: String
     group: String
     name: String
     permission: String
   }
 
-  type ListShareRelationships {
-    person: [Person]
+  type PeopleListShareRelationships {
+    PeoplePerson: [PeoplePerson]
   }
 
-  type ListShareAttributes {
+  type PeopleListShareAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: value
@@ -1662,30 +6036,30 @@ const typeDefs = gql`
     name: String
   }
 
-  type ListShare {
+  type PeopleListShare {
     id: ID!
-    attributes: ListShareAttributes
-    relationships: ListShareRelationships
+    attributes: PeopleListShareAttributes
+    relationships: PeopleListShareRelationships
   }
 
-  enum ListStarOrderByEnum {
+  enum PeopleListStarOrderByEnum {
     id
     created_at
   }
 
-  input ListStarOrderInput {
+  input PeopleListStarOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ListStarOrderByEnum
+    field: PeopleListStarOrderByEnum
   }
 
-  type ListStarAttributes {
+  type PeopleListStarAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 2000-01-01T12:00:00Z
@@ -1693,12 +6067,12 @@ const typeDefs = gql`
     created_at: String
   }
 
-  type ListStar {
+  type PeopleListStar {
     id: ID!
-    attributes: ListStarAttributes
+    attributes: PeopleListStarAttributes
   }
 
-  enum MailchimpSyncStatusOrderByEnum {
+  enum PeopleMailchimpSyncStatusOrderByEnum {
     id
     status
     error
@@ -1707,19 +6081,19 @@ const typeDefs = gql`
     segment_id
   }
 
-  input MailchimpSyncStatusOrderInput {
+  input PeopleMailchimpSyncStatusOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: MailchimpSyncStatusOrderByEnum
+    field: PeopleMailchimpSyncStatusOrderByEnum
   }
 
-  type MailchimpSyncStatusAttributes {
+  type PeopleMailchimpSyncStatusAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1747,33 +6121,33 @@ const typeDefs = gql`
     segment_id: String
   }
 
-  type MailchimpSyncStatus {
+  type PeopleMailchimpSyncStatus {
     id: ID!
-    attributes: MailchimpSyncStatusAttributes
+    attributes: PeopleMailchimpSyncStatusAttributes
   }
 
-  enum MaritalStatusOrderByEnum {
+  enum PeopleMaritalStatusOrderByEnum {
     id
     value
   }
 
-  input MaritalStatusOrderInput {
+  input PeopleMaritalStatusOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: MaritalStatusOrderByEnum
+    field: PeopleMaritalStatusOrderByEnum
   }
 
-  input MaritalStatusWhereAttributes {
+  input PeopleMaritalStatusWhereAttributes {
     value: String
   }
 
-  type MaritalStatusAttributes {
+  type PeopleMaritalStatusAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1781,12 +6155,12 @@ const typeDefs = gql`
     value: String
   }
 
-  type MaritalStatus {
+  type PeopleMaritalStatus {
     id: ID!
-    attributes: MaritalStatusAttributes
+    attributes: PeopleMaritalStatusAttributes
   }
 
-  enum MessageOrderByEnum {
+  enum PeopleMessageOrderByEnum {
     id
     kind
     to_addresses
@@ -1805,15 +6179,15 @@ const typeDefs = gql`
     message_type
   }
 
-  input MessageOrderInput {
+  input PeopleMessageOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: MessageOrderByEnum
+    field: PeopleMessageOrderByEnum
   }
 
-  input MessageWhereAttributes {
+  input PeopleMessageWhereAttributes {
     app_name: String
     bounced_at: String
     created_at: String
@@ -1828,16 +6202,16 @@ const typeDefs = gql`
     to_addresses: String
   }
 
-  type MessageRelationships {
-    message_group: [MessageGroup]
-    to: [Person]
+  type PeopleMessageRelationships {
+    PeopleMessage_group: [PeopleMessageGroup]
+    PeopleTo: [PeoplePerson]
   }
 
-  type MessageAttributes {
+  type PeopleMessageAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: value
@@ -1915,13 +6289,13 @@ const typeDefs = gql`
     message_type: String
   }
 
-  type Message {
+  type PeopleMessage {
     id: ID!
-    attributes: MessageAttributes
-    relationships: MessageRelationships
+    attributes: PeopleMessageAttributes
+    relationships: PeopleMessageRelationships
   }
 
-  enum MessageGroupOrderByEnum {
+  enum PeopleMessageGroupOrderByEnum {
     id
     uuid
     message_type
@@ -1932,15 +6306,15 @@ const typeDefs = gql`
     created_at
   }
 
-  input MessageGroupOrderInput {
+  input PeopleMessageGroupOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: MessageGroupOrderByEnum
+    field: PeopleMessageGroupOrderByEnum
   }
 
-  input MessageGroupWhereAttributes {
+  input PeopleMessageGroupWhereAttributes {
     created_at: String
     from_address: String
     message_count: String
@@ -1950,17 +6324,17 @@ const typeDefs = gql`
     uuid: String
   }
 
-  type MessageGroupRelationships {
-    app: [App]
-    from: [Person]
-    messages: [Message]
+  type PeopleMessageGroupRelationships {
+    PeopleApp: [PeopleApp]
+    PeopleFrom: [PeoplePerson]
+    PeopleMessages: [PeopleMessage]
   }
 
-  type MessageGroupAttributes {
+  type PeopleMessageGroupAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -1998,34 +6372,34 @@ const typeDefs = gql`
     created_at: String
   }
 
-  type MessageGroup {
+  type PeopleMessageGroup {
     id: ID!
-    attributes: MessageGroupAttributes
-    relationships: MessageGroupRelationships
+    attributes: PeopleMessageGroupAttributes
+    relationships: PeopleMessageGroupRelationships
   }
 
-  enum NamePrefixOrderByEnum {
+  enum PeopleNamePrefixOrderByEnum {
     id
     value
   }
 
-  input NamePrefixOrderInput {
+  input PeopleNamePrefixOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: NamePrefixOrderByEnum
+    field: PeopleNamePrefixOrderByEnum
   }
 
-  input NamePrefixWhereAttributes {
+  input PeopleNamePrefixWhereAttributes {
     value: String
   }
 
-  type NamePrefixAttributes {
+  type PeopleNamePrefixAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2033,33 +6407,33 @@ const typeDefs = gql`
     value: String
   }
 
-  type NamePrefix {
+  type PeopleNamePrefix {
     id: ID!
-    attributes: NamePrefixAttributes
+    attributes: PeopleNamePrefixAttributes
   }
 
-  enum NameSuffixOrderByEnum {
+  enum PeopleNameSuffixOrderByEnum {
     id
     value
   }
 
-  input NameSuffixOrderInput {
+  input PeopleNameSuffixOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: NameSuffixOrderByEnum
+    field: PeopleNameSuffixOrderByEnum
   }
 
-  input NameSuffixWhereAttributes {
+  input PeopleNameSuffixWhereAttributes {
     value: String
   }
 
-  type NameSuffixAttributes {
+  type PeopleNameSuffixAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2067,12 +6441,12 @@ const typeDefs = gql`
     value: String
   }
 
-  type NameSuffix {
+  type PeopleNameSuffix {
     id: ID!
-    attributes: NameSuffixAttributes
+    attributes: PeopleNameSuffixAttributes
   }
 
-  enum NoteOrderByEnum {
+  enum PeopleNoteOrderByEnum {
     id
     note
     created_at
@@ -2084,30 +6458,30 @@ const typeDefs = gql`
     created_by_id
   }
 
-  input NoteOrderInput {
+  input PeopleNoteOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: NoteOrderByEnum
+    field: PeopleNoteOrderByEnum
   }
 
-  input NoteWhereAttributes {
+  input PeopleNoteWhereAttributes {
     note: String
-    note_category_id: ID
+    note_category_id: ID!
   }
 
-  type NoteRelationships {
-    category: [NoteCategory]
-    created_by: [Person]
-    person: [Person]
+  type PeopleNoteRelationships {
+    PeopleCategory: [PeopleNoteCategory]
+    PeopleCreated_by: [PeoplePerson]
+    PeoplePerson: [PeoplePerson]
   }
 
-  type NoteAttributes {
+  type PeopleNoteAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2132,31 +6506,31 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    note_category_id: ID
+    note_category_id: ID!
 
     """
     example: primary_key
     """
-    organization_id: ID
+    organization_id: ID!
 
     """
     example: primary_key
     """
-    person_id: ID
+    person_id: ID!
 
     """
     example: primary_key
     """
-    created_by_id: ID
+    created_by_id: ID!
   }
 
-  type Note {
+  type PeopleNote {
     id: ID!
-    attributes: NoteAttributes
-    relationships: NoteRelationships
+    attributes: PeopleNoteAttributes
+    relationships: PeopleNoteRelationships
   }
 
-  enum NoteCategoryOrderByEnum {
+  enum PeopleNoteCategoryOrderByEnum {
     id
     name
     locked
@@ -2165,33 +6539,33 @@ const typeDefs = gql`
     organization_id
   }
 
-  input NoteCategoryOrderInput {
+  input PeopleNoteCategoryOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: NoteCategoryOrderByEnum
+    field: PeopleNoteCategoryOrderByEnum
   }
 
-  input NoteCategoryWhereAttributes {
+  input PeopleNoteCategoryWhereAttributes {
     created_at: String
     locked: Boolean
     name: String
-    organization_id: ID
+    organization_id: ID!
     updated_at: String
   }
 
-  type NoteCategoryRelationships {
-    shares: [NoteCategoryShare]
-    subscribers: [Person]
-    subscriptions: [NoteCategorySubscription]
+  type PeopleNoteCategoryRelationships {
+    PeopleShares: [PeopleNoteCategoryShare]
+    PeopleSubscribers: [PeoplePerson]
+    PeopleSubscriptions: [PeopleNoteCategorySubscription]
   }
 
-  type NoteCategoryAttributes {
+  type PeopleNoteCategoryAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2216,43 +6590,43 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    organization_id: ID
+    organization_id: ID!
   }
 
-  type NoteCategory {
+  type PeopleNoteCategory {
     id: ID!
-    attributes: NoteCategoryAttributes
-    relationships: NoteCategoryRelationships
+    attributes: PeopleNoteCategoryAttributes
+    relationships: PeopleNoteCategoryRelationships
   }
 
-  enum NoteCategoryShareOrderByEnum {
+  enum PeopleNoteCategoryShareOrderByEnum {
     id
     group
     permission
     person_id
   }
 
-  input NoteCategoryShareOrderInput {
+  input PeopleNoteCategoryShareOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: NoteCategoryShareOrderByEnum
+    field: PeopleNoteCategoryShareOrderByEnum
   }
 
-  input NoteCategoryShareWhereAttributes {
+  input PeopleNoteCategoryShareWhereAttributes {
     permission: String
   }
 
-  type NoteCategoryShareRelationships {
-    person: [Person]
+  type PeopleNoteCategoryShareRelationships {
+    PeoplePerson: [PeoplePerson]
   }
 
-  type NoteCategoryShareAttributes {
+  type PeopleNoteCategoryShareAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: value
@@ -2267,39 +6641,39 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    person_id: ID
+    person_id: ID!
   }
 
-  type NoteCategoryShare {
+  type PeopleNoteCategoryShare {
     id: ID!
-    attributes: NoteCategoryShareAttributes
-    relationships: NoteCategoryShareRelationships
+    attributes: PeopleNoteCategoryShareAttributes
+    relationships: PeopleNoteCategoryShareRelationships
   }
 
-  enum NoteCategorySubscriptionOrderByEnum {
+  enum PeopleNoteCategorySubscriptionOrderByEnum {
     id
     created_at
     updated_at
   }
 
-  input NoteCategorySubscriptionOrderInput {
+  input PeopleNoteCategorySubscriptionOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: NoteCategorySubscriptionOrderByEnum
+    field: PeopleNoteCategorySubscriptionOrderByEnum
   }
 
-  input NoteCategorySubscriptionWhereAttributes {
+  input PeopleNoteCategorySubscriptionWhereAttributes {
     created_at: String
     updated_at: String
   }
 
-  type NoteCategorySubscriptionAttributes {
+  type PeopleNoteCategorySubscriptionAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 2000-01-01T12:00:00Z
@@ -2312,12 +6686,12 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type NoteCategorySubscription {
+  type PeopleNoteCategorySubscription {
     id: ID!
-    attributes: NoteCategorySubscriptionAttributes
+    attributes: PeopleNoteCategorySubscriptionAttributes
   }
 
-  enum OrganizationOrderByEnum {
+  enum PeopleOrganizationOrderByEnum {
     id
     name
     country_code
@@ -2328,55 +6702,55 @@ const typeDefs = gql`
     avatar_url
   }
 
-  input OrganizationOrderInput {
+  input PeopleOrganizationOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: OrganizationOrderByEnum
+    field: PeopleOrganizationOrderByEnum
   }
 
-  type OrganizationRelationships {
-    addresses: [Address]
-    anniversary_couples: [AnniversaryCouples]
-    apps: [App]
-    background_checks: [BackgroundCheck]
-    birthday_people: [BirthdayPeople]
-    campuses: [Campus]
-    carriers: [Carrier]
-    emails: [Email]
-    field_data: [FieldDatum]
-    field_definitions: [FieldDefinition]
-    forms: [Form]
-    households: [Household]
-    inactive_reasons: [InactiveReason]
-    list_categories: [ListCategory]
-    lists: [List]
-    marital_statuses: [MaritalStatus]
-    message_groups: [MessageGroup]
-    messages: [Message]
-    name_prefixes: [NamePrefix]
-    name_suffixes: [NameSuffix]
-    note_categories: [NoteCategory]
-    note_category_subscriptions: [NoteCategorySubscription]
-    notes: [Note]
-    people: [Person]
-    people_imports: [PeopleImport]
-    person_mergers: [PersonMerger]
-    phone_numbers: [PhoneNumber]
-    reports: [Report]
-    school_options: [SchoolOption]
-    social_profiles: [SocialProfile]
-    stats: [OrganizationStatistics]
-    tabs: [Tab]
-    workflows: [Workflow]
+  type PeopleOrganizationRelationships {
+    PeopleAddresses: [PeopleAddress]
+    PeopleAnniversary_couples: [PeopleAnniversaryCouples]
+    PeopleApps: [PeopleApp]
+    PeopleBackground_checks: [PeopleBackgroundCheck]
+    PeopleBirthday_people: [PeopleBirthdayPeople]
+    PeopleCampuses: [PeopleCampus]
+    PeopleCarriers: [PeopleCarrier]
+    PeopleEmails: [PeopleEmail]
+    PeopleField_data: [PeopleFieldDatum]
+    PeopleField_definitions: [PeopleFieldDefinition]
+    PeopleForms: [PeopleForm]
+    PeopleHouseholds: [PeopleHousehold]
+    PeopleInactive_reasons: [PeopleInactiveReason]
+    PeopleList_categories: [PeopleListCategory]
+    PeopleLists: [PeopleList]
+    PeopleMarital_statuses: [PeopleMaritalStatus]
+    PeopleMessage_groups: [PeopleMessageGroup]
+    PeopleMessages: [PeopleMessage]
+    PeopleName_prefixes: [PeopleNamePrefix]
+    PeopleName_suffixes: [PeopleNameSuffix]
+    PeopleNote_categories: [PeopleNoteCategory]
+    PeopleNote_category_subscriptions: [PeopleNoteCategorySubscription]
+    PeopleNotes: [PeopleNote]
+    PeoplePeople: [PeoplePerson]
+    PeoplePeople_imports: [PeoplePeopleImport]
+    PeoplePerson_mergers: [PeoplePersonMerger]
+    PeoplePhone_numbers: [PeoplePhoneNumber]
+    PeopleReports: [PeopleReport]
+    PeopleSchool_options: [PeopleSchoolOption]
+    PeopleSocial_profiles: [PeopleSocialProfile]
+    PeopleStats: [PeopleOrganizationStatistics]
+    PeopleTabs: [PeopleTab]
+    PeopleWorkflows: [PeopleWorkflow]
   }
 
-  type OrganizationAttributes {
+  type PeopleOrganizationAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2414,37 +6788,37 @@ const typeDefs = gql`
     avatar_url: String
   }
 
-  type Organization {
+  type PeopleOrganization {
     id: ID!
-    attributes: OrganizationAttributes
-    relationships: OrganizationRelationships
+    attributes: PeopleOrganizationAttributes
+    relationships: PeopleOrganizationRelationships
   }
 
-  enum OrganizationStatisticsOrderByEnum {
+  enum PeopleOrganizationStatisticsOrderByEnum {
     id
   }
 
-  input OrganizationStatisticsOrderInput {
+  input PeopleOrganizationStatisticsOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: OrganizationStatisticsOrderByEnum
+    field: PeopleOrganizationStatisticsOrderByEnum
   }
 
-  type OrganizationStatisticsAttributes {
+  type PeopleOrganizationStatisticsAttributes {
     """
     example: primary_key
     """
-    id: ID
-  }
-
-  type OrganizationStatistics {
     id: ID!
-    attributes: OrganizationStatisticsAttributes
   }
 
-  enum PeopleImportOrderByEnum {
+  type PeopleOrganizationStatistics {
+    id: ID!
+    attributes: PeopleOrganizationStatisticsAttributes
+  }
+
+  enum PeoplePeopleImportOrderByEnum {
     id
     attribs
     status
@@ -2454,28 +6828,28 @@ const typeDefs = gql`
     undone_at
   }
 
-  input PeopleImportOrderInput {
+  input PeoplePeopleImportOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PeopleImportOrderByEnum
+    field: PeoplePeopleImportOrderByEnum
   }
 
-  input PeopleImportWhereAttributes {
+  input PeoplePeopleImportWhereAttributes {
     status: String
   }
 
-  type PeopleImportRelationships {
-    conflicts: [PeopleImportConflict]
-    histories: [PeopleImportHistory]
+  type PeoplePeopleImportRelationships {
+    PeopleConflicts: [PeoplePeopleImportConflict]
+    PeopleHistories: [PeoplePeopleImportHistory]
   }
 
-  type PeopleImportAttributes {
+  type PeoplePeopleImportAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2508,13 +6882,13 @@ const typeDefs = gql`
     undone_at: String
   }
 
-  type PeopleImport {
+  type PeoplePeopleImport {
     id: ID!
-    attributes: PeopleImportAttributes
-    relationships: PeopleImportRelationships
+    attributes: PeoplePeopleImportAttributes
+    relationships: PeoplePeopleImportRelationships
   }
 
-  enum PeopleImportConflictOrderByEnum {
+  enum PeoplePeopleImportConflictOrderByEnum {
     id
     kind
     name
@@ -2526,24 +6900,24 @@ const typeDefs = gql`
     updated_at
   }
 
-  input PeopleImportConflictOrderInput {
+  input PeoplePeopleImportConflictOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PeopleImportConflictOrderByEnum
+    field: PeoplePeopleImportConflictOrderByEnum
   }
 
-  input PeopleImportConflictWhereAttributes {
+  input PeoplePeopleImportConflictWhereAttributes {
     kind: String
     name: String
   }
 
-  type PeopleImportConflictAttributes {
+  type PeoplePeopleImportConflictAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2586,12 +6960,12 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type PeopleImportConflict {
+  type PeoplePeopleImportConflict {
     id: ID!
-    attributes: PeopleImportConflictAttributes
+    attributes: PeoplePeopleImportConflictAttributes
   }
 
-  enum PeopleImportHistoryOrderByEnum {
+  enum PeoplePeopleImportHistoryOrderByEnum {
     id
     name
     created_at
@@ -2600,28 +6974,28 @@ const typeDefs = gql`
     kind
   }
 
-  input PeopleImportHistoryOrderInput {
+  input PeoplePeopleImportHistoryOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PeopleImportHistoryOrderByEnum
+    field: PeoplePeopleImportHistoryOrderByEnum
   }
 
-  input PeopleImportHistoryWhereAttributes {
+  input PeoplePeopleImportHistoryWhereAttributes {
     name: String
   }
 
-  type PeopleImportHistoryRelationships {
-    household: [Household]
-    person: [Person]
+  type PeoplePeopleImportHistoryRelationships {
+    PeopleHousehold: [PeopleHousehold]
+    PeoplePerson: [PeoplePerson]
   }
 
-  type PeopleImportHistoryAttributes {
+  type PeoplePeopleImportHistoryAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2649,13 +7023,13 @@ const typeDefs = gql`
     kind: String
   }
 
-  type PeopleImportHistory {
+  type PeoplePeopleImportHistory {
     id: ID!
-    attributes: PeopleImportHistoryAttributes
-    relationships: PeopleImportHistoryRelationships
+    attributes: PeoplePeopleImportHistoryAttributes
+    relationships: PeoplePeopleImportHistoryRelationships
   }
 
-  enum PersonOrderByEnum {
+  enum PeoplePersonOrderByEnum {
     id
     given_name
     first_name
@@ -2675,6 +7049,7 @@ const typeDefs = gql`
     inactivated_at
     status
     medical_notes
+    mfa_configured
     created_at
     updated_at
     avatar
@@ -2688,15 +7063,15 @@ const typeDefs = gql`
     remote_id
   }
 
-  input PersonOrderInput {
+  input PeoplePersonOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PersonOrderByEnum
+    field: PeoplePersonOrderByEnum
   }
 
-  input PersonWhereAttributes {
+  input PeoplePersonWhereAttributes {
     accounting_administrator: Boolean
     anniversary: String
     birthdate: String
@@ -2707,11 +7082,12 @@ const typeDefs = gql`
     given_name: String
     grade: String
     graduation_year: String
-    id: ID
+    id: ID!
     inactivated_at: String
     last_name: String
     medical_notes: String
     membership: String
+    mfa_configured: Boolean
     middle_name: String
     nickname: String
     people_permissions: String
@@ -2726,38 +7102,38 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type PersonRelationships {
-    addresses: [Address]
-    apps: [App]
-    background_checks: [BackgroundCheck]
-    connected_people: [ConnectedPerson]
-    emails: [Email]
-    field_data: [FieldDatum]
-    household_memberships: [HouseholdMembership]
-    households: [Household]
-    inactive_reason: [InactiveReason]
-    marital_status: [MaritalStatus]
-    message_groups: [MessageGroup]
-    messages: [Message]
-    name_prefix: [NamePrefix]
-    name_suffix: [NameSuffix]
-    notes: [Note]
-    organization: [Organization]
-    person_apps: [PersonApp]
-    phone_numbers: [PhoneNumber]
-    platform_notifications: [PlatformNotification]
-    primary_campus: [Campus]
-    school: [SchoolOption]
-    social_profiles: [SocialProfile]
-    workflow_cards: [WorkflowCard]
-    workflow_shares: [WorkflowShare]
+  type PeoplePersonRelationships {
+    PeopleAddresses: [PeopleAddress]
+    PeopleApps: [PeopleApp]
+    PeopleBackground_checks: [PeopleBackgroundCheck]
+    PeopleConnected_people: [PeopleConnectedPerson]
+    PeopleEmails: [PeopleEmail]
+    PeopleField_data: [PeopleFieldDatum]
+    PeopleHousehold_memberships: [PeopleHouseholdMembership]
+    PeopleHouseholds: [PeopleHousehold]
+    PeopleInactive_reason: [PeopleInactiveReason]
+    PeopleMarital_status: [PeopleMaritalStatus]
+    PeopleMessage_groups: [PeopleMessageGroup]
+    PeopleMessages: [PeopleMessage]
+    PeopleName_prefix: [PeopleNamePrefix]
+    PeopleName_suffix: [PeopleNameSuffix]
+    PeopleNotes: [PeopleNote]
+    PeopleOrganization: [PeopleOrganization]
+    PeoplePerson_apps: [PeoplePersonApp]
+    PeoplePhone_numbers: [PeoplePhoneNumber]
+    PeoplePlatform_notifications: [PeoplePlatformNotification]
+    PeoplePrimary_campus: [PeopleCampus]
+    PeopleSchool: [PeopleSchoolOption]
+    PeopleSocial_profiles: [PeopleSocialProfile]
+    PeopleWorkflow_cards: [PeopleWorkflowCard]
+    PeopleWorkflow_shares: [PeopleWorkflowShare]
   }
 
-  type PersonAttributes {
+  type PeoplePersonAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -2848,6 +7224,11 @@ const typeDefs = gql`
     example: string
     """
     medical_notes: String
+
+    """
+    example: true
+    """
+    mfa_configured: Boolean
 
     """
     example: 2000-01-01T12:00:00Z
@@ -2905,35 +7286,35 @@ const typeDefs = gql`
     remote_id: String
   }
 
-  type Person {
+  type PeoplePerson {
     id: ID!
-    attributes: PersonAttributes
-    relationships: PersonRelationships
+    attributes: PeoplePersonAttributes
+    relationships: PeoplePersonRelationships
   }
 
-  enum PersonAppOrderByEnum {
+  enum PeoplePersonAppOrderByEnum {
     id
     allow_pco_login
     people_permissions
   }
 
-  input PersonAppOrderInput {
+  input PeoplePersonAppOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PersonAppOrderByEnum
+    field: PeoplePersonAppOrderByEnum
   }
 
-  type PersonAppRelationships {
-    app: [App]
+  type PeoplePersonAppRelationships {
+    PeopleApp: [PeopleApp]
   }
 
-  type PersonAppAttributes {
+  type PeoplePersonAppAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: true
@@ -2946,38 +7327,38 @@ const typeDefs = gql`
     people_permissions: String
   }
 
-  type PersonApp {
+  type PeoplePersonApp {
     id: ID!
-    attributes: PersonAppAttributes
-    relationships: PersonAppRelationships
+    attributes: PeoplePersonAppAttributes
+    relationships: PeoplePersonAppRelationships
   }
 
-  enum PersonMergerOrderByEnum {
+  enum PeoplePersonMergerOrderByEnum {
     id
     created_at
     person_to_keep_id
     person_to_remove_id
   }
 
-  input PersonMergerOrderInput {
+  input PeoplePersonMergerOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PersonMergerOrderByEnum
+    field: PeoplePersonMergerOrderByEnum
   }
 
-  input PersonMergerWhereAttributes {
+  input PeoplePersonMergerWhereAttributes {
     created_at: String
-    person_to_keep_id: ID
-    person_to_remove_id: ID
+    person_to_keep_id: ID!
+    person_to_remove_id: ID!
   }
 
-  type PersonMergerAttributes {
+  type PeoplePersonMergerAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 2000-01-01T12:00:00Z
@@ -2987,20 +7368,20 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    person_to_keep_id: ID
+    person_to_keep_id: ID!
 
     """
     example: primary_key
     """
-    person_to_remove_id: ID
+    person_to_remove_id: ID!
   }
 
-  type PersonMerger {
+  type PeoplePersonMerger {
     id: ID!
-    attributes: PersonMergerAttributes
+    attributes: PeoplePersonMergerAttributes
   }
 
-  enum PhoneNumberOrderByEnum {
+  enum PeoplePhoneNumberOrderByEnum {
     id
     number
     carrier
@@ -3015,15 +7396,15 @@ const typeDefs = gql`
     formatted_number
   }
 
-  input PhoneNumberOrderInput {
+  input PeoplePhoneNumberOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PhoneNumberOrderByEnum
+    field: PeoplePhoneNumberOrderByEnum
   }
 
-  input PhoneNumberWhereAttributes {
+  input PeoplePhoneNumberWhereAttributes {
     carrier: String
     created_at: String
     location: String
@@ -3032,11 +7413,11 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type PhoneNumberAttributes {
+  type PeoplePhoneNumberAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3094,29 +7475,29 @@ const typeDefs = gql`
     formatted_number: String
   }
 
-  type PhoneNumber {
+  type PeoplePhoneNumber {
     id: ID!
-    attributes: PhoneNumberAttributes
+    attributes: PeoplePhoneNumberAttributes
   }
 
-  enum PlatformNotificationOrderByEnum {
+  enum PeoplePlatformNotificationOrderByEnum {
     id
     html
   }
 
-  input PlatformNotificationOrderInput {
+  input PeoplePlatformNotificationOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: PlatformNotificationOrderByEnum
+    field: PeoplePlatformNotificationOrderByEnum
   }
 
-  type PlatformNotificationAttributes {
+  type PeoplePlatformNotificationAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3124,12 +7505,12 @@ const typeDefs = gql`
     html: String
   }
 
-  type PlatformNotification {
+  type PeoplePlatformNotification {
     id: ID!
-    attributes: PlatformNotificationAttributes
+    attributes: PeoplePlatformNotificationAttributes
   }
 
-  enum ReportOrderByEnum {
+  enum PeopleReportOrderByEnum {
     id
     name
     body
@@ -3137,31 +7518,31 @@ const typeDefs = gql`
     updated_at
   }
 
-  input ReportOrderInput {
+  input PeopleReportOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ReportOrderByEnum
+    field: PeopleReportOrderByEnum
   }
 
-  input ReportWhereAttributes {
+  input PeopleReportWhereAttributes {
     body: String
     created_at: String
     name: String
     updated_at: String
   }
 
-  type ReportRelationships {
-    created_by: [Person]
-    updated_by: [Person]
+  type PeopleReportRelationships {
+    PeopleCreated_by: [PeoplePerson]
+    PeopleUpdated_by: [PeoplePerson]
   }
 
-  type ReportAttributes {
+  type PeopleReportAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3184,42 +7565,42 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type Report {
+  type PeopleReport {
     id: ID!
-    attributes: ReportAttributes
-    relationships: ReportRelationships
+    attributes: PeopleReportAttributes
+    relationships: PeopleReportRelationships
   }
 
-  enum RuleOrderByEnum {
+  enum PeopleRuleOrderByEnum {
     id
     subset
     created_at
     updated_at
   }
 
-  input RuleOrderInput {
+  input PeopleRuleOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: RuleOrderByEnum
+    field: PeopleRuleOrderByEnum
   }
 
-  input RuleWhereAttributes {
+  input PeopleRuleWhereAttributes {
     created_at: String
     subset: String
     updated_at: String
   }
 
-  type RuleRelationships {
-    conditions: [Condition]
+  type PeopleRuleRelationships {
+    PeopleConditions: [PeopleCondition]
   }
 
-  type RuleAttributes {
+  type PeopleRuleAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3237,13 +7618,13 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type Rule {
+  type PeopleRule {
     id: ID!
-    attributes: RuleAttributes
-    relationships: RuleRelationships
+    attributes: PeopleRuleAttributes
+    relationships: PeopleRuleRelationships
   }
 
-  enum SchoolOptionOrderByEnum {
+  enum PeopleSchoolOptionOrderByEnum {
     id
     value
     sequence
@@ -3252,15 +7633,15 @@ const typeDefs = gql`
     school_types
   }
 
-  input SchoolOptionOrderInput {
+  input PeopleSchoolOptionOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: SchoolOptionOrderByEnum
+    field: PeopleSchoolOptionOrderByEnum
   }
 
-  input SchoolOptionWhereAttributes {
+  input PeopleSchoolOptionWhereAttributes {
     beginning_grade: String
     ending_grade: String
     school_types: String
@@ -3268,15 +7649,15 @@ const typeDefs = gql`
     value: String
   }
 
-  type SchoolOptionRelationships {
-    promotes_to_school: [SchoolOption]
+  type PeopleSchoolOptionRelationships {
+    PeoplePromotes_to_school: [PeopleSchoolOption]
   }
 
-  type SchoolOptionAttributes {
+  type PeopleSchoolOptionAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3304,32 +7685,32 @@ const typeDefs = gql`
     school_types: String
   }
 
-  type SchoolOption {
+  type PeopleSchoolOption {
     id: ID!
-    attributes: SchoolOptionAttributes
-    relationships: SchoolOptionRelationships
+    attributes: PeopleSchoolOptionAttributes
+    relationships: PeopleSchoolOptionRelationships
   }
 
-  enum ServiceTimeOrderByEnum {
+  enum PeopleServiceTimeOrderByEnum {
     id
     start_time
     day
     description
   }
 
-  input ServiceTimeOrderInput {
+  input PeopleServiceTimeOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: ServiceTimeOrderByEnum
+    field: PeopleServiceTimeOrderByEnum
   }
 
-  type ServiceTimeAttributes {
+  type PeopleServiceTimeAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 1
@@ -3347,12 +7728,12 @@ const typeDefs = gql`
     description: String
   }
 
-  type ServiceTime {
+  type PeopleServiceTime {
     id: ID!
-    attributes: ServiceTimeAttributes
+    attributes: PeopleServiceTimeAttributes
   }
 
-  enum SocialProfileOrderByEnum {
+  enum PeopleSocialProfileOrderByEnum {
     id
     site
     url
@@ -3361,15 +7742,15 @@ const typeDefs = gql`
     updated_at
   }
 
-  input SocialProfileOrderInput {
+  input PeopleSocialProfileOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: SocialProfileOrderByEnum
+    field: PeopleSocialProfileOrderByEnum
   }
 
-  input SocialProfileWhereAttributes {
+  input PeopleSocialProfileWhereAttributes {
     created_at: String
     site: String
     updated_at: String
@@ -3377,15 +7758,15 @@ const typeDefs = gql`
     verified: Boolean
   }
 
-  type SocialProfileRelationships {
-    person: [Person]
+  type PeopleSocialProfileRelationships {
+    PeoplePerson: [PeoplePerson]
   }
 
-  type SocialProfileAttributes {
+  type PeopleSocialProfileAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3413,43 +7794,43 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type SocialProfile {
+  type PeopleSocialProfile {
     id: ID!
-    attributes: SocialProfileAttributes
-    relationships: SocialProfileRelationships
+    attributes: PeopleSocialProfileAttributes
+    relationships: PeopleSocialProfileRelationships
   }
 
-  enum TabOrderByEnum {
+  enum PeopleTabOrderByEnum {
     id
     name
     sequence
     slug
   }
 
-  input TabOrderInput {
+  input PeopleTabOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: TabOrderByEnum
+    field: PeopleTabOrderByEnum
   }
 
-  input TabWhereAttributes {
+  input PeopleTabWhereAttributes {
     name: String
     sequence: String
     slug: String
   }
 
-  type TabRelationships {
-    field_definitions: [FieldDefinition]
-    field_options: [FieldOption]
+  type PeopleTabRelationships {
+    PeopleField_definitions: [PeopleFieldDefinition]
+    PeopleField_options: [PeopleFieldOption]
   }
 
-  type TabAttributes {
+  type PeopleTabAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3467,13 +7848,13 @@ const typeDefs = gql`
     slug: String
   }
 
-  type Tab {
+  type PeopleTab {
     id: ID!
-    attributes: TabAttributes
-    relationships: TabRelationships
+    attributes: PeopleTabAttributes
+    relationships: PeopleTabRelationships
   }
 
-  enum WorkflowOrderByEnum {
+  enum PeopleWorkflowOrderByEnum {
     id
     name
     my_ready_card_count
@@ -3491,37 +7872,37 @@ const typeDefs = gql`
     recently_viewed
   }
 
-  input WorkflowOrderInput {
+  input PeopleWorkflowOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowOrderByEnum
+    field: PeopleWorkflowOrderByEnum
   }
 
-  input WorkflowWhereAttributes {
-    campus_id: ID
+  input PeopleWorkflowWhereAttributes {
+    campus_id: ID!
     created_at: String
     deleted_at: String
-    id: ID
+    id: ID!
     name: String
     updated_at: String
-    workflow_category_id: ID
+    workflow_category_id: ID!
   }
 
-  type WorkflowRelationships {
-    cards: [WorkflowCard]
-    category: [WorkflowCategory]
-    shared_people: [Person]
-    shares: [WorkflowShare]
-    steps: [WorkflowStep]
+  type PeopleWorkflowRelationships {
+    PeopleCards: [PeopleWorkflowCard]
+    PeopleCategory: [PeopleWorkflowCategory]
+    PeopleShared_people: [PeoplePerson]
+    PeopleShares: [PeopleWorkflowShare]
+    PeopleSteps: [PeopleWorkflowStep]
   }
 
-  type WorkflowAttributes {
+  type PeopleWorkflowAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3571,12 +7952,12 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    campus_id: ID
+    campus_id: ID!
 
     """
     example: primary_key
     """
-    workflow_category_id: ID
+    workflow_category_id: ID!
 
     """
     example: 1
@@ -3594,13 +7975,13 @@ const typeDefs = gql`
     recently_viewed: Boolean
   }
 
-  type Workflow {
+  type PeopleWorkflow {
     id: ID!
-    attributes: WorkflowAttributes
-    relationships: WorkflowRelationships
+    attributes: PeopleWorkflowAttributes
+    relationships: PeopleWorkflowRelationships
   }
 
-  enum WorkflowCardOrderByEnum {
+  enum PeopleWorkflowCardOrderByEnum {
     id
     snooze_until
     overdue
@@ -3615,32 +7996,32 @@ const typeDefs = gql`
     moved_to_step_at
   }
 
-  input WorkflowCardOrderInput {
+  input PeopleWorkflowCardOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowCardOrderByEnum
+    field: PeopleWorkflowCardOrderByEnum
   }
 
-  input WorkflowCardWhereAttributes {
+  input PeopleWorkflowCardWhereAttributes {
     stage: String
   }
 
-  type WorkflowCardRelationships {
-    activities: [WorkflowCardActivity]
-    assignee: [Person]
-    current_step: [WorkflowStep]
-    notes: [WorkflowCardNote]
-    person: [Person]
-    workflow: [Workflow]
+  type PeopleWorkflowCardRelationships {
+    PeopleActivities: [PeopleWorkflowCardActivity]
+    PeopleAssignee: [PeoplePerson]
+    PeopleCurrent_step: [PeopleWorkflowStep]
+    PeopleNotes: [PeopleWorkflowCardNote]
+    PeoplePerson: [PeoplePerson]
+    PeopleWorkflow: [PeopleWorkflow]
   }
 
-  type WorkflowCardAttributes {
+  type PeopleWorkflowCardAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 2000-01-01T12:00:00Z
@@ -3698,13 +8079,13 @@ const typeDefs = gql`
     moved_to_step_at: String
   }
 
-  type WorkflowCard {
+  type PeopleWorkflowCard {
     id: ID!
-    attributes: WorkflowCardAttributes
-    relationships: WorkflowCardRelationships
+    attributes: PeopleWorkflowCardAttributes
+    relationships: PeopleWorkflowCardRelationships
   }
 
-  enum WorkflowCardActivityOrderByEnum {
+  enum PeopleWorkflowCardActivityOrderByEnum {
     id
     comment
     content
@@ -3719,19 +8100,19 @@ const typeDefs = gql`
     created_at
   }
 
-  input WorkflowCardActivityOrderInput {
+  input PeopleWorkflowCardActivityOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowCardActivityOrderByEnum
+    field: PeopleWorkflowCardActivityOrderByEnum
   }
 
-  type WorkflowCardActivityAttributes {
+  type PeopleWorkflowCardActivityAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3789,30 +8170,30 @@ const typeDefs = gql`
     created_at: String
   }
 
-  type WorkflowCardActivity {
+  type PeopleWorkflowCardActivity {
     id: ID!
-    attributes: WorkflowCardActivityAttributes
+    attributes: PeopleWorkflowCardActivityAttributes
   }
 
-  enum WorkflowCardNoteOrderByEnum {
+  enum PeopleWorkflowCardNoteOrderByEnum {
     id
     note
     created_at
   }
 
-  input WorkflowCardNoteOrderInput {
+  input PeopleWorkflowCardNoteOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowCardNoteOrderByEnum
+    field: PeopleWorkflowCardNoteOrderByEnum
   }
 
-  type WorkflowCardNoteAttributes {
+  type PeopleWorkflowCardNoteAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3825,37 +8206,37 @@ const typeDefs = gql`
     created_at: String
   }
 
-  type WorkflowCardNote {
+  type PeopleWorkflowCardNote {
     id: ID!
-    attributes: WorkflowCardNoteAttributes
+    attributes: PeopleWorkflowCardNoteAttributes
   }
 
-  enum WorkflowCategoryOrderByEnum {
+  enum PeopleWorkflowCategoryOrderByEnum {
     id
     name
     created_at
     updated_at
   }
 
-  input WorkflowCategoryOrderInput {
+  input PeopleWorkflowCategoryOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowCategoryOrderByEnum
+    field: PeopleWorkflowCategoryOrderByEnum
   }
 
-  input WorkflowCategoryWhereAttributes {
+  input PeopleWorkflowCategoryWhereAttributes {
     created_at: String
     name: String
     updated_at: String
   }
 
-  type WorkflowCategoryAttributes {
+  type PeopleWorkflowCategoryAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: string
@@ -3873,39 +8254,39 @@ const typeDefs = gql`
     updated_at: String
   }
 
-  type WorkflowCategory {
+  type PeopleWorkflowCategory {
     id: ID!
-    attributes: WorkflowCategoryAttributes
+    attributes: PeopleWorkflowCategoryAttributes
   }
 
-  enum WorkflowShareOrderByEnum {
+  enum PeopleWorkflowShareOrderByEnum {
     id
     group
     permission
     person_id
   }
 
-  input WorkflowShareOrderInput {
+  input PeopleWorkflowShareOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowShareOrderByEnum
+    field: PeopleWorkflowShareOrderByEnum
   }
 
-  input WorkflowShareWhereAttributes {
+  input PeopleWorkflowShareWhereAttributes {
     permission: String
   }
 
-  type WorkflowShareRelationships {
-    person: [Person]
+  type PeopleWorkflowShareRelationships {
+    PeoplePerson: [PeoplePerson]
   }
 
-  type WorkflowShareAttributes {
+  type PeopleWorkflowShareAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: value
@@ -3920,16 +8301,16 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    person_id: ID
+    person_id: ID!
   }
 
-  type WorkflowShare {
+  type PeopleWorkflowShare {
     id: ID!
-    attributes: WorkflowShareAttributes
-    relationships: WorkflowShareRelationships
+    attributes: PeopleWorkflowShareAttributes
+    relationships: PeopleWorkflowShareRelationships
   }
 
-  enum WorkflowStepOrderByEnum {
+  enum PeopleWorkflowStepOrderByEnum {
     id
     created_at
     updated_at
@@ -3945,30 +8326,30 @@ const typeDefs = gql`
     default_assignee_id
   }
 
-  input WorkflowStepOrderInput {
+  input PeopleWorkflowStepOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowStepOrderByEnum
+    field: PeopleWorkflowStepOrderByEnum
   }
 
-  input WorkflowStepWhereAttributes {
+  input PeopleWorkflowStepWhereAttributes {
     created_at: String
     name: String
     updated_at: String
   }
 
-  type WorkflowStepRelationships {
-    assignee_summaries: [WorkflowStepAssigneeSummary]
-    default_assignee: [Person]
+  type PeopleWorkflowStepRelationships {
+    PeopleAssignee_summaries: [PeopleWorkflowStepAssigneeSummary]
+    PeopleDefault_assignee: [PeoplePerson]
   }
 
-  type WorkflowStepAttributes {
+  type PeopleWorkflowStepAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 2000-01-01T12:00:00Z
@@ -4028,38 +8409,38 @@ const typeDefs = gql`
     """
     example: primary_key
     """
-    default_assignee_id: ID
+    default_assignee_id: ID!
   }
 
-  type WorkflowStep {
+  type PeopleWorkflowStep {
     id: ID!
-    attributes: WorkflowStepAttributes
-    relationships: WorkflowStepRelationships
+    attributes: PeopleWorkflowStepAttributes
+    relationships: PeopleWorkflowStepRelationships
   }
 
-  enum WorkflowStepAssigneeSummaryOrderByEnum {
+  enum PeopleWorkflowStepAssigneeSummaryOrderByEnum {
     id
     ready_count
     snoozed_count
   }
 
-  input WorkflowStepAssigneeSummaryOrderInput {
+  input PeopleWorkflowStepAssigneeSummaryOrderInput {
     """
     this will append a (-) to the field name if desc
     """
     sort: sortEnum = asc
-    field: WorkflowStepAssigneeSummaryOrderByEnum
+    field: PeopleWorkflowStepAssigneeSummaryOrderByEnum
   }
 
-  type WorkflowStepAssigneeSummaryRelationships {
-    person: [Person]
+  type PeopleWorkflowStepAssigneeSummaryRelationships {
+    PeoplePerson: [PeoplePerson]
   }
 
-  type WorkflowStepAssigneeSummaryAttributes {
+  type PeopleWorkflowStepAssigneeSummaryAttributes {
     """
     example: primary_key
     """
-    id: ID
+    id: ID!
 
     """
     example: 1
@@ -4072,408 +8453,8365 @@ const typeDefs = gql`
     snoozed_count: String
   }
 
-  type WorkflowStepAssigneeSummary {
+  type PeopleWorkflowStepAssigneeSummary {
     id: ID!
-    attributes: WorkflowStepAssigneeSummaryAttributes
-    relationships: WorkflowStepAssigneeSummaryRelationships
+    attributes: PeopleWorkflowStepAssigneeSummaryAttributes
+    relationships: PeopleWorkflowStepAssigneeSummaryRelationships
+  }
+
+  enum ServicesArrangementOrderByEnum {
+    id
+    bpm
+    created_at
+    has_chords
+    length
+    meter
+    name
+    notes
+    print_margin
+    print_orientation
+    print_page_size
+    updated_at
+    chord_chart
+    chord_chart_font
+    chord_chart_key
+    chord_chart_columns
+    chord_chart_font_size
+    has_chord_chart
+    lyrics_enabled
+    number_chart_enabled
+    numeral_chart_enabled
+    sequence
+    sequence_short
+    sequence_full
+    chord_chart_chord_color
+    archived_at
+    lyrics
+  }
+
+  input ServicesArrangementOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesArrangementOrderByEnum
+  }
+
+  type ServicesArrangementRelationships {
+    ServicesAttachments: [ServicesAttachment]
+    ServicesKeys: [ServicesKey]
+    ServicesSections: [ServicesArrangementSections]
+    ServicesTags: [ServicesTag]
+  }
+
+  type ServicesArrangementAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1.42
+    """
+    bpm: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: true
+    """
+    has_chords: Boolean
+
+    """
+    example: 1
+    """
+    length: String
+
+    """
+    example: string
+    """
+    meter: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    notes: String
+
+    """
+    example: string
+    """
+    print_margin: String
+
+    """
+    example: string
+    """
+    print_orientation: String
+
+    """
+    example: string
+    """
+    print_page_size: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    chord_chart: String
+
+    """
+    example: string
+    """
+    chord_chart_font: String
+
+    """
+    example: string
+    """
+    chord_chart_key: String
+
+    """
+    example: 1
+    """
+    chord_chart_columns: String
+
+    """
+    example: 1
+    """
+    chord_chart_font_size: String
+
+    """
+    example: true
+    """
+    has_chord_chart: Boolean
+
+    """
+    example: true
+    """
+    lyrics_enabled: Boolean
+
+    """
+    example: true
+    """
+    number_chart_enabled: Boolean
+
+    """
+    example: true
+    """
+    numeral_chart_enabled: Boolean
+
+    """
+    example:
+    """
+    sequence: String
+
+    """
+    example:
+    """
+    sequence_short: String
+
+    """
+    example:
+    """
+    sequence_full: String
+
+    """
+    example: 1
+    """
+    chord_chart_chord_color: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    archived_at: String
+
+    """
+    example: string
+    """
+    lyrics: String
+  }
+
+  type ServicesArrangement {
+    id: ID!
+    attributes: ServicesArrangementAttributes
+    relationships: ServicesArrangementRelationships
+  }
+
+  enum ServicesArrangementSectionsOrderByEnum {
+    id
+    sections
+  }
+
+  input ServicesArrangementSectionsOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesArrangementSectionsOrderByEnum
+  }
+
+  type ServicesArrangementSectionsAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example:
+    """
+    sections: String
+  }
+
+  type ServicesArrangementSections {
+    id: ID!
+    attributes: ServicesArrangementSectionsAttributes
+  }
+
+  enum ServicesAttachmentOrderByEnum {
+    id
+    created_at
+    page_order
+    updated_at
+    filename
+    file_size
+    licenses_purchased
+    licenses_remaining
+    licenses_used
+    content
+    content_type
+    display_name
+    filetype
+    linked_url
+    pco_type
+    remote_link
+    thumbnail_url
+    url
+    allow_mp3_download
+    web_streamable
+    downloadable
+    transposable
+    import_to_item_details
+    streamable
+    has_preview
+    file_upload_identifier
+  }
+
+  input ServicesAttachmentOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesAttachmentOrderByEnum
+  }
+
+  input ServicesAttachmentWhereAttributes {
+    licenses_purchased: String
+  }
+
+  type ServicesAttachmentRelationships {
+    ServicesZooms: [ServicesZoom]
+  }
+
+  type ServicesAttachmentAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    page_order: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    filename: String
+
+    """
+    example: 1
+    """
+    file_size: String
+
+    """
+    example: 1
+    """
+    licenses_purchased: String
+
+    """
+    example: 1
+    """
+    licenses_remaining: String
+
+    """
+    example: 1
+    """
+    licenses_used: String
+
+    """
+    example: string
+    """
+    content: String
+
+    """
+    example: string
+    """
+    content_type: String
+
+    """
+    example: string
+    """
+    display_name: String
+
+    """
+    example: string
+    """
+    filetype: String
+
+    """
+    example: string
+    """
+    linked_url: String
+
+    """
+    example: string
+    """
+    pco_type: String
+
+    """
+    example: string
+    """
+    remote_link: String
+
+    """
+    example: string
+    """
+    thumbnail_url: String
+
+    """
+    example: string
+    """
+    url: String
+
+    """
+    example: true
+    """
+    allow_mp3_download: Boolean
+
+    """
+    example: true
+    """
+    web_streamable: Boolean
+
+    """
+    example: true
+    """
+    downloadable: Boolean
+
+    """
+    example: true
+    """
+    transposable: Boolean
+
+    """
+    example: true
+    """
+    import_to_item_details: Boolean
+
+    """
+    example: true
+    """
+    streamable: Boolean
+
+    """
+    example: true
+    """
+    has_preview: Boolean
+
+    """
+    example: string
+    """
+    file_upload_identifier: String
+  }
+
+  type ServicesAttachment {
+    id: ID!
+    attributes: ServicesAttachmentAttributes
+    relationships: ServicesAttachmentRelationships
+  }
+
+  enum ServicesAttachmentActivityOrderByEnum {
+    id
+    date
+    attachment_url
+    activity_type
+  }
+
+  input ServicesAttachmentActivityOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesAttachmentActivityOrderByEnum
+  }
+
+  type ServicesAttachmentActivityAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01
+    """
+    date: String
+
+    """
+    example: string
+    """
+    attachment_url: String
+
+    """
+    example: string
+    """
+    activity_type: String
+  }
+
+  type ServicesAttachmentActivity {
+    id: ID!
+    attributes: ServicesAttachmentActivityAttributes
+  }
+
+  enum ServicesAttachmentTypeOrderByEnum {
+    id
+    name
+    aliases
+    capoed_chord_charts
+    chord_charts
+    exclusions
+    lyrics
+    number_charts
+    numeral_charts
+    built_in
+  }
+
+  input ServicesAttachmentTypeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesAttachmentTypeOrderByEnum
+  }
+
+  type ServicesAttachmentTypeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    aliases: String
+
+    """
+    example: true
+    """
+    capoed_chord_charts: Boolean
+
+    """
+    example: true
+    """
+    chord_charts: Boolean
+
+    """
+    example: string
+    """
+    exclusions: String
+
+    """
+    example: true
+    """
+    lyrics: Boolean
+
+    """
+    example: true
+    """
+    number_charts: Boolean
+
+    """
+    example: true
+    """
+    numeral_charts: Boolean
+
+    """
+    example: true
+    """
+    built_in: Boolean
+  }
+
+  type ServicesAttachmentType {
+    id: ID!
+    attributes: ServicesAttachmentTypeAttributes
+  }
+
+  enum ServicesAttendanceOrderByEnum {
+    id
+    checked_in_at
+    check_ins_event_id
+    check_ins_event_period_id
+  }
+
+  input ServicesAttendanceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesAttendanceOrderByEnum
+  }
+
+  type ServicesAttendanceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    checked_in_at: String
+
+    """
+    example: primary_key
+    """
+    check_ins_event_id: ID!
+
+    """
+    example: primary_key
+    """
+    check_ins_event_period_id: ID!
+  }
+
+  type ServicesAttendance {
+    id: ID!
+    attributes: ServicesAttendanceAttributes
+  }
+
+  enum ServicesAvailableSignupOrderByEnum {
+    id
+    organization_name
+    planning_center_url
+    service_type_name
+    signups_available
+  }
+
+  input ServicesAvailableSignupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesAvailableSignupOrderByEnum
+  }
+
+  type ServicesAvailableSignupRelationships {
+    ServicesSignup_sheets: [ServicesSignupSheet]
+  }
+
+  type ServicesAvailableSignupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    organization_name: String
+
+    """
+    example: string
+    """
+    planning_center_url: String
+
+    """
+    example: string
+    """
+    service_type_name: String
+
+    """
+    example: true
+    """
+    signups_available: Boolean
+  }
+
+  type ServicesAvailableSignup {
+    id: ID!
+    attributes: ServicesAvailableSignupAttributes
+    relationships: ServicesAvailableSignupRelationships
+  }
+
+  enum ServicesBlockoutOrderByEnum {
+    id
+    description
+    group_identifier
+    organization_name
+    reason
+    repeat_frequency
+    repeat_interval
+    repeat_period
+    settings
+    time_zone
+    created_at
+    updated_at
+    repeat_until
+    starts_at
+    ends_at
+    share
+  }
+
+  input ServicesBlockoutOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesBlockoutOrderByEnum
+  }
+
+  input ServicesBlockoutWhereAttributes {
+    group_identifier: String
+  }
+
+  type ServicesBlockoutRelationships {
+    ServicesBlockout_dates: [ServicesBlockoutDate]
+    ServicesBlockout_exceptions: [ServicesBlockoutException]
+  }
+
+  type ServicesBlockoutAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    group_identifier: String
+
+    """
+    example: string
+    """
+    organization_name: String
+
+    """
+    example: string
+    """
+    reason: String
+
+    """
+    example: string
+    """
+    repeat_frequency: String
+
+    """
+    example: string
+    """
+    repeat_interval: String
+
+    """
+    example: string
+    """
+    repeat_period: String
+
+    """
+    example: string
+    """
+    settings: String
+
+    """
+    example: string
+    """
+    time_zone: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01
+    """
+    repeat_until: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: true
+    """
+    share: Boolean
+  }
+
+  type ServicesBlockout {
+    id: ID!
+    attributes: ServicesBlockoutAttributes
+    relationships: ServicesBlockoutRelationships
+  }
+
+  enum ServicesBlockoutDateOrderByEnum {
+    id
+    group_identifier
+    reason
+    time_zone
+    share
+    starts_at
+    ends_at
+    ends_at_utc
+    starts_at_utc
+  }
+
+  input ServicesBlockoutDateOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesBlockoutDateOrderByEnum
+  }
+
+  type ServicesBlockoutDateAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    group_identifier: String
+
+    """
+    example: string
+    """
+    reason: String
+
+    """
+    example: string
+    """
+    time_zone: String
+
+    """
+    example: true
+    """
+    share: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at_utc: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at_utc: String
+  }
+
+  type ServicesBlockoutDate {
+    id: ID!
+    attributes: ServicesBlockoutDateAttributes
+  }
+
+  enum ServicesBlockoutExceptionOrderByEnum {
+    id
+    date
+    created_at
+    updated_at
+  }
+
+  input ServicesBlockoutExceptionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesBlockoutExceptionOrderByEnum
+  }
+
+  type ServicesBlockoutExceptionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01
+    """
+    date: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type ServicesBlockoutException {
+    id: ID!
+    attributes: ServicesBlockoutExceptionAttributes
+  }
+
+  enum ServicesBlockoutScheduleConflictOrderByEnum {
+    id
+    dates
+    organization_name
+    person_avatar
+    person_name
+    position_display_times
+    service_type_name
+    short_dates
+    status
+    team_name
+    team_position_name
+    sort_date
+    can_accept_partial
+  }
+
+  input ServicesBlockoutScheduleConflictOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesBlockoutScheduleConflictOrderByEnum
+  }
+
+  type ServicesBlockoutScheduleConflictAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    dates: String
+
+    """
+    example: string
+    """
+    organization_name: String
+
+    """
+    example: string
+    """
+    person_avatar: String
+
+    """
+    example: string
+    """
+    person_name: String
+
+    """
+    example: string
+    """
+    position_display_times: String
+
+    """
+    example: string
+    """
+    service_type_name: String
+
+    """
+    example: string
+    """
+    short_dates: String
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: string
+    """
+    team_name: String
+
+    """
+    example: string
+    """
+    team_position_name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    sort_date: String
+
+    """
+    example: true
+    """
+    can_accept_partial: Boolean
+  }
+
+  type ServicesBlockoutScheduleConflict {
+    id: ID!
+    attributes: ServicesBlockoutScheduleConflictAttributes
+  }
+
+  enum ServicesChatOrderByEnum {
+    id
+    payload
+    people
+    plans
+    teams
+  }
+
+  input ServicesChatOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesChatOrderByEnum
+  }
+
+  type ServicesChatAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    payload: String
+
+    """
+    example:
+    """
+    people: String
+
+    """
+    example:
+    """
+    plans: String
+
+    """
+    example:
+    """
+    teams: String
+  }
+
+  type ServicesChat {
+    id: ID!
+    attributes: ServicesChatAttributes
+  }
+
+  enum ServicesContributorOrderByEnum {
+    id
+    created_at
+    updated_at
+    contributable_action
+    contributable_category
+    contributable_type
+    full_name
+    photo_thumbnail_url
+  }
+
+  input ServicesContributorOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesContributorOrderByEnum
+  }
+
+  type ServicesContributorAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    contributable_action: String
+
+    """
+    example: string
+    """
+    contributable_category: String
+
+    """
+    example: string
+    """
+    contributable_type: String
+
+    """
+    example: string
+    """
+    full_name: String
+
+    """
+    example: string
+    """
+    photo_thumbnail_url: String
+  }
+
+  type ServicesContributor {
+    id: ID!
+    attributes: ServicesContributorAttributes
+  }
+
+  enum ServicesCustomSlideOrderByEnum {
+    id
+    body
+    label
+    order
+    enabled
+  }
+
+  input ServicesCustomSlideOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesCustomSlideOrderByEnum
+  }
+
+  type ServicesCustomSlideAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+
+    """
+    example: string
+    """
+    label: String
+
+    """
+    example: 1
+    """
+    order: String
+
+    """
+    example: true
+    """
+    enabled: Boolean
+  }
+
+  type ServicesCustomSlide {
+    id: ID!
+    attributes: ServicesCustomSlideAttributes
+  }
+
+  enum ServicesEmailTemplateOrderByEnum {
+    id
+    kind
+    created_at
+    updated_at
+    html_body
+    subject
+  }
+
+  input ServicesEmailTemplateOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesEmailTemplateOrderByEnum
+  }
+
+  type ServicesEmailTemplateAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    html_body: String
+
+    """
+    example: string
+    """
+    subject: String
+  }
+
+  type ServicesEmailTemplate {
+    id: ID!
+    attributes: ServicesEmailTemplateAttributes
+  }
+
+  enum ServicesEmailTemplateRenderedResponseOrderByEnum {
+    id
+    body
+    subject
+  }
+
+  input ServicesEmailTemplateRenderedResponseOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesEmailTemplateRenderedResponseOrderByEnum
+  }
+
+  type ServicesEmailTemplateRenderedResponseAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+
+    """
+    example: string
+    """
+    subject: String
+  }
+
+  type ServicesEmailTemplateRenderedResponse {
+    id: ID!
+    attributes: ServicesEmailTemplateRenderedResponseAttributes
+  }
+
+  enum ServicesFolderOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    container
+  }
+
+  input ServicesFolderOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesFolderOrderByEnum
+  }
+
+  type ServicesFolderRelationships {
+    ServicesFolders: [ServicesFolder]
+    ServicesService_types: [ServicesServiceType]
+  }
+
+  type ServicesFolderAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    container: String
+  }
+
+  type ServicesFolder {
+    id: ID!
+    attributes: ServicesFolderAttributes
+    relationships: ServicesFolderRelationships
+  }
+
+  enum ServicesFolderPathOrderByEnum {
+    id
+    path
+  }
+
+  input ServicesFolderPathOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesFolderPathOrderByEnum
+  }
+
+  type ServicesFolderPathAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example:
+    """
+    path: String
+  }
+
+  type ServicesFolderPath {
+    id: ID!
+    attributes: ServicesFolderPathAttributes
+  }
+
+  enum ServicesItemOrderByEnum {
+    id
+    title
+    sequence
+    created_at
+    updated_at
+    length
+    item_type
+    html_details
+    service_position
+    description
+    key_name
+    custom_arrangement_sequence
+    custom_arrangement_sequence_short
+    custom_arrangement_sequence_full
+  }
+
+  input ServicesItemOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesItemOrderByEnum
+  }
+
+  type ServicesItemRelationships {
+    ServicesArrangement: [ServicesArrangement]
+    ServicesAttachments: [ServicesAttachment]
+    ServicesCustom_slides: [ServicesCustomSlide]
+    ServicesItem_notes: [ServicesItemNote]
+    ServicesItem_times: [ServicesItemTime]
+    ServicesKey: [ServicesKey]
+    ServicesMedia: [ServicesMedia]
+    ServicesSelected_attachment: [ServicesAttachment]
+    ServicesSelected_background: [ServicesAttachment]
+    ServicesSong: [ServicesSong]
+  }
+
+  type ServicesItemAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: 1
+    """
+    sequence: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    length: String
+
+    """
+    example: string
+    """
+    item_type: String
+
+    """
+    example: string
+    """
+    html_details: String
+
+    """
+    example: string
+    """
+    service_position: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    key_name: String
+
+    """
+    example:
+    """
+    custom_arrangement_sequence: String
+
+    """
+    example:
+    """
+    custom_arrangement_sequence_short: String
+
+    """
+    example:
+    """
+    custom_arrangement_sequence_full: String
+  }
+
+  type ServicesItem {
+    id: ID!
+    attributes: ServicesItemAttributes
+    relationships: ServicesItemRelationships
+  }
+
+  enum ServicesItemNoteOrderByEnum {
+    id
+    created_at
+    updated_at
+    content
+    category_name
+  }
+
+  input ServicesItemNoteOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesItemNoteOrderByEnum
+  }
+
+  type ServicesItemNoteRelationships {
+    ServicesItem_note_category: [ServicesItemNoteCategory]
+  }
+
+  type ServicesItemNoteAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    content: String
+
+    """
+    example: string
+    """
+    category_name: String
+  }
+
+  type ServicesItemNote {
+    id: ID!
+    attributes: ServicesItemNoteAttributes
+    relationships: ServicesItemNoteRelationships
+  }
+
+  enum ServicesItemNoteCategoryOrderByEnum {
+    id
+    created_at
+    deleted_at
+    name
+    sequence
+    updated_at
+    frequently_used
+  }
+
+  input ServicesItemNoteCategoryOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesItemNoteCategoryOrderByEnum
+  }
+
+  type ServicesItemNoteCategoryAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    deleted_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    sequence: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: true
+    """
+    frequently_used: Boolean
+  }
+
+  type ServicesItemNoteCategory {
+    id: ID!
+    attributes: ServicesItemNoteCategoryAttributes
+  }
+
+  enum ServicesItemTimeOrderByEnum {
+    id
+    live_start_at
+    live_end_at
+    exclude
+    length
+    length_offset
+  }
+
+  input ServicesItemTimeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesItemTimeOrderByEnum
+  }
+
+  type ServicesItemTimeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    live_start_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    live_end_at: String
+
+    """
+    example: true
+    """
+    exclude: Boolean
+
+    """
+    example: 1
+    """
+    length: String
+
+    """
+    example: 1
+    """
+    length_offset: String
+  }
+
+  type ServicesItemTime {
+    id: ID!
+    attributes: ServicesItemTimeAttributes
+  }
+
+  enum ServicesKeyOrderByEnum {
+    id
+    created_at
+    updated_at
+    name
+    alternate_keys
+    ending_key
+    starting_key
+    starting_minor
+    ending_minor
+  }
+
+  input ServicesKeyOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesKeyOrderByEnum
+  }
+
+  type ServicesKeyRelationships {
+    ServicesAttachments: [ServicesAttachment]
+  }
+
+  type ServicesKeyAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    alternate_keys: String
+
+    """
+    example: string
+    """
+    ending_key: String
+
+    """
+    example: string
+    """
+    starting_key: String
+
+    """
+    example: true
+    """
+    starting_minor: Boolean
+
+    """
+    example: true
+    """
+    ending_minor: Boolean
+  }
+
+  type ServicesKey {
+    id: ID!
+    attributes: ServicesKeyAttributes
+    relationships: ServicesKeyRelationships
+  }
+
+  enum ServicesLayoutOrderByEnum {
+    id
+  }
+
+  input ServicesLayoutOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesLayoutOrderByEnum
+  }
+
+  type ServicesLayoutAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+  }
+
+  type ServicesLayout {
+    id: ID!
+    attributes: ServicesLayoutAttributes
+  }
+
+  enum ServicesLiveOrderByEnum {
+    id
+    series_title
+    title
+    dates
+    live_channel
+    chat_room_channel
+    can_control
+    can_take_control
+    can_chat
+    can_control_video_feed
+  }
+
+  input ServicesLiveOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesLiveOrderByEnum
+  }
+
+  type ServicesLiveRelationships {
+    ServicesController: [ServicesPerson]
+    ServicesCurrent_item_time: [ServicesItemTime]
+    ServicesItems: [ServicesItem]
+    ServicesNext_item_time: [ServicesItemTime]
+    ServicesService_type: [ServicesServiceType]
+    ServicesWatchable_plans: [ServicesPlan]
+  }
+
+  type ServicesLiveAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    series_title: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: string
+    """
+    dates: String
+
+    """
+    example: string
+    """
+    live_channel: String
+
+    """
+    example: string
+    """
+    chat_room_channel: String
+
+    """
+    example: true
+    """
+    can_control: Boolean
+
+    """
+    example: true
+    """
+    can_take_control: Boolean
+
+    """
+    example: true
+    """
+    can_chat: Boolean
+
+    """
+    example: true
+    """
+    can_control_video_feed: Boolean
+  }
+
+  type ServicesLive {
+    id: ID!
+    attributes: ServicesLiveAttributes
+    relationships: ServicesLiveRelationships
+  }
+
+  enum ServicesLiveControllerOrderByEnum {
+    id
+    created_at
+    updated_at
+    full_name
+    photo_thumbnail_url
+  }
+
+  input ServicesLiveControllerOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesLiveControllerOrderByEnum
+  }
+
+  type ServicesLiveControllerAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    full_name: String
+
+    """
+    example: string
+    """
+    photo_thumbnail_url: String
+  }
+
+  type ServicesLiveController {
+    id: ID!
+    attributes: ServicesLiveControllerAttributes
+  }
+
+  enum ServicesMediaOrderByEnum {
+    id
+    created_at
+    updated_at
+    themes
+    title
+    thumbnail_file_name
+    thumbnail_content_type
+    thumbnail_file_size
+    thumbnail_updated_at
+    preview_file_name
+    preview_content_type
+    preview_file_size
+    preview_updated_at
+    length
+    media_type
+    media_type_name
+    thumbnail_url
+    creator_name
+    preview_url
+    image_url
+  }
+
+  input ServicesMediaOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesMediaOrderByEnum
+  }
+
+  input ServicesMediaWhereAttributes {
+    creator_name: String
+    id: ID!
+    themes: String
+    title: String
+  }
+
+  type ServicesMediaRelationships {
+    ServicesAttachments: [ServicesAttachment]
+    ServicesMedia_schedules: [ServicesMediaSchedule]
+    ServicesTags: [ServicesTag]
+  }
+
+  type ServicesMediaAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    themes: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: string
+    """
+    thumbnail_file_name: String
+
+    """
+    example: string
+    """
+    thumbnail_content_type: String
+
+    """
+    example: 1
+    """
+    thumbnail_file_size: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    thumbnail_updated_at: String
+
+    """
+    example: string
+    """
+    preview_file_name: String
+
+    """
+    example: string
+    """
+    preview_content_type: String
+
+    """
+    example: 1
+    """
+    preview_file_size: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    preview_updated_at: String
+
+    """
+    example: 1
+    """
+    length: String
+
+    """
+    example: string
+    """
+    media_type: String
+
+    """
+    example: string
+    """
+    media_type_name: String
+
+    """
+    example: string
+    """
+    thumbnail_url: String
+
+    """
+    example: string
+    """
+    creator_name: String
+
+    """
+    example: string
+    """
+    preview_url: String
+
+    """
+    example: string
+    """
+    image_url: String
+  }
+
+  type ServicesMedia {
+    id: ID!
+    attributes: ServicesMediaAttributes
+    relationships: ServicesMediaRelationships
+  }
+
+  enum ServicesMediaScheduleOrderByEnum {
+    id
+    plan_dates
+    plan_short_dates
+    service_type_name
+    plan_sort_date
+  }
+
+  input ServicesMediaScheduleOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesMediaScheduleOrderByEnum
+  }
+
+  type ServicesMediaScheduleAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    plan_dates: String
+
+    """
+    example: string
+    """
+    plan_short_dates: String
+
+    """
+    example: string
+    """
+    service_type_name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    plan_sort_date: String
+  }
+
+  type ServicesMediaSchedule {
+    id: ID!
+    attributes: ServicesMediaScheduleAttributes
+  }
+
+  enum ServicesNeededPositionOrderByEnum {
+    id
+    quantity
+    team_position_name
+    scheduled_to
+  }
+
+  input ServicesNeededPositionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesNeededPositionOrderByEnum
+  }
+
+  type ServicesNeededPositionRelationships {
+    ServicesTeam: [ServicesTeam]
+    ServicesTime: [ServicesPlanTime]
+  }
+
+  type ServicesNeededPositionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: string
+    """
+    team_position_name: String
+
+    """
+    example: string
+    """
+    scheduled_to: String
+  }
+
+  type ServicesNeededPosition {
+    id: ID!
+    attributes: ServicesNeededPositionAttributes
+    relationships: ServicesNeededPositionRelationships
+  }
+
+  enum ServicesOrganizationOrderByEnum {
+    id
+    ccli
+    created_at
+    date_format
+    music_stand_enabled
+    name
+    projector_enabled
+    time_zone
+    twenty_four_hour_time
+    updated_at
+    owner_name
+    required_to_set_download_permission
+    secret
+    allow_mp3_download
+    calendar_starts_on_sunday
+    ccli_connected
+    ccli_auto_reporting_enabled
+    ccli_reporting_enabled
+    extra_file_storage_allowed
+    file_storage_exceeded
+    file_storage_size
+    file_storage_size_used
+    file_storage_extra_enabled
+    rehearsal_mix_enabled
+    rehearsal_pack_connected
+    legacy_id
+    file_storage_extra_charges
+    people_allowed
+    people_remaining
+    beta
+  }
+
+  input ServicesOrganizationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesOrganizationOrderByEnum
+  }
+
+  type ServicesOrganizationRelationships {
+    ServicesAttachment_types: [ServicesAttachmentType]
+    ServicesChat: [ServicesChat]
+    ServicesEmail_templates: [ServicesEmailTemplate]
+    ServicesFolders: [ServicesFolder]
+    ServicesMedia: [ServicesMedia]
+    ServicesPeople: [ServicesPerson]
+    ServicesPlans: [ServicesOrganization]
+    ServicesReport_templates: [ServicesReportTemplate]
+    ServicesSeries: [ServicesSeries]
+    ServicesService_types: [ServicesServiceType]
+    ServicesSongs: [ServicesSong]
+    ServicesTag_groups: [ServicesTagGroup]
+    ServicesTeams: [ServicesTeam]
+  }
+
+  type ServicesOrganizationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    ccli: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 1
+    """
+    date_format: String
+
+    """
+    example: true
+    """
+    music_stand_enabled: Boolean
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: true
+    """
+    projector_enabled: Boolean
+
+    """
+    example: string
+    """
+    time_zone: String
+
+    """
+    example: true
+    """
+    twenty_four_hour_time: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    owner_name: String
+
+    """
+    example: string
+    """
+    required_to_set_download_permission: String
+
+    """
+    example: string
+    """
+    secret: String
+
+    """
+    example: true
+    """
+    allow_mp3_download: Boolean
+
+    """
+    example: true
+    """
+    calendar_starts_on_sunday: Boolean
+
+    """
+    example: true
+    """
+    ccli_connected: Boolean
+
+    """
+    example: true
+    """
+    ccli_auto_reporting_enabled: Boolean
+
+    """
+    example: true
+    """
+    ccli_reporting_enabled: Boolean
+
+    """
+    example: true
+    """
+    extra_file_storage_allowed: Boolean
+
+    """
+    example: true
+    """
+    file_storage_exceeded: Boolean
+
+    """
+    example: true
+    """
+    file_storage_size: Boolean
+
+    """
+    example: true
+    """
+    file_storage_size_used: Boolean
+
+    """
+    example: true
+    """
+    file_storage_extra_enabled: Boolean
+
+    """
+    example: true
+    """
+    rehearsal_mix_enabled: Boolean
+
+    """
+    example: true
+    """
+    rehearsal_pack_connected: Boolean
+
+    """
+    example: primary_key
+    """
+    legacy_id: ID!
+
+    """
+    example: 1
+    """
+    file_storage_extra_charges: String
+
+    """
+    example: 1
+    """
+    people_allowed: String
+
+    """
+    example: 1
+    """
+    people_remaining: String
+
+    """
+    example: true
+    """
+    beta: Boolean
+  }
+
+  type ServicesOrganization {
+    id: ID!
+    attributes: ServicesOrganizationAttributes
+    relationships: ServicesOrganizationRelationships
+  }
+
+  enum ServicesPersonOrderByEnum {
+    id
+    photo_url
+    photo_thumbnail_url
+    preferred_app
+    assigned_to_rehearsal_team
+    archived_at
+    created_at
+    first_name
+    last_name
+    name_prefix
+    name_suffix
+    updated_at
+    facebook_id
+    legacy_id
+    full_name
+    max_permissions
+    permissions
+    status
+    anniversary
+    birthdate
+    given_name
+    middle_name
+    nickname
+    access_media_attachments
+    access_plan_attachments
+    access_song_attachments
+    archived
+    site_administrator
+    logged_in_at
+    notes
+    passed_background_check
+    ical_code
+    preferred_max_plans_per_day
+    preferred_max_plans_per_month
+    praise_charts_enabled
+    me_tab
+    plans_tab
+    songs_tab
+    media_tab
+    people_tab
+    can_edit_all_people
+    can_view_all_people
+    onboardings
+  }
+
+  input ServicesPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPersonOrderByEnum
+  }
+
+  input ServicesPersonWhereAttributes {
+    assigned_to_rehearsal_team: Boolean
+    legacy_id: ID!
+  }
+
+  type ServicesPersonRelationships {
+    ServicesAvailable_signups: [ServicesAvailableSignup]
+    ServicesBlockouts: [ServicesBlockout]
+    ServicesPerson_team_position_assignments: [ServicesPersonTeamPositionAssignment]
+    ServicesPlan_people: [ServicesPlanPerson]
+    ServicesSchedules: [ServicesSchedule]
+    ServicesScheduling_preferences: [ServicesSchedulingPreference]
+    ServicesTags: [ServicesTag]
+    ServicesTeam_leaders: [ServicesTeamLeader]
+    ServicesText_settings: [ServicesTextSetting]
+  }
+
+  type ServicesPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    photo_url: String
+
+    """
+    example: string
+    """
+    photo_thumbnail_url: String
+
+    """
+    example: string
+    """
+    preferred_app: String
+
+    """
+    example: true
+    """
+    assigned_to_rehearsal_team: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    archived_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: string
+    """
+    name_prefix: String
+
+    """
+    example: string
+    """
+    name_suffix: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: primary_key
+    """
+    facebook_id: ID!
+
+    """
+    example: primary_key
+    """
+    legacy_id: ID!
+
+    """
+    example: string
+    """
+    full_name: String
+
+    """
+    example: string
+    """
+    max_permissions: String
+
+    """
+    example: string
+    """
+    permissions: String
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    anniversary: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    birthdate: String
+
+    """
+    example: string
+    """
+    given_name: String
+
+    """
+    example: string
+    """
+    middle_name: String
+
+    """
+    example: string
+    """
+    nickname: String
+
+    """
+    example: true
+    """
+    access_media_attachments: Boolean
+
+    """
+    example: true
+    """
+    access_plan_attachments: Boolean
+
+    """
+    example: true
+    """
+    access_song_attachments: Boolean
+
+    """
+    example: true
+    """
+    archived: Boolean
+
+    """
+    example: true
+    """
+    site_administrator: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    logged_in_at: String
+
+    """
+    example: string
+    """
+    notes: String
+
+    """
+    example: true
+    """
+    passed_background_check: Boolean
+
+    """
+    example: string
+    """
+    ical_code: String
+
+    """
+    example: 1
+    """
+    preferred_max_plans_per_day: String
+
+    """
+    example: 1
+    """
+    preferred_max_plans_per_month: String
+
+    """
+    example: true
+    """
+    praise_charts_enabled: Boolean
+
+    """
+    example: string
+    """
+    me_tab: String
+
+    """
+    example: string
+    """
+    plans_tab: String
+
+    """
+    example: string
+    """
+    songs_tab: String
+
+    """
+    example: string
+    """
+    media_tab: String
+
+    """
+    example: string
+    """
+    people_tab: String
+
+    """
+    example: true
+    """
+    can_edit_all_people: Boolean
+
+    """
+    example: true
+    """
+    can_view_all_people: Boolean
+
+    """
+    example:
+    """
+    onboardings: String
+  }
+
+  type ServicesPerson {
+    id: ID!
+    attributes: ServicesPersonAttributes
+    relationships: ServicesPersonRelationships
+  }
+
+  enum ServicesPersonTeamPositionAssignmentOrderByEnum {
+    id
+    created_at
+    updated_at
+    schedule_preference
+    preferred_weeks
+  }
+
+  input ServicesPersonTeamPositionAssignmentOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPersonTeamPositionAssignmentOrderByEnum
+  }
+
+  type ServicesPersonTeamPositionAssignmentRelationships {
+    ServicesPerson: [ServicesPerson]
+    ServicesTeam_position: [ServicesTeamPosition]
+  }
+
+  type ServicesPersonTeamPositionAssignmentAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    schedule_preference: String
+
+    """
+    example:
+    """
+    preferred_weeks: String
+  }
+
+  type ServicesPersonTeamPositionAssignment {
+    id: ID!
+    attributes: ServicesPersonTeamPositionAssignmentAttributes
+    relationships: ServicesPersonTeamPositionAssignmentRelationships
+  }
+
+  enum ServicesPlanOrderByEnum {
+    id
+    created_at
+    title
+    updated_at
+    public
+    series_title
+    plan_notes_count
+    other_time_count
+    rehearsal_time_count
+    service_time_count
+    plan_people_count
+    needed_positions_count
+    items_count
+    total_length
+    can_view_order
+    multi_day
+    prefers_order_view
+    rehearsable
+    files_expire_at
+    sort_date
+    last_time_at
+    permissions
+    dates
+    short_dates
+    planning_center_url
+    reminders_disabled
+  }
+
+  input ServicesPlanOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPlanOrderByEnum
+  }
+
+  input ServicesPlanWhereAttributes {
+    created_at: String
+    id: ID!
+    series_title: String
+    title: String
+    updated_at: String
+  }
+
+  type ServicesPlanRelationships {
+    ServicesAll_attachments: [ServicesAttachment]
+    ServicesAttachments: [ServicesAttachment]
+    ServicesAttendances: [ServicesAttendance]
+    ServicesContributors: [ServicesContributor]
+    ServicesItems: [ServicesItem]
+    ServicesLive: [ServicesLive]
+    ServicesMy_schedules: [ServicesSchedule]
+    ServicesNeeded_positions: [ServicesNeededPosition]
+    ServicesNext_plan: [ServicesPlan]
+    ServicesNotes: [ServicesPlanNote]
+    ServicesPlan_times: [ServicesPlanTime]
+    ServicesPrevious_plan: [ServicesPlan]
+    ServicesSeries: [ServicesSeries]
+    ServicesSignup_teams: [ServicesTeam]
+    ServicesTeam_members: [ServicesPlanPerson]
+  }
+
+  type ServicesPlanAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: true
+    """
+    public: Boolean
+
+    """
+    example: string
+    """
+    series_title: String
+
+    """
+    example: 1
+    """
+    plan_notes_count: String
+
+    """
+    example: 1
+    """
+    other_time_count: String
+
+    """
+    example: 1
+    """
+    rehearsal_time_count: String
+
+    """
+    example: 1
+    """
+    service_time_count: String
+
+    """
+    example: 1
+    """
+    plan_people_count: String
+
+    """
+    example: 1
+    """
+    needed_positions_count: String
+
+    """
+    example: 1
+    """
+    items_count: String
+
+    """
+    example: 1
+    """
+    total_length: String
+
+    """
+    example: true
+    """
+    can_view_order: Boolean
+
+    """
+    example: true
+    """
+    multi_day: Boolean
+
+    """
+    example: true
+    """
+    prefers_order_view: Boolean
+
+    """
+    example: true
+    """
+    rehearsable: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    files_expire_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    sort_date: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    last_time_at: String
+
+    """
+    example: string
+    """
+    permissions: String
+
+    """
+    example: string
+    """
+    dates: String
+
+    """
+    example: string
+    """
+    short_dates: String
+
+    """
+    example: string
+    """
+    planning_center_url: String
+
+    """
+    example: true
+    """
+    reminders_disabled: Boolean
+  }
+
+  type ServicesPlan {
+    id: ID!
+    attributes: ServicesPlanAttributes
+    relationships: ServicesPlanRelationships
+  }
+
+  enum ServicesPlanNoteOrderByEnum {
+    id
+    created_at
+    updated_at
+    category_name
+    content
+  }
+
+  input ServicesPlanNoteOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPlanNoteOrderByEnum
+  }
+
+  input ServicesPlanNoteWhereAttributes {
+    created_at: String
+    updated_at: String
+  }
+
+  type ServicesPlanNoteRelationships {
+    ServicesPlan_note_category: [ServicesPlanNoteCategory]
+  }
+
+  type ServicesPlanNoteAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    category_name: String
+
+    """
+    example: string
+    """
+    content: String
+  }
+
+  type ServicesPlanNote {
+    id: ID!
+    attributes: ServicesPlanNoteAttributes
+    relationships: ServicesPlanNoteRelationships
+  }
+
+  enum ServicesPlanNoteCategoryOrderByEnum {
+    id
+    created_at
+    deleted_at
+    name
+    sequence
+    updated_at
+  }
+
+  input ServicesPlanNoteCategoryOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPlanNoteCategoryOrderByEnum
+  }
+
+  type ServicesPlanNoteCategoryAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    deleted_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    sequence: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type ServicesPlanNoteCategory {
+    id: ID!
+    attributes: ServicesPlanNoteCategoryAttributes
+  }
+
+  enum ServicesPlanPersonOrderByEnum {
+    id
+    status
+    created_at
+    updated_at
+    notes
+    decline_reason
+    name
+    notification_changed_by_name
+    notification_sender_name
+    team_position_name
+    photo_thumbnail
+    scheduled_by_name
+    status_updated_at
+    notification_changed_at
+    notification_prepared_at
+    notification_read_at
+    notification_sent_at
+    prepare_notification
+    can_accept_partial
+  }
+
+  input ServicesPlanPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPlanPersonOrderByEnum
+  }
+
+  type ServicesPlanPersonRelationships {
+    ServicesDeclined_plan_times: [ServicesPlanTime]
+    ServicesPerson: [ServicesPerson]
+    ServicesPlan: [ServicesPlan]
+    ServicesPlan_person_times: [ServicesPlanPersonTime]
+    ServicesPlan_times: [ServicesPlanTime]
+    ServicesTeam: [ServicesTeam]
+  }
+
+  type ServicesPlanPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    notes: String
+
+    """
+    example: string
+    """
+    decline_reason: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    notification_changed_by_name: String
+
+    """
+    example: string
+    """
+    notification_sender_name: String
+
+    """
+    example: string
+    """
+    team_position_name: String
+
+    """
+    example: string
+    """
+    photo_thumbnail: String
+
+    """
+    example: string
+    """
+    scheduled_by_name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    status_updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    notification_changed_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    notification_prepared_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    notification_read_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    notification_sent_at: String
+
+    """
+    example: true
+    """
+    prepare_notification: Boolean
+
+    """
+    example: true
+    """
+    can_accept_partial: Boolean
+  }
+
+  type ServicesPlanPerson {
+    id: ID!
+    attributes: ServicesPlanPersonAttributes
+    relationships: ServicesPlanPersonRelationships
+  }
+
+  enum ServicesPlanPersonTimeOrderByEnum {
+    id
+    status
+    created_at
+    updated_at
+  }
+
+  input ServicesPlanPersonTimeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPlanPersonTimeOrderByEnum
+  }
+
+  type ServicesPlanPersonTimeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type ServicesPlanPersonTime {
+    id: ID!
+    attributes: ServicesPlanPersonTimeAttributes
+  }
+
+  enum ServicesPlanTemplateOrderByEnum {
+    id
+    name
+    created_at
+    updated_at
+    item_count
+    team_count
+    note_count
+    can_view_order
+    multi_day
+    prefers_order_view
+    rehearsable
+  }
+
+  input ServicesPlanTemplateOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPlanTemplateOrderByEnum
+  }
+
+  type ServicesPlanTemplateRelationships {
+    ServicesItems: [ServicesItem]
+    ServicesNotes: [ServicesPlanNote]
+  }
+
+  type ServicesPlanTemplateAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    item_count: String
+
+    """
+    example: 1
+    """
+    team_count: String
+
+    """
+    example: 1
+    """
+    note_count: String
+
+    """
+    example: true
+    """
+    can_view_order: Boolean
+
+    """
+    example: true
+    """
+    multi_day: Boolean
+
+    """
+    example: true
+    """
+    prefers_order_view: Boolean
+
+    """
+    example: true
+    """
+    rehearsable: Boolean
+  }
+
+  type ServicesPlanTemplate {
+    id: ID!
+    attributes: ServicesPlanTemplateAttributes
+    relationships: ServicesPlanTemplateRelationships
+  }
+
+  enum ServicesPlanTimeOrderByEnum {
+    id
+    created_at
+    updated_at
+    name
+    time_type
+    recorded
+    team_reminders
+    starts_at
+    ends_at
+    live_starts_at
+    live_ends_at
+  }
+
+  input ServicesPlanTimeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPlanTimeOrderByEnum
+  }
+
+  input ServicesPlanTimeWhereAttributes {
+    time_type: String
+  }
+
+  type ServicesPlanTimeRelationships {
+    ServicesSplit_team_rehearsal_assignments: [ServicesSplitTeamRehearsalAssignment]
+  }
+
+  type ServicesPlanTimeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    time_type: String
+
+    """
+    example: true
+    """
+    recorded: Boolean
+
+    """
+    example:
+    """
+    team_reminders: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    live_starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    live_ends_at: String
+  }
+
+  type ServicesPlanTime {
+    id: ID!
+    attributes: ServicesPlanTimeAttributes
+    relationships: ServicesPlanTimeRelationships
+  }
+
+  enum ServicesPublicViewOrderByEnum {
+    id
+    series_and_plan_titles
+    item_lengths
+    service_times
+    song_items
+    media_items
+    regular_items
+    headers
+    itunes
+    amazon
+    spotify
+    youtube
+    vimeo
+  }
+
+  input ServicesPublicViewOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesPublicViewOrderByEnum
+  }
+
+  type ServicesPublicViewAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    series_and_plan_titles: Boolean
+
+    """
+    example: true
+    """
+    item_lengths: Boolean
+
+    """
+    example: true
+    """
+    service_times: Boolean
+
+    """
+    example: true
+    """
+    song_items: Boolean
+
+    """
+    example: true
+    """
+    media_items: Boolean
+
+    """
+    example: true
+    """
+    regular_items: Boolean
+
+    """
+    example: true
+    """
+    headers: Boolean
+
+    """
+    example: true
+    """
+    itunes: Boolean
+
+    """
+    example: true
+    """
+    amazon: Boolean
+
+    """
+    example: true
+    """
+    spotify: Boolean
+
+    """
+    example: true
+    """
+    youtube: Boolean
+
+    """
+    example: true
+    """
+    vimeo: Boolean
+  }
+
+  type ServicesPublicView {
+    id: ID!
+    attributes: ServicesPublicViewAttributes
+  }
+
+  enum ServicesReportTemplateOrderByEnum {
+    id
+    body
+    title
+    type
+    default
+  }
+
+  input ServicesReportTemplateOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesReportTemplateOrderByEnum
+  }
+
+  type ServicesReportTemplateAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: string
+    """
+    type: String
+
+    """
+    example: true
+    """
+    default: Boolean
+  }
+
+  type ServicesReportTemplate {
+    id: ID!
+    attributes: ServicesReportTemplateAttributes
+  }
+
+  enum ServicesScheduleOrderByEnum {
+    id
+    sort_date
+    dates
+    decline_reason
+    organization_name
+    organization_time_zone
+    organization_twenty_four_hour_time
+    person_name
+    position_display_times
+    responds_to_name
+    service_type_name
+    short_dates
+    status
+    team_name
+    team_position_name
+    can_accept_partial
+    can_accept_partial_one_time
+    can_rehearse
+    plan_visible
+    plan_visible_to_me
+  }
+
+  input ServicesScheduleOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesScheduleOrderByEnum
+  }
+
+  type ServicesScheduleRelationships {
+    ServicesDeclined_plan_times: [ServicesPlanTime]
+    ServicesPlan_times: [ServicesPlanTime]
+    ServicesRespond_to: [ServicesPerson]
+    ServicesTeam: [ServicesTeam]
+  }
+
+  type ServicesScheduleAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    sort_date: String
+
+    """
+    example: string
+    """
+    dates: String
+
+    """
+    example: string
+    """
+    decline_reason: String
+
+    """
+    example: string
+    """
+    organization_name: String
+
+    """
+    example: string
+    """
+    organization_time_zone: String
+
+    """
+    example: string
+    """
+    organization_twenty_four_hour_time: String
+
+    """
+    example: string
+    """
+    person_name: String
+
+    """
+    example: string
+    """
+    position_display_times: String
+
+    """
+    example: string
+    """
+    responds_to_name: String
+
+    """
+    example: string
+    """
+    service_type_name: String
+
+    """
+    example: string
+    """
+    short_dates: String
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: string
+    """
+    team_name: String
+
+    """
+    example: string
+    """
+    team_position_name: String
+
+    """
+    example: true
+    """
+    can_accept_partial: Boolean
+
+    """
+    example: true
+    """
+    can_accept_partial_one_time: Boolean
+
+    """
+    example: true
+    """
+    can_rehearse: Boolean
+
+    """
+    example: true
+    """
+    plan_visible: Boolean
+
+    """
+    example: true
+    """
+    plan_visible_to_me: Boolean
+  }
+
+  type ServicesSchedule {
+    id: ID!
+    attributes: ServicesScheduleAttributes
+    relationships: ServicesScheduleRelationships
+  }
+
+  enum ServicesScheduledPersonOrderByEnum {
+    id
+    full_name
+    status
+    thumbnail
+  }
+
+  input ServicesScheduledPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesScheduledPersonOrderByEnum
+  }
+
+  type ServicesScheduledPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    full_name: String
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: string
+    """
+    thumbnail: String
+  }
+
+  type ServicesScheduledPerson {
+    id: ID!
+    attributes: ServicesScheduledPersonAttributes
+  }
+
+  enum ServicesSchedulingPreferenceOrderByEnum {
+    id
+    preference
+  }
+
+  input ServicesSchedulingPreferenceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSchedulingPreferenceOrderByEnum
+  }
+
+  type ServicesSchedulingPreferenceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    preference: String
+  }
+
+  type ServicesSchedulingPreference {
+    id: ID!
+    attributes: ServicesSchedulingPreferenceAttributes
+  }
+
+  enum ServicesSeriesOrderByEnum {
+    id
+    created_at
+    updated_at
+    artwork_file_name
+    artwork_content_type
+    artwork_file_size
+    title
+    artwork_for_dashboard
+    artwork_for_mobile
+    artwork_for_plan
+    artwork_original
+    has_artwork
+  }
+
+  input ServicesSeriesOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSeriesOrderByEnum
+  }
+
+  input ServicesSeriesWhereAttributes {
+    title: String
+  }
+
+  type ServicesSeriesRelationships {
+    ServicesPlans: [ServicesPlan]
+  }
+
+  type ServicesSeriesAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    artwork_file_name: String
+
+    """
+    example: string
+    """
+    artwork_content_type: String
+
+    """
+    example: 1
+    """
+    artwork_file_size: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: string
+    """
+    artwork_for_dashboard: String
+
+    """
+    example: string
+    """
+    artwork_for_mobile: String
+
+    """
+    example: string
+    """
+    artwork_for_plan: String
+
+    """
+    example: string
+    """
+    artwork_original: String
+
+    """
+    example: true
+    """
+    has_artwork: Boolean
+  }
+
+  type ServicesSeries {
+    id: ID!
+    attributes: ServicesSeriesAttributes
+    relationships: ServicesSeriesRelationships
+  }
+
+  enum ServicesServiceTypeOrderByEnum {
+    id
+    archived_at
+    created_at
+    deleted_at
+    name
+    sequence
+    updated_at
+    permissions
+    attachment_types_enabled
+    custom_item_types
+    standard_item_types
+    background_check_permissions
+    comment_permissions
+    frequency
+    last_plan_from
+  }
+
+  input ServicesServiceTypeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesServiceTypeOrderByEnum
+  }
+
+  input ServicesServiceTypeWhereAttributes {
+    id: ID!
+    name: String
+  }
+
+  type ServicesServiceTypeRelationships {
+    ServicesAttachments: [ServicesAttachment]
+    ServicesItem_note_categories: [ServicesItemNoteCategory]
+    ServicesLayouts: [ServicesLayout]
+    ServicesLive_controllers: [ServicesLiveController]
+    ServicesPlan_note_categories: [ServicesPlanNoteCategory]
+    ServicesPlan_templates: [ServicesPlanTemplate]
+    ServicesPlan_times: [ServicesPlanTime]
+    ServicesPlans: [ServicesPlan]
+    ServicesPublic_view: [ServicesPublicView]
+    ServicesTeam_positions: [ServicesTeamPosition]
+    ServicesTeams: [ServicesTeam]
+    ServicesTime_preference_options: [ServicesTimePreferenceOption]
+    ServicesUnscoped_plans: [ServicesPlan]
+  }
+
+  type ServicesServiceTypeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    archived_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    deleted_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    sequence: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    permissions: String
+
+    """
+    example: true
+    """
+    attachment_types_enabled: Boolean
+
+    """
+    example:
+    """
+    custom_item_types: String
+
+    """
+    example:
+    """
+    standard_item_types: String
+
+    """
+    example: string
+    """
+    background_check_permissions: String
+
+    """
+    example: string
+    """
+    comment_permissions: String
+
+    """
+    example: string
+    """
+    frequency: String
+
+    """
+    example: string
+    """
+    last_plan_from: String
+  }
+
+  type ServicesServiceType {
+    id: ID!
+    attributes: ServicesServiceTypeAttributes
+    relationships: ServicesServiceTypeRelationships
+  }
+
+  enum ServicesServiceTypePathOrderByEnum {
+    id
+    path
+  }
+
+  input ServicesServiceTypePathOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesServiceTypePathOrderByEnum
+  }
+
+  type ServicesServiceTypePathAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example:
+    """
+    path: String
+  }
+
+  type ServicesServiceTypePath {
+    id: ID!
+    attributes: ServicesServiceTypePathAttributes
+  }
+
+  enum ServicesSignupSheetOrderByEnum {
+    id
+    sort_date
+    group_key
+    team_name
+    display_times
+    position_name
+    title
+    sort_index
+  }
+
+  input ServicesSignupSheetOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSignupSheetOrderByEnum
+  }
+
+  type ServicesSignupSheetRelationships {
+    ServicesScheduled_people: [ServicesScheduledPerson]
+    ServicesSignup_sheet_metadata: [ServicesSignupSheetMetadata]
+  }
+
+  type ServicesSignupSheetAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    sort_date: String
+
+    """
+    example: string
+    """
+    group_key: String
+
+    """
+    example: string
+    """
+    team_name: String
+
+    """
+    example: string
+    """
+    display_times: String
+
+    """
+    example: string
+    """
+    position_name: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: 1
+    """
+    sort_index: String
+  }
+
+  type ServicesSignupSheet {
+    id: ID!
+    attributes: ServicesSignupSheetAttributes
+    relationships: ServicesSignupSheetRelationships
+  }
+
+  enum ServicesSignupSheetMetadataOrderByEnum {
+    id
+    conflicts
+    time_type
+    time_name
+    ends_at
+    starts_at
+  }
+
+  input ServicesSignupSheetMetadataOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSignupSheetMetadataOrderByEnum
+  }
+
+  type ServicesSignupSheetMetadataAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: [object Object]
+    """
+    conflicts: String
+
+    """
+    example: string
+    """
+    time_type: String
+
+    """
+    example: string
+    """
+    time_name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+  }
+
+  type ServicesSignupSheetMetadata {
+    id: ID!
+    attributes: ServicesSignupSheetMetadataAttributes
+  }
+
+  enum ServicesSkippedAttachmentOrderByEnum {
+    id
+    skipped
+  }
+
+  input ServicesSkippedAttachmentOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSkippedAttachmentOrderByEnum
+  }
+
+  type ServicesSkippedAttachmentAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    skipped: Boolean
+  }
+
+  type ServicesSkippedAttachment {
+    id: ID!
+    attributes: ServicesSkippedAttachmentAttributes
+  }
+
+  enum ServicesSongOrderByEnum {
+    id
+    title
+    created_at
+    updated_at
+    admin
+    author
+    copyright
+    hidden
+    notes
+    themes
+    last_scheduled_short_dates
+    last_scheduled_at
+    ccli_number
+  }
+
+  input ServicesSongOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSongOrderByEnum
+  }
+
+  input ServicesSongWhereAttributes {
+    author: String
+    ccli_number: String
+    hidden: Boolean
+    themes: String
+    title: String
+  }
+
+  type ServicesSongRelationships {
+    ServicesArrangements: [ServicesArrangement]
+    ServicesAttachments: [ServicesAttachment]
+    ServicesLast_scheduled_item: [ServicesItem]
+    ServicesSong_schedules: [ServicesSongSchedule]
+    ServicesTags: [ServicesTag]
+  }
+
+  type ServicesSongAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    admin: String
+
+    """
+    example: string
+    """
+    author: String
+
+    """
+    example: string
+    """
+    copyright: String
+
+    """
+    example: true
+    """
+    hidden: Boolean
+
+    """
+    example: string
+    """
+    notes: String
+
+    """
+    example: string
+    """
+    themes: String
+
+    """
+    example: string
+    """
+    last_scheduled_short_dates: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    last_scheduled_at: String
+
+    """
+    example: 1
+    """
+    ccli_number: String
+  }
+
+  type ServicesSong {
+    id: ID!
+    attributes: ServicesSongAttributes
+    relationships: ServicesSongRelationships
+  }
+
+  enum ServicesSongScheduleOrderByEnum {
+    id
+    arrangement_name
+    key_name
+    plan_dates
+    service_type_name
+    plan_sort_date
+  }
+
+  input ServicesSongScheduleOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSongScheduleOrderByEnum
+  }
+
+  type ServicesSongScheduleAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    arrangement_name: String
+
+    """
+    example: string
+    """
+    key_name: String
+
+    """
+    example: string
+    """
+    plan_dates: String
+
+    """
+    example: string
+    """
+    service_type_name: String
+
+    """
+    example: string
+    """
+    plan_sort_date: String
+  }
+
+  type ServicesSongSchedule {
+    id: ID!
+    attributes: ServicesSongScheduleAttributes
+  }
+
+  enum ServicesSongbookStatusOrderByEnum {
+    id
+    status
+    status_code
+    status_token
+    url
+  }
+
+  input ServicesSongbookStatusOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSongbookStatusOrderByEnum
+  }
+
+  type ServicesSongbookStatusAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: string
+    """
+    status_code: String
+
+    """
+    example: string
+    """
+    status_token: String
+
+    """
+    example: string
+    """
+    url: String
+  }
+
+  type ServicesSongbookStatus {
+    id: ID!
+    attributes: ServicesSongbookStatusAttributes
+  }
+
+  enum ServicesSplitTeamRehearsalAssignmentOrderByEnum {
+    id
+    schedule_special_service_times
+  }
+
+  input ServicesSplitTeamRehearsalAssignmentOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesSplitTeamRehearsalAssignmentOrderByEnum
+  }
+
+  type ServicesSplitTeamRehearsalAssignmentRelationships {
+    ServicesTeam: [ServicesTeam]
+  }
+
+  type ServicesSplitTeamRehearsalAssignmentAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    schedule_special_service_times: Boolean
+  }
+
+  type ServicesSplitTeamRehearsalAssignment {
+    id: ID!
+    attributes: ServicesSplitTeamRehearsalAssignmentAttributes
+    relationships: ServicesSplitTeamRehearsalAssignmentRelationships
+  }
+
+  enum ServicesTagOrderByEnum {
+    id
+    name
+  }
+
+  input ServicesTagOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesTagOrderByEnum
+  }
+
+  type ServicesTagAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+  }
+
+  type ServicesTag {
+    id: ID!
+    attributes: ServicesTagAttributes
+  }
+
+  enum ServicesTagGroupOrderByEnum {
+    id
+    name
+    required
+    allow_multiple_selections
+    tags_for
+    service_type_folder_name
+  }
+
+  input ServicesTagGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesTagGroupOrderByEnum
+  }
+
+  input ServicesTagGroupWhereAttributes {
+    name: String
+    tags_for: String
+  }
+
+  type ServicesTagGroupRelationships {
+    ServicesFolder: [ServicesFolder]
+    ServicesTags: [ServicesTag]
+  }
+
+  type ServicesTagGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: true
+    """
+    required: Boolean
+
+    """
+    example: true
+    """
+    allow_multiple_selections: Boolean
+
+    """
+    example: string
+    """
+    tags_for: String
+
+    """
+    example: string
+    """
+    service_type_folder_name: String
+  }
+
+  type ServicesTagGroup {
+    id: ID!
+    attributes: ServicesTagGroupAttributes
+    relationships: ServicesTagGroupRelationships
+  }
+
+  enum ServicesTeamOrderByEnum {
+    id
+    name
+    rehearsal_team
+    sequence
+    schedule_to
+    default_status
+    default_prepare_notifications
+    created_at
+    updated_at
+    archived_at
+    viewers_see
+    assigned_directly
+    secure_team
+    last_plan_from
+    stage_color
+    stage_variant
+  }
+
+  input ServicesTeamOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesTeamOrderByEnum
+  }
+
+  input ServicesTeamWhereAttributes {
+    name: String
+  }
+
+  type ServicesTeamRelationships {
+    ServicesPeople: [ServicesPerson]
+    ServicesPerson_team_position_assignments: [ServicesPersonTeamPositionAssignment]
+    ServicesPlan_people: [ServicesPlanPerson]
+    ServicesService_type: [ServicesServiceType]
+    ServicesTeam_leaders: [ServicesTeamLeader]
+    ServicesTeam_positions: [ServicesTeamPosition]
+  }
+
+  type ServicesTeamAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: true
+    """
+    rehearsal_team: Boolean
+
+    """
+    example: 1
+    """
+    sequence: String
+
+    """
+    example: string
+    """
+    schedule_to: String
+
+    """
+    example: string
+    """
+    default_status: String
+
+    """
+    example: true
+    """
+    default_prepare_notifications: Boolean
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    archived_at: String
+
+    """
+    example: 1
+    """
+    viewers_see: String
+
+    """
+    example: true
+    """
+    assigned_directly: Boolean
+
+    """
+    example: true
+    """
+    secure_team: Boolean
+
+    """
+    example: string
+    """
+    last_plan_from: String
+
+    """
+    example: string
+    """
+    stage_color: String
+
+    """
+    example: string
+    """
+    stage_variant: String
+  }
+
+  type ServicesTeam {
+    id: ID!
+    attributes: ServicesTeamAttributes
+    relationships: ServicesTeamRelationships
+  }
+
+  enum ServicesTeamLeaderOrderByEnum {
+    id
+    send_responses_for_accepts
+    send_responses_for_declines
+    send_responses_for_blockouts
+  }
+
+  input ServicesTeamLeaderOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesTeamLeaderOrderByEnum
+  }
+
+  type ServicesTeamLeaderRelationships {
+    ServicesPeople: [ServicesPerson]
+    ServicesTeam: [ServicesTeam]
+  }
+
+  type ServicesTeamLeaderAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    send_responses_for_accepts: Boolean
+
+    """
+    example: true
+    """
+    send_responses_for_declines: Boolean
+
+    """
+    example: true
+    """
+    send_responses_for_blockouts: Boolean
+  }
+
+  type ServicesTeamLeader {
+    id: ID!
+    attributes: ServicesTeamLeaderAttributes
+    relationships: ServicesTeamLeaderRelationships
+  }
+
+  enum ServicesTeamPositionOrderByEnum {
+    id
+    name
+    sequence
+    tags
+    negative_tag_groups
+    tag_groups
+  }
+
+  input ServicesTeamPositionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesTeamPositionOrderByEnum
+  }
+
+  type ServicesTeamPositionRelationships {
+    ServicesPerson_team_position_assignments: [ServicesPersonTeamPositionAssignment]
+    ServicesTags: [ServicesTag]
+    ServicesTeam: [ServicesTeam]
+  }
+
+  type ServicesTeamPositionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    sequence: String
+
+    """
+    example:
+    """
+    tags: String
+
+    """
+    example:
+    """
+    negative_tag_groups: String
+
+    """
+    example:
+    """
+    tag_groups: String
+  }
+
+  type ServicesTeamPosition {
+    id: ID!
+    attributes: ServicesTeamPositionAttributes
+    relationships: ServicesTeamPositionRelationships
+  }
+
+  enum ServicesTextSettingOrderByEnum {
+    id
+    scheduling_requests_enabled
+    general_emails_enabled
+    scheduling_replies_enabled
+    reminders_enabled
+    carrier
+    display_number
+    normalized_number
+  }
+
+  input ServicesTextSettingOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesTextSettingOrderByEnum
+  }
+
+  type ServicesTextSettingAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    scheduling_requests_enabled: Boolean
+
+    """
+    example: true
+    """
+    general_emails_enabled: Boolean
+
+    """
+    example: true
+    """
+    scheduling_replies_enabled: Boolean
+
+    """
+    example: true
+    """
+    reminders_enabled: Boolean
+
+    """
+    example: string
+    """
+    carrier: String
+
+    """
+    example: string
+    """
+    display_number: String
+
+    """
+    example: string
+    """
+    normalized_number: String
+  }
+
+  type ServicesTextSetting {
+    id: ID!
+    attributes: ServicesTextSettingAttributes
+  }
+
+  enum ServicesTimePreferenceOptionOrderByEnum {
+    id
+    day_of_week
+    created_at
+    updated_at
+    description
+    sort_index
+    time_type
+    minute_of_day
+    starts_at
+  }
+
+  input ServicesTimePreferenceOptionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesTimePreferenceOptionOrderByEnum
+  }
+
+  type ServicesTimePreferenceOptionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    day_of_week: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    sort_index: String
+
+    """
+    example: string
+    """
+    time_type: String
+
+    """
+    example: 1
+    """
+    minute_of_day: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+  }
+
+  type ServicesTimePreferenceOption {
+    id: ID!
+    attributes: ServicesTimePreferenceOptionAttributes
+  }
+
+  enum ServicesZoomOrderByEnum {
+    id
+    aspect_ratio
+    zoom_level
+    x_offset
+    y_offset
+  }
+
+  input ServicesZoomOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ServicesZoomOrderByEnum
+  }
+
+  type ServicesZoomAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1.42
+    """
+    aspect_ratio: String
+
+    """
+    example: 1.42
+    """
+    zoom_level: String
+
+    """
+    example: 1.42
+    """
+    x_offset: String
+
+    """
+    example: 1.42
+    """
+    y_offset: String
+  }
+
+  type ServicesZoom {
+    id: ID!
+    attributes: ServicesZoomAttributes
+  }
+
+  enum ResourcesAttachmentOrderByEnum {
+    id
+    content_type
+    created_at
+    description
+    file_size
+    name
+    updated_at
+    url
+  }
+
+  input ResourcesAttachmentOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesAttachmentOrderByEnum
+  }
+
+  input ResourcesAttachmentWhereAttributes {
+    content_type: String
+    created_at: String
+    description: String
+    file_size: String
+    name: String
+    updated_at: String
+  }
+
+  type ResourcesAttachmentRelationships {
+    ResourcesEvent: [ResourcesEvent]
+  }
+
+  type ResourcesAttachmentAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    content_type: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: 1
+    """
+    file_size: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    url: String
+  }
+
+  type ResourcesAttachment {
+    id: ID!
+    attributes: ResourcesAttachmentAttributes
+    relationships: ResourcesAttachmentRelationships
+  }
+
+  enum ResourcesConflictOrderByEnum {
+    id
+    created_at
+    note
+    resolved_at
+    updated_at
+  }
+
+  input ResourcesConflictOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesConflictOrderByEnum
+  }
+
+  type ResourcesConflictRelationships {
+    ResourcesResolved_by: [ResourcesPerson]
+    ResourcesResource: [ResourcesResource]
+    ResourcesWinner: [ResourcesEvent]
+  }
+
+  type ResourcesConflictAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    note: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    resolved_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type ResourcesConflict {
+    id: ID!
+    attributes: ResourcesConflictAttributes
+    relationships: ResourcesConflictRelationships
+  }
+
+  enum ResourcesEventOrderByEnum {
+    id
+    approval_status
+    created_at
+    description
+    image_url
+    name
+    percent_approved
+    percent_rejected
+    registration_url
+    summary
+    updated_at
+    visible_in_church_center
+  }
+
+  input ResourcesEventOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesEventOrderByEnum
+  }
+
+  input ResourcesEventWhereAttributes {
+    approval_status: String
+    created_at: String
+    name: String
+    percent_approved: String
+    percent_rejected: String
+    updated_at: String
+    visible_in_church_center: Boolean
+  }
+
+  type ResourcesEventRelationships {
+    ResourcesAttachments: [ResourcesAttachment]
+    ResourcesConflicts: [ResourcesConflict]
+    ResourcesEvent_connections: [ResourcesEventConnection]
+    ResourcesEvent_instances: [ResourcesEventInstance]
+    ResourcesEvent_resource_requests: [ResourcesEventResourceRequest]
+    ResourcesFeed: [ResourcesFeed]
+    ResourcesOwner: [ResourcesPerson]
+    ResourcesResource_bookings: [ResourcesResourceBooking]
+    ResourcesTags: [ResourcesTag]
+  }
+
+  type ResourcesEventAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    approval_status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    image_url: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1
+    """
+    percent_approved: String
+
+    """
+    example: 1
+    """
+    percent_rejected: String
+
+    """
+    example: string
+    """
+    registration_url: String
+
+    """
+    example: string
+    """
+    summary: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: true
+    """
+    visible_in_church_center: Boolean
+  }
+
+  type ResourcesEvent {
+    id: ID!
+    attributes: ResourcesEventAttributes
+    relationships: ResourcesEventRelationships
+  }
+
+  enum ResourcesEventConnectionOrderByEnum {
+    id
+    connected_to_id
+    connected_to_name
+    connected_to_type
+    product_name
+    connected_to_url
+  }
+
+  input ResourcesEventConnectionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesEventConnectionOrderByEnum
+  }
+
+  input ResourcesEventConnectionWhereAttributes {
+    product_name: String
+  }
+
+  type ResourcesEventConnectionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: primary_key
+    """
+    connected_to_id: ID!
+
+    """
+    example: string
+    """
+    connected_to_name: String
+
+    """
+    example: string
+    """
+    connected_to_type: String
+
+    """
+    example: string
+    """
+    product_name: String
+
+    """
+    example: string
+    """
+    connected_to_url: String
+  }
+
+  type ResourcesEventConnection {
+    id: ID!
+    attributes: ResourcesEventConnectionAttributes
+  }
+
+  enum ResourcesEventInstanceOrderByEnum {
+    id
+    all_day_event
+    compact_recurrence_description
+    created_at
+    ends_at
+    location
+    recurrence
+    recurrence_description
+    starts_at
+    updated_at
+    church_center_url
+  }
+
+  input ResourcesEventInstanceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesEventInstanceOrderByEnum
+  }
+
+  input ResourcesEventInstanceWhereAttributes {
+    created_at: String
+    ends_at: String
+    starts_at: String
+    updated_at: String
+  }
+
+  type ResourcesEventInstanceRelationships {
+    ResourcesEvent: [ResourcesEvent]
+    ResourcesEvent_times: [ResourcesEventTime]
+    ResourcesResource_bookings: [ResourcesResourceBooking]
+    ResourcesTags: [ResourcesTag]
+  }
+
+  type ResourcesEventInstanceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    all_day_event: Boolean
+
+    """
+    example: string
+    """
+    compact_recurrence_description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: string
+    """
+    location: String
+
+    """
+    example: string
+    """
+    recurrence: String
+
+    """
+    example: string
+    """
+    recurrence_description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    church_center_url: String
+  }
+
+  type ResourcesEventInstance {
+    id: ID!
+    attributes: ResourcesEventInstanceAttributes
+    relationships: ResourcesEventInstanceRelationships
+  }
+
+  enum ResourcesEventResourceRequestOrderByEnum {
+    id
+    approval_sent
+    approval_status
+    created_at
+    updated_at
+    notes
+    quantity
+  }
+
+  input ResourcesEventResourceRequestOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesEventResourceRequestOrderByEnum
+  }
+
+  input ResourcesEventResourceRequestWhereAttributes {
+    approval_sent: Boolean
+    approval_status: String
+    created_at: String
+    updated_at: String
+  }
+
+  type ResourcesEventResourceRequestRelationships {
+    ResourcesCreated_by: [ResourcesPerson]
+    ResourcesEvent: [ResourcesEvent]
+    ResourcesResource_bookings: [ResourcesResourceBooking]
+    ResourcesResource: [ResourcesResource]
+    ResourcesRoom_setup: [ResourcesRoomSetup]
+    ResourcesUpdated_by: [ResourcesPerson]
+  }
+
+  type ResourcesEventResourceRequestAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    approval_sent: Boolean
+
+    """
+    example: string
+    """
+    approval_status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    notes: String
+
+    """
+    example: 1
+    """
+    quantity: String
+  }
+
+  type ResourcesEventResourceRequest {
+    id: ID!
+    attributes: ResourcesEventResourceRequestAttributes
+    relationships: ResourcesEventResourceRequestRelationships
+  }
+
+  enum ResourcesEventTimeOrderByEnum {
+    id
+    ends_at
+    starts_at
+    name
+    visible_on_kiosks
+    visible_on_widget_and_ical
+  }
+
+  input ResourcesEventTimeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesEventTimeOrderByEnum
+  }
+
+  input ResourcesEventTimeWhereAttributes {
+    ends_at: String
+    name: String
+    starts_at: String
+    visible_on_kiosks: Boolean
+    visible_on_widget_and_ical: Boolean
+  }
+
+  type ResourcesEventTimeRelationships {
+    ResourcesEvent: [ResourcesEvent]
+  }
+
+  type ResourcesEventTimeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    name: String
+
+    """
+    example: true
+    """
+    visible_on_kiosks: Boolean
+
+    """
+    example: true
+    """
+    visible_on_widget_and_ical: Boolean
+  }
+
+  type ResourcesEventTime {
+    id: ID!
+    attributes: ResourcesEventTimeAttributes
+    relationships: ResourcesEventTimeRelationships
+  }
+
+  enum ResourcesFeedOrderByEnum {
+    id
+    default_church_center_visibility
+    feed_type
+    name
+    imported_at
+    can_delete
+  }
+
+  input ResourcesFeedOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesFeedOrderByEnum
+  }
+
+  input ResourcesFeedWhereAttributes {
+    feed_type: String
+  }
+
+  type ResourcesFeedAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: value
+    """
+    default_church_center_visibility: String
+
+    """
+    example: value
+    """
+    feed_type: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    imported_at: String
+
+    """
+    example: true
+    """
+    can_delete: Boolean
+  }
+
+  type ResourcesFeed {
+    id: ID!
+    attributes: ResourcesFeedAttributes
+  }
+
+  enum ResourcesOrganizationOrderByEnum {
+    id
+    name
+    time_zone
+    twenty_four_hour_time
+    date_format
+    onboarding
+  }
+
+  input ResourcesOrganizationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesOrganizationOrderByEnum
+  }
+
+  type ResourcesOrganizationRelationships {
+    ResourcesAttachments: [ResourcesAttachment]
+    ResourcesConflicts: [ResourcesConflict]
+    ResourcesEvent_instances: [ResourcesEventInstance]
+    ResourcesEvent_resource_requests: [ResourcesEventResourceRequest]
+    ResourcesEvents: [ResourcesEvent]
+    ResourcesFeeds: [ResourcesFeed]
+    ResourcesPeople: [ResourcesPerson]
+    ResourcesReport_templates: [ResourcesReportTemplate]
+    ResourcesResource_approval_groups: [ResourcesResourceApprovalGroup]
+    ResourcesResource_bookings: [ResourcesResourceBooking]
+    ResourcesResource_folders: [ResourcesResourceFolder]
+    ResourcesResource_questions: [ResourcesResourceQuestion]
+    ResourcesResources: [ResourcesResource]
+    ResourcesRoom_setups: [ResourcesRoomSetup]
+    ResourcesTag_groups: [ResourcesTagGroup]
+    ResourcesTags: [ResourcesTag]
+  }
+
+  type ResourcesOrganizationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    time_zone: String
+
+    """
+    example: true
+    """
+    twenty_four_hour_time: Boolean
+
+    """
+    example: string
+    """
+    date_format: String
+
+    """
+    example: true
+    """
+    onboarding: Boolean
+  }
+
+  type ResourcesOrganization {
+    id: ID!
+    attributes: ResourcesOrganizationAttributes
+    relationships: ResourcesOrganizationRelationships
+  }
+
+  enum ResourcesPersonOrderByEnum {
+    id
+    created_at
+    first_name
+    last_name
+    middle_name
+    updated_at
+    avatar_url
+    child
+    contact_data
+    gender
+    has_access
+    name_prefix
+    name_suffix
+    pending_request_count
+    permissions
+    resolves_conflicts
+    site_administrator
+    status
+    event_permissions_type
+    people_permissions_type
+    room_permissions_type
+    resources_permissions_type
+  }
+
+  input ResourcesPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesPersonOrderByEnum
+  }
+
+  input ResourcesPersonWhereAttributes {
+    created_at: String
+    first_name: String
+    last_name: String
+    middle_name: String
+    updated_at: String
+  }
+
+  type ResourcesPersonRelationships {
+    ResourcesEvent_resource_requests: [ResourcesEventResourceRequest]
+    ResourcesOrganization: [ResourcesOrganization]
+  }
+
+  type ResourcesPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: string
+    """
+    middle_name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    avatar_url: String
+
+    """
+    example: true
+    """
+    child: Boolean
+
+    """
+    example: string
+    """
+    contact_data: String
+
+    """
+    example: string
+    """
+    gender: String
+
+    """
+    example: true
+    """
+    has_access: Boolean
+
+    """
+    example: string
+    """
+    name_prefix: String
+
+    """
+    example: string
+    """
+    name_suffix: String
+
+    """
+    example: 1
+    """
+    pending_request_count: String
+
+    """
+    example: 1
+    """
+    permissions: String
+
+    """
+    example: true
+    """
+    resolves_conflicts: Boolean
+
+    """
+    example: true
+    """
+    site_administrator: Boolean
+
+    """
+    example: value
+    """
+    status: String
+
+    """
+    example: string
+    """
+    event_permissions_type: String
+
+    """
+    example: string
+    """
+    people_permissions_type: String
+
+    """
+    example: string
+    """
+    room_permissions_type: String
+
+    """
+    example: string
+    """
+    resources_permissions_type: String
+  }
+
+  type ResourcesPerson {
+    id: ID!
+    attributes: ResourcesPersonAttributes
+    relationships: ResourcesPersonRelationships
+  }
+
+  enum ResourcesReportTemplateOrderByEnum {
+    id
+    body
+    created_at
+    description
+    title
+    updated_at
+  }
+
+  input ResourcesReportTemplateOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesReportTemplateOrderByEnum
+  }
+
+  type ResourcesReportTemplateAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+
+    """
+    example: string
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    title: String
+
+    """
+    example: string
+    """
+    updated_at: String
+  }
+
+  type ResourcesReportTemplate {
+    id: ID!
+    attributes: ResourcesReportTemplateAttributes
+  }
+
+  enum ResourcesRequiredApprovalOrderByEnum {
+    id
+  }
+
+  input ResourcesRequiredApprovalOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesRequiredApprovalOrderByEnum
+  }
+
+  type ResourcesRequiredApprovalRelationships {
+    ResourcesResource: [ResourcesResource]
+  }
+
+  type ResourcesRequiredApprovalAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+  }
+
+  type ResourcesRequiredApproval {
+    id: ID!
+    attributes: ResourcesRequiredApprovalAttributes
+    relationships: ResourcesRequiredApprovalRelationships
+  }
+
+  enum ResourcesResourceOrderByEnum {
+    id
+    created_at
+    kind
+    name
+    serial_number
+    updated_at
+    description
+    expires_at
+    home_location
+    image
+    quantity
+    path_name
+  }
+
+  input ResourcesResourceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesResourceOrderByEnum
+  }
+
+  input ResourcesResourceWhereAttributes {
+    created_at: String
+    kind: String
+    name: String
+    path_name: String
+    serial_number: String
+    updated_at: String
+  }
+
+  type ResourcesResourceRelationships {
+    ResourcesConflicts: [ResourcesConflict]
+    ResourcesEvent_resource_requests: [ResourcesEventResourceRequest]
+    ResourcesRequired_approvals: [ResourcesRequiredApproval]
+    ResourcesResource_approval_groups: [ResourcesResourceApprovalGroup]
+    ResourcesResource_bookings: [ResourcesResourceBooking]
+    ResourcesResource_folder: [ResourcesResourceFolder]
+    ResourcesResource_questions: [ResourcesResourceQuestion]
+    ResourcesRoom_setups: [ResourcesRoomSetup]
+  }
+
+  type ResourcesResourceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    serial_number: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    expires_at: String
+
+    """
+    example: string
+    """
+    home_location: String
+
+    """
+    example: string
+    """
+    image: String
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: string
+    """
+    path_name: String
+  }
+
+  type ResourcesResource {
+    id: ID!
+    attributes: ResourcesResourceAttributes
+    relationships: ResourcesResourceRelationships
+  }
+
+  enum ResourcesResourceApprovalGroupOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    form_count
+    resource_count
+    room_count
+  }
+
+  input ResourcesResourceApprovalGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesResourceApprovalGroupOrderByEnum
+  }
+
+  input ResourcesResourceApprovalGroupWhereAttributes {
+    created_at: String
+    name: String
+    updated_at: String
+  }
+
+  type ResourcesResourceApprovalGroupRelationships {
+    ResourcesEvent_resource_requests: [ResourcesEventResourceRequest]
+    ResourcesPeople: [ResourcesPerson]
+    ResourcesRequired_approvals: [ResourcesRequiredApproval]
+    ResourcesResources: [ResourcesResource]
+  }
+
+  type ResourcesResourceApprovalGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    form_count: String
+
+    """
+    example: 1
+    """
+    resource_count: String
+
+    """
+    example: 1
+    """
+    room_count: String
+  }
+
+  type ResourcesResourceApprovalGroup {
+    id: ID!
+    attributes: ResourcesResourceApprovalGroupAttributes
+    relationships: ResourcesResourceApprovalGroupRelationships
+  }
+
+  enum ResourcesResourceBookingOrderByEnum {
+    id
+    created_at
+    ends_at
+    starts_at
+    updated_at
+    quantity
+  }
+
+  input ResourcesResourceBookingOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesResourceBookingOrderByEnum
+  }
+
+  input ResourcesResourceBookingWhereAttributes {
+    created_at: String
+    ends_at: String
+    starts_at: String
+    updated_at: String
+  }
+
+  type ResourcesResourceBookingRelationships {
+    ResourcesEvent_instance: [ResourcesEventInstance]
+    ResourcesEvent_resource_request: [ResourcesEventResourceRequest]
+    ResourcesResource: [ResourcesResource]
+  }
+
+  type ResourcesResourceBookingAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    quantity: String
+  }
+
+  type ResourcesResourceBooking {
+    id: ID!
+    attributes: ResourcesResourceBookingAttributes
+    relationships: ResourcesResourceBookingRelationships
+  }
+
+  enum ResourcesResourceFolderOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    ancestry
+    kind
+    path_name
+  }
+
+  input ResourcesResourceFolderOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesResourceFolderOrderByEnum
+  }
+
+  input ResourcesResourceFolderWhereAttributes {
+    ancestry: String
+    created_at: String
+    name: String
+    path_name: String
+    updated_at: String
+  }
+
+  type ResourcesResourceFolderRelationships {
+    ResourcesResources: [ResourcesResource]
+  }
+
+  type ResourcesResourceFolderAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    ancestry: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: string
+    """
+    path_name: String
+  }
+
+  type ResourcesResourceFolder {
+    id: ID!
+    attributes: ResourcesResourceFolderAttributes
+    relationships: ResourcesResourceFolderRelationships
+  }
+
+  enum ResourcesResourceQuestionOrderByEnum {
+    id
+    created_at
+    kind
+    updated_at
+    choices
+    description
+    multiple_select
+    optional
+    position
+    question
+  }
+
+  input ResourcesResourceQuestionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesResourceQuestionOrderByEnum
+  }
+
+  input ResourcesResourceQuestionWhereAttributes {
+    created_at: String
+    kind: String
+    updated_at: String
+  }
+
+  type ResourcesResourceQuestionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    kind: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    choices: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: true
+    """
+    multiple_select: Boolean
+
+    """
+    example: true
+    """
+    optional: Boolean
+
+    """
+    example: 1
+    """
+    position: String
+
+    """
+    example: string
+    """
+    question: String
+  }
+
+  type ResourcesResourceQuestion {
+    id: ID!
+    attributes: ResourcesResourceQuestionAttributes
+  }
+
+  enum ResourcesResourceSuggestionOrderByEnum {
+    id
+    created_at
+    quantity
+    updated_at
+  }
+
+  input ResourcesResourceSuggestionOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesResourceSuggestionOrderByEnum
+  }
+
+  type ResourcesResourceSuggestionRelationships {
+    ResourcesResource: [ResourcesResource]
+  }
+
+  type ResourcesResourceSuggestionAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 1
+    """
+    quantity: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type ResourcesResourceSuggestion {
+    id: ID!
+    attributes: ResourcesResourceSuggestionAttributes
+    relationships: ResourcesResourceSuggestionRelationships
+  }
+
+  enum ResourcesRoomSetupOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    description
+    diagram
+    diagram_url
+    diagram_thumbnail_url
+  }
+
+  input ResourcesRoomSetupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesRoomSetupOrderByEnum
+  }
+
+  input ResourcesRoomSetupWhereAttributes {
+    created_at: String
+    name: String
+    updated_at: String
+  }
+
+  type ResourcesRoomSetupRelationships {
+    ResourcesContaining_resource: [ResourcesResource]
+    ResourcesResource_suggestions: [ResourcesResourceSuggestion]
+  }
+
+  type ResourcesRoomSetupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: string
+    """
+    diagram: String
+
+    """
+    example: string
+    """
+    diagram_url: String
+
+    """
+    example: string
+    """
+    diagram_thumbnail_url: String
+  }
+
+  type ResourcesRoomSetup {
+    id: ID!
+    attributes: ResourcesRoomSetupAttributes
+    relationships: ResourcesRoomSetupRelationships
+  }
+
+  enum ResourcesTagOrderByEnum {
+    id
+    church_center_category
+    color
+    created_at
+    name
+    position
+    updated_at
+  }
+
+  input ResourcesTagOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesTagOrderByEnum
+  }
+
+  input ResourcesTagWhereAttributes {
+    church_center_category: Boolean
+    color: String
+    created_at: String
+    id: ID!
+    name: String
+    position: String
+    updated_at: String
+  }
+
+  type ResourcesTagRelationships {
+    ResourcesEvent_instances: [ResourcesEventInstance]
+    ResourcesEvents: [ResourcesEvent]
+    ResourcesTag_group: [ResourcesTagGroup]
+  }
+
+  type ResourcesTagAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: true
+    """
+    church_center_category: Boolean
+
+    """
+    example: string
+    """
+    color: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 1.42
+    """
+    position: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+  }
+
+  type ResourcesTag {
+    id: ID!
+    attributes: ResourcesTagAttributes
+    relationships: ResourcesTagRelationships
+  }
+
+  enum ResourcesTagGroupOrderByEnum {
+    id
+    created_at
+    name
+    updated_at
+    required
+  }
+
+  input ResourcesTagGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: ResourcesTagGroupOrderByEnum
+  }
+
+  input ResourcesTagGroupWhereAttributes {
+    created_at: String
+    name: String
+    updated_at: String
+  }
+
+  type ResourcesTagGroupRelationships {
+    ResourcesEvents: [ResourcesEvent]
+    ResourcesTags: [ResourcesTag]
+  }
+
+  type ResourcesTagGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: true
+    """
+    required: Boolean
+  }
+
+  type ResourcesTagGroup {
+    id: ID!
+    attributes: ResourcesTagGroupAttributes
+    relationships: ResourcesTagGroupRelationships
+  }
+
+  enum GivingBatchOrderByEnum {
+    id
+    created_at
+    updated_at
+    committed_at
+    description
+    donations_count
+    total_cents
+    total_currency
+    status
+  }
+
+  input GivingBatchOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingBatchOrderByEnum
+  }
+
+  input GivingBatchWhereAttributes {
+    updated_at: String
+  }
+
+  type GivingBatchRelationships {
+    GivingBatch_group: [GivingBatchGroup]
+    GivingDonations: [GivingDonation]
+    GivingOwner: [GivingPerson]
+  }
+
+  type GivingBatchAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    committed_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: 1
+    """
+    donations_count: String
+
+    """
+    example: 1
+    """
+    total_cents: String
+
+    """
+    example: string
+    """
+    total_currency: String
+
+    """
+    example: string
+    """
+    status: String
+  }
+
+  type GivingBatch {
+    id: ID!
+    attributes: GivingBatchAttributes
+    relationships: GivingBatchRelationships
+  }
+
+  enum GivingBatchGroupOrderByEnum {
+    id
+    created_at
+    updated_at
+    description
+    committed
+    total_cents
+    total_currency
+    status
+  }
+
+  input GivingBatchGroupOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingBatchGroupOrderByEnum
+  }
+
+  input GivingBatchGroupWhereAttributes {
+    updated_at: String
+  }
+
+  type GivingBatchGroupRelationships {
+    GivingBatches: [GivingBatch]
+    GivingOwner: [GivingPerson]
+  }
+
+  type GivingBatchGroupAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: true
+    """
+    committed: Boolean
+
+    """
+    example: 1
+    """
+    total_cents: String
+
+    """
+    example: string
+    """
+    total_currency: String
+
+    """
+    example: string
+    """
+    status: String
+  }
+
+  type GivingBatchGroup {
+    id: ID!
+    attributes: GivingBatchGroupAttributes
+    relationships: GivingBatchGroupRelationships
+  }
+
+  enum GivingCampusOrderByEnum {
+    id
+    name
+    address
+  }
+
+  input GivingCampusOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingCampusOrderByEnum
+  }
+
+  type GivingCampusRelationships {
+    GivingDonations: [GivingDonation]
+  }
+
+  type GivingCampusAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: [object Object]
+    """
+    address: String
+  }
+
+  type GivingCampus {
+    id: ID!
+    attributes: GivingCampusAttributes
+    relationships: GivingCampusRelationships
+  }
+
+  enum GivingDesignationOrderByEnum {
+    id
+    amount_cents
+    amount_currency
+  }
+
+  input GivingDesignationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingDesignationOrderByEnum
+  }
+
+  type GivingDesignationRelationships {
+    GivingFund: [GivingFund]
+  }
+
+  type GivingDesignationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    amount_cents: String
+
+    """
+    example: string
+    """
+    amount_currency: String
+  }
+
+  type GivingDesignation {
+    id: ID!
+    attributes: GivingDesignationAttributes
+    relationships: GivingDesignationRelationships
+  }
+
+  enum GivingDesignationRefundOrderByEnum {
+    id
+    amount_cents
+    amount_currency
+  }
+
+  input GivingDesignationRefundOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingDesignationRefundOrderByEnum
+  }
+
+  type GivingDesignationRefundRelationships {
+    GivingDesignation: [GivingDesignation]
+  }
+
+  type GivingDesignationRefundAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    amount_cents: String
+
+    """
+    example: string
+    """
+    amount_currency: String
+  }
+
+  type GivingDesignationRefund {
+    id: ID!
+    attributes: GivingDesignationRefundAttributes
+    relationships: GivingDesignationRefundRelationships
+  }
+
+  enum GivingDonationOrderByEnum {
+    id
+    created_at
+    updated_at
+    payment_method_sub
+    payment_last4
+    payment_brand
+    payment_check_number
+    payment_check_dated_at
+    fee_cents
+    payment_method
+    received_at
+    amount_cents
+    payment_status
+    completed_at
+    amount_currency
+    fee_currency
+    refunded
+    refundable
+  }
+
+  input GivingDonationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingDonationOrderByEnum
+  }
+
+  input GivingDonationWhereAttributes {
+    completed_at: String
+    created_at: String
+    payment_method: String
+    received_at: String
+    updated_at: String
+  }
+
+  type GivingDonationRelationships {
+    GivingCampus: [GivingCampus]
+    GivingDesignations: [GivingDesignation]
+    GivingLabels: [GivingLabel]
+    GivingNote: [GivingNote]
+    GivingRefund: [GivingRefund]
+  }
+
+  type GivingDonationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: value
+    """
+    payment_method_sub: String
+
+    """
+    example: string
+    """
+    payment_last4: String
+
+    """
+    example: string
+    """
+    payment_brand: String
+
+    """
+    example: 1
+    """
+    payment_check_number: String
+
+    """
+    example: 2000-01-01
+    """
+    payment_check_dated_at: String
+
+    """
+    example: 1
+    """
+    fee_cents: String
+
+    """
+    example: value
+    """
+    payment_method: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    received_at: String
+
+    """
+    example: 1
+    """
+    amount_cents: String
+
+    """
+    example: value
+    """
+    payment_status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    completed_at: String
+
+    """
+    example: USD
+    """
+    amount_currency: String
+
+    """
+    example: USD
+    """
+    fee_currency: String
+
+    """
+    example: true
+    """
+    refunded: Boolean
+
+    """
+    example: true
+    """
+    refundable: Boolean
+  }
+
+  type GivingDonation {
+    id: ID!
+    attributes: GivingDonationAttributes
+    relationships: GivingDonationRelationships
+  }
+
+  enum GivingFundOrderByEnum {
+    id
+    created_at
+    updated_at
+    name
+    ledger_code
+    description
+    visibility
+    default
+    color
+    deletable
+  }
+
+  input GivingFundOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingFundOrderByEnum
+  }
+
+  input GivingFundWhereAttributes {
+    default: Boolean
+    id: ID!
+    name: String
+    visibility: String
+  }
+
+  type GivingFundAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    ledger_code: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: value
+    """
+    visibility: String
+
+    """
+    example: true
+    """
+    default: Boolean
+
+    """
+    example: string
+    """
+    color: String
+
+    """
+    example: true
+    """
+    deletable: Boolean
+  }
+
+  type GivingFund {
+    id: ID!
+    attributes: GivingFundAttributes
+  }
+
+  enum GivingLabelOrderByEnum {
+    id
+    slug
+  }
+
+  input GivingLabelOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingLabelOrderByEnum
+  }
+
+  input GivingLabelWhereAttributes {
+    slug: String
+  }
+
+  type GivingLabelAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    slug: String
+  }
+
+  type GivingLabel {
+    id: ID!
+    attributes: GivingLabelAttributes
+  }
+
+  enum GivingNoteOrderByEnum {
+    id
+    body
+  }
+
+  input GivingNoteOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingNoteOrderByEnum
+  }
+
+  type GivingNoteAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    body: String
+  }
+
+  type GivingNote {
+    id: ID!
+    attributes: GivingNoteAttributes
+  }
+
+  enum GivingOrganizationOrderByEnum {
+    id
+    name
+  }
+
+  input GivingOrganizationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingOrganizationOrderByEnum
+  }
+
+  type GivingOrganizationRelationships {
+    GivingBatch_groups: [GivingBatchGroup]
+    GivingBatches: [GivingBatch]
+    GivingCampuses: [GivingCampus]
+    GivingDonations: [GivingDonation]
+    GivingFunds: [GivingFund]
+    GivingLabels: [GivingLabel]
+    GivingPayment_sources: [GivingPaymentSource]
+    GivingPeople: [GivingPerson]
+    GivingRecurring_donations: [GivingRecurringDonation]
+  }
+
+  type GivingOrganizationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    name: String
+  }
+
+  type GivingOrganization {
+    id: ID!
+    attributes: GivingOrganizationAttributes
+    relationships: GivingOrganizationRelationships
+  }
+
+  enum GivingPaymentMethodOrderByEnum {
+    id
+    created_at
+    updated_at
+    method_type
+    method_subtype
+    last4
+    brand
+    expiration
+    verified
+  }
+
+  input GivingPaymentMethodOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingPaymentMethodOrderByEnum
+  }
+
+  type GivingPaymentMethodRelationships {
+    GivingRecurring_donations: [GivingRecurringDonation]
+  }
+
+  type GivingPaymentMethodAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: value
+    """
+    method_type: String
+
+    """
+    example: string
+    """
+    method_subtype: String
+
+    """
+    example: string
+    """
+    last4: String
+
+    """
+    example: string
+    """
+    brand: String
+
+    """
+    example: 2000-01-01
+    """
+    expiration: String
+
+    """
+    example: true
+    """
+    verified: Boolean
+  }
+
+  type GivingPaymentMethod {
+    id: ID!
+    attributes: GivingPaymentMethodAttributes
+    relationships: GivingPaymentMethodRelationships
+  }
+
+  enum GivingPaymentSourceOrderByEnum {
+    id
+    created_at
+    updated_at
+    name
+  }
+
+  input GivingPaymentSourceOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingPaymentSourceOrderByEnum
+  }
+
+  type GivingPaymentSourceRelationships {
+    GivingDonations: [GivingDonation]
+  }
+
+  type GivingPaymentSourceAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    name: String
+  }
+
+  type GivingPaymentSource {
+    id: ID!
+    attributes: GivingPaymentSourceAttributes
+    relationships: GivingPaymentSourceRelationships
+  }
+
+  enum GivingPersonOrderByEnum {
+    id
+    permissions
+    email_addresses
+    addresses
+    phone_numbers
+    first_name
+    last_name
+    donor_number
+  }
+
+  input GivingPersonOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingPersonOrderByEnum
+  }
+
+  input GivingPersonWhereAttributes {
+    first_name: String
+    last_name: String
+  }
+
+  type GivingPersonRelationships {
+    GivingBatch_groups: [GivingBatchGroup]
+    GivingBatches: [GivingBatch]
+    GivingDonations: [GivingDonation]
+    GivingPayment_methods: [GivingPaymentMethod]
+    GivingPledges: [GivingPledge]
+    GivingPrimary_campus: [GivingCampus]
+    GivingRecurring_donations: [GivingRecurringDonation]
+  }
+
+  type GivingPersonAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: string
+    """
+    permissions: String
+
+    """
+    example:
+    """
+    email_addresses: String
+
+    """
+    example:
+    """
+    addresses: String
+
+    """
+    example:
+    """
+    phone_numbers: String
+
+    """
+    example: string
+    """
+    first_name: String
+
+    """
+    example: string
+    """
+    last_name: String
+
+    """
+    example: 1
+    """
+    donor_number: String
+  }
+
+  type GivingPerson {
+    id: ID!
+    attributes: GivingPersonAttributes
+    relationships: GivingPersonRelationships
+  }
+
+  enum GivingPledgeOrderByEnum {
+    id
+    created_at
+    updated_at
+    amount_cents
+    amount_currency
+    joint_giver_amount_cents
+    donated_total_cents
+    joint_giver_donated_total_cents
+  }
+
+  input GivingPledgeOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingPledgeOrderByEnum
+  }
+
+  input GivingPledgeWhereAttributes {
+    created_at: String
+    updated_at: String
+  }
+
+  type GivingPledgeRelationships {
+    GivingJoint_giver: [GivingPerson]
+    GivingPledge_campaign: [GivingPledgeCampaign]
+  }
+
+  type GivingPledgeAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    amount_cents: String
+
+    """
+    example: USD
+    """
+    amount_currency: String
+
+    """
+    example: 1
+    """
+    joint_giver_amount_cents: String
+
+    """
+    example: 1
+    """
+    donated_total_cents: String
+
+    """
+    example: 1
+    """
+    joint_giver_donated_total_cents: String
+  }
+
+  type GivingPledge {
+    id: ID!
+    attributes: GivingPledgeAttributes
+    relationships: GivingPledgeRelationships
+  }
+
+  enum GivingPledgeCampaignOrderByEnum {
+    id
+    created_at
+    updated_at
+    name
+    description
+    starts_at
+    ends_at
+    goal_cents
+    goal_currency
+    show_goal_in_church_center
+    received_total_from_pledges_cents
+    received_total_outside_of_pledges_cents
+  }
+
+  input GivingPledgeCampaignOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingPledgeCampaignOrderByEnum
+  }
+
+  input GivingPledgeCampaignWhereAttributes {
+    ends_at: String
+    starts_at: String
+  }
+
+  type GivingPledgeCampaignRelationships {
+    GivingFund: [GivingFund]
+    GivingPledges: [GivingPledge]
+  }
+
+  type GivingPledgeCampaignAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: string
+    """
+    name: String
+
+    """
+    example: string
+    """
+    description: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    starts_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    ends_at: String
+
+    """
+    example: 1
+    """
+    goal_cents: String
+
+    """
+    example: USD
+    """
+    goal_currency: String
+
+    """
+    example: true
+    """
+    show_goal_in_church_center: Boolean
+
+    """
+    example: 1
+    """
+    received_total_from_pledges_cents: String
+
+    """
+    example: 1
+    """
+    received_total_outside_of_pledges_cents: String
+  }
+
+  type GivingPledgeCampaign {
+    id: ID!
+    attributes: GivingPledgeCampaignAttributes
+    relationships: GivingPledgeCampaignRelationships
+  }
+
+  enum GivingRecurringDonationOrderByEnum {
+    id
+    created_at
+    updated_at
+    release_hold_at
+    amount_cents
+    status
+    last_donation_received_at
+    next_occurrence
+    schedule
+    amount_currency
+  }
+
+  input GivingRecurringDonationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingRecurringDonationOrderByEnum
+  }
+
+  type GivingRecurringDonationRelationships {
+    GivingPayment_method: [GivingPaymentMethod]
+    GivingDesignations: [GivingRecurringDonationDesignation]
+  }
+
+  type GivingRecurringDonationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    release_hold_at: String
+
+    """
+    example: 1
+    """
+    amount_cents: String
+
+    """
+    example: string
+    """
+    status: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    last_donation_received_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    next_occurrence: String
+
+    """
+    example: [object Object]
+    """
+    schedule: String
+
+    """
+    example: USD
+    """
+    amount_currency: String
+  }
+
+  type GivingRecurringDonation {
+    id: ID!
+    attributes: GivingRecurringDonationAttributes
+    relationships: GivingRecurringDonationRelationships
+  }
+
+  enum GivingRecurringDonationDesignationOrderByEnum {
+    id
+    amount_cents
+    amount_currency
+  }
+
+  input GivingRecurringDonationDesignationOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingRecurringDonationDesignationOrderByEnum
+  }
+
+  type GivingRecurringDonationDesignationRelationships {
+    GivingFund: [GivingFund]
+  }
+
+  type GivingRecurringDonationDesignationAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 1
+    """
+    amount_cents: String
+
+    """
+    example: string
+    """
+    amount_currency: String
+  }
+
+  type GivingRecurringDonationDesignation {
+    id: ID!
+    attributes: GivingRecurringDonationDesignationAttributes
+    relationships: GivingRecurringDonationDesignationRelationships
+  }
+
+  enum GivingRefundOrderByEnum {
+    id
+    created_at
+    updated_at
+    amount_cents
+    amount_currency
+    fee_cents
+    refunded_at
+    fee_currency
+  }
+
+  input GivingRefundOrderInput {
+    """
+    this will append a (-) to the field name if desc
+    """
+    sort: sortEnum = asc
+    field: GivingRefundOrderByEnum
+  }
+
+  type GivingRefundRelationships {
+    GivingDesignation_refunds: [GivingDesignationRefund]
+  }
+
+  type GivingRefundAttributes {
+    """
+    example: primary_key
+    """
+    id: ID!
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    created_at: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    updated_at: String
+
+    """
+    example: 1
+    """
+    amount_cents: String
+
+    """
+    example: string
+    """
+    amount_currency: String
+
+    """
+    example: 1
+    """
+    fee_cents: String
+
+    """
+    example: 2000-01-01T12:00:00Z
+    """
+    refunded_at: String
+
+    """
+    example: USD
+    """
+    fee_currency: String
+  }
+
+  type GivingRefund {
+    id: ID!
+    attributes: GivingRefundAttributes
+    relationships: GivingRefundRelationships
   }
 
   type Query {
-    AddressById(id: ID!): Address
-    Address(
+    CalendarAttachmentById(id: ID!): CalendarAttachment
+    CalendarAttachment(
       limit: Int
-      where: AddressWhereAttributes
-      order: AddressOrderInput
-    ): [Address!]
+      where: CalendarAttachmentWhereAttributes
+      order: CalendarAttachmentOrderInput
+    ): [CalendarAttachment!]
 
-    AnniversaryCouplesById(id: ID!): AnniversaryCouples
-    AnniversaryCouples(
-      limit: Int
-
-      order: AnniversaryCouplesOrderInput
-    ): [AnniversaryCouples!]
-
-    AppById(id: ID!): App
-    App(limit: Int, where: AppWhereAttributes, order: AppOrderInput): [App!]
-
-    BackgroundCheckById(id: ID!): BackgroundCheck
-    BackgroundCheck(
+    CalendarConflictById(id: ID!): CalendarConflict
+    CalendarConflict(
       limit: Int
 
-      order: BackgroundCheckOrderInput
-    ): [BackgroundCheck!]
+      order: CalendarConflictOrderInput
+    ): [CalendarConflict!]
 
-    BirthdayPeopleById(id: ID!): BirthdayPeople
-    BirthdayPeople(
+    CalendarEventById(id: ID!): CalendarEvent
+    CalendarEvent(
+      limit: Int
+      where: CalendarEventWhereAttributes
+      order: CalendarEventOrderInput
+    ): [CalendarEvent!]
+
+    CalendarEventInstanceById(id: ID!): CalendarEventInstance
+    CalendarEventInstance(
+      limit: Int
+      where: CalendarEventInstanceWhereAttributes
+      order: CalendarEventInstanceOrderInput
+    ): [CalendarEventInstance!]
+
+    CalendarEventResourceRequestById(id: ID!): CalendarEventResourceRequest
+    CalendarEventResourceRequest(
+      limit: Int
+      where: CalendarEventResourceRequestWhereAttributes
+      order: CalendarEventResourceRequestOrderInput
+    ): [CalendarEventResourceRequest!]
+
+    CalendarFeedById(id: ID!): CalendarFeed
+    CalendarFeed(
+      limit: Int
+      where: CalendarFeedWhereAttributes
+      order: CalendarFeedOrderInput
+    ): [CalendarFeed!]
+
+    CalendarPersonById(id: ID!): CalendarPerson
+    CalendarPerson(
+      limit: Int
+      where: CalendarPersonWhereAttributes
+      order: CalendarPersonOrderInput
+    ): [CalendarPerson!]
+
+    CalendarReportTemplateById(id: ID!): CalendarReportTemplate
+    CalendarReportTemplate(
       limit: Int
 
-      order: BirthdayPeopleOrderInput
-    ): [BirthdayPeople!]
+      order: CalendarReportTemplateOrderInput
+    ): [CalendarReportTemplate!]
 
-    CampusById(id: ID!): Campus
-    Campus(
+    CalendarResourceById(id: ID!): CalendarResource
+    CalendarResource(
       limit: Int
-      where: CampusWhereAttributes
-      order: CampusOrderInput
-    ): [Campus!]
+      where: CalendarResourceWhereAttributes
+      order: CalendarResourceOrderInput
+    ): [CalendarResource!]
 
-    CarrierById(id: ID!): Carrier
-    Carrier(
+    CalendarResourceApprovalGroupById(id: ID!): CalendarResourceApprovalGroup
+    CalendarResourceApprovalGroup(
       limit: Int
+      where: CalendarResourceApprovalGroupWhereAttributes
+      order: CalendarResourceApprovalGroupOrderInput
+    ): [CalendarResourceApprovalGroup!]
 
-      order: CarrierOrderInput
-    ): [Carrier!]
-
-    ConditionById(id: ID!): Condition
-    Condition(
+    CalendarResourceBookingById(id: ID!): CalendarResourceBooking
+    CalendarResourceBooking(
       limit: Int
-      where: ConditionWhereAttributes
-      order: ConditionOrderInput
-    ): [Condition!]
+      where: CalendarResourceBookingWhereAttributes
+      order: CalendarResourceBookingOrderInput
+    ): [CalendarResourceBooking!]
 
-    ConnectedPersonById(id: ID!): ConnectedPerson
-    ConnectedPerson(
+    CalendarResourceFolderById(id: ID!): CalendarResourceFolder
+    CalendarResourceFolder(
       limit: Int
+      where: CalendarResourceFolderWhereAttributes
+      order: CalendarResourceFolderOrderInput
+    ): [CalendarResourceFolder!]
 
-      order: ConnectedPersonOrderInput
-    ): [ConnectedPerson!]
-
-    EmailById(id: ID!): Email
-    Email(
+    CalendarResourceQuestionById(id: ID!): CalendarResourceQuestion
+    CalendarResourceQuestion(
       limit: Int
-      where: EmailWhereAttributes
-      order: EmailOrderInput
-    ): [Email!]
+      where: CalendarResourceQuestionWhereAttributes
+      order: CalendarResourceQuestionOrderInput
+    ): [CalendarResourceQuestion!]
 
-    FieldDatumById(id: ID!): FieldDatum
-    FieldDatum(
+    CalendarRoomSetupById(id: ID!): CalendarRoomSetup
+    CalendarRoomSetup(
       limit: Int
-      where: FieldDatumWhereAttributes
-      order: FieldDatumOrderInput
-    ): [FieldDatum!]
+      where: CalendarRoomSetupWhereAttributes
+      order: CalendarRoomSetupOrderInput
+    ): [CalendarRoomSetup!]
 
-    FieldDefinitionById(id: ID!): FieldDefinition
-    FieldDefinition(
+    CalendarTagById(id: ID!): CalendarTag
+    CalendarTag(
       limit: Int
-      where: FieldDefinitionWhereAttributes
-      order: FieldDefinitionOrderInput
-    ): [FieldDefinition!]
+      where: CalendarTagWhereAttributes
+      order: CalendarTagOrderInput
+    ): [CalendarTag!]
 
-    FieldOptionById(id: ID!): FieldOption
-    FieldOption(
+    CalendarTagGroupById(id: ID!): CalendarTagGroup
+    CalendarTagGroup(
       limit: Int
-      where: FieldOptionWhereAttributes
-      order: FieldOptionOrderInput
-    ): [FieldOption!]
+      where: CalendarTagGroupWhereAttributes
+      order: CalendarTagGroupOrderInput
+    ): [CalendarTagGroup!]
 
-    FormById(id: ID!): Form
-    Form(limit: Int, where: FormWhereAttributes, order: FormOrderInput): [Form!]
-
-    FormFieldById(id: ID!): FormField
-    FormField(
+    Check_insCheckInById(id: ID!): Check_insCheckIn
+    Check_insCheckIn(
       limit: Int
+      where: Check_insCheckInWhereAttributes
+      order: Check_insCheckInOrderInput
+    ): [Check_insCheckIn!]
 
-      order: FormFieldOrderInput
-    ): [FormField!]
-
-    FormFieldOptionById(id: ID!): FormFieldOption
-    FormFieldOption(
+    Check_insEventById(id: ID!): Check_insEvent
+    Check_insEvent(
       limit: Int
+      where: Check_insEventWhereAttributes
+      order: Check_insEventOrderInput
+    ): [Check_insEvent!]
 
-      order: FormFieldOptionOrderInput
-    ): [FormFieldOption!]
-
-    FormSubmissionById(id: ID!): FormSubmission
-    FormSubmission(
+    Check_insEventTimeById(id: ID!): Check_insEventTime
+    Check_insEventTime(
       limit: Int
+      where: Check_insEventTimeWhereAttributes
+      order: Check_insEventTimeOrderInput
+    ): [Check_insEventTime!]
 
-      order: FormSubmissionOrderInput
-    ): [FormSubmission!]
-
-    FormSubmissionValueById(id: ID!): FormSubmissionValue
-    FormSubmissionValue(
+    Check_insHeadcountById(id: ID!): Check_insHeadcount
+    Check_insHeadcount(
       limit: Int
+      where: Check_insHeadcountWhereAttributes
+      order: Check_insHeadcountOrderInput
+    ): [Check_insHeadcount!]
 
-      order: FormSubmissionValueOrderInput
-    ): [FormSubmissionValue!]
-
-    HouseholdById(id: ID!): Household
-    Household(
-      limit: Int
-      where: HouseholdWhereAttributes
-      order: HouseholdOrderInput
-    ): [Household!]
-
-    HouseholdMembershipById(id: ID!): HouseholdMembership
-    HouseholdMembership(
-      limit: Int
-      where: HouseholdMembershipWhereAttributes
-      order: HouseholdMembershipOrderInput
-    ): [HouseholdMembership!]
-
-    InactiveReasonById(id: ID!): InactiveReason
-    InactiveReason(
-      limit: Int
-      where: InactiveReasonWhereAttributes
-      order: InactiveReasonOrderInput
-    ): [InactiveReason!]
-
-    ListById(id: ID!): List
-    List(limit: Int, where: ListWhereAttributes, order: ListOrderInput): [List!]
-
-    ListCategoryById(id: ID!): ListCategory
-    ListCategory(
-      limit: Int
-      where: ListCategoryWhereAttributes
-      order: ListCategoryOrderInput
-    ): [ListCategory!]
-
-    ListResultById(id: ID!): ListResult
-    ListResult(
+    Check_insLabelById(id: ID!): Check_insLabel
+    Check_insLabel(
       limit: Int
 
-      order: ListResultOrderInput
-    ): [ListResult!]
+      order: Check_insLabelOrderInput
+    ): [Check_insLabel!]
 
-    ListShareById(id: ID!): ListShare
-    ListShare(
-      limit: Int
-      where: ListShareWhereAttributes
-      order: ListShareOrderInput
-    ): [ListShare!]
-
-    ListStarById(id: ID!): ListStar
-    ListStar(
+    Check_insOptionById(id: ID!): Check_insOption
+    Check_insOption(
       limit: Int
 
-      order: ListStarOrderInput
-    ): [ListStar!]
+      order: Check_insOptionOrderInput
+    ): [Check_insOption!]
 
-    MailchimpSyncStatusById(id: ID!): MailchimpSyncStatus
-    MailchimpSyncStatus(
+    Check_insPassById(id: ID!): Check_insPass
+    Check_insPass(
+      limit: Int
+      where: Check_insPassWhereAttributes
+      order: Check_insPassOrderInput
+    ): [Check_insPass!]
+
+    Check_insPersonById(id: ID!): Check_insPerson
+    Check_insPerson(
+      limit: Int
+      where: Check_insPersonWhereAttributes
+      order: Check_insPersonOrderInput
+    ): [Check_insPerson!]
+
+    Check_insStationById(id: ID!): Check_insStation
+    Check_insStation(
       limit: Int
 
-      order: MailchimpSyncStatusOrderInput
-    ): [MailchimpSyncStatus!]
+      order: Check_insStationOrderInput
+    ): [Check_insStation!]
 
-    MaritalStatusById(id: ID!): MaritalStatus
-    MaritalStatus(
-      limit: Int
-      where: MaritalStatusWhereAttributes
-      order: MaritalStatusOrderInput
-    ): [MaritalStatus!]
-
-    MessageById(id: ID!): Message
-    Message(
-      limit: Int
-      where: MessageWhereAttributes
-      order: MessageOrderInput
-    ): [Message!]
-
-    MessageGroupById(id: ID!): MessageGroup
-    MessageGroup(
-      limit: Int
-      where: MessageGroupWhereAttributes
-      order: MessageGroupOrderInput
-    ): [MessageGroup!]
-
-    NamePrefixById(id: ID!): NamePrefix
-    NamePrefix(
-      limit: Int
-      where: NamePrefixWhereAttributes
-      order: NamePrefixOrderInput
-    ): [NamePrefix!]
-
-    NameSuffixById(id: ID!): NameSuffix
-    NameSuffix(
-      limit: Int
-      where: NameSuffixWhereAttributes
-      order: NameSuffixOrderInput
-    ): [NameSuffix!]
-
-    NoteById(id: ID!): Note
-    Note(limit: Int, where: NoteWhereAttributes, order: NoteOrderInput): [Note!]
-
-    NoteCategoryById(id: ID!): NoteCategory
-    NoteCategory(
-      limit: Int
-      where: NoteCategoryWhereAttributes
-      order: NoteCategoryOrderInput
-    ): [NoteCategory!]
-
-    NoteCategoryShareById(id: ID!): NoteCategoryShare
-    NoteCategoryShare(
-      limit: Int
-      where: NoteCategoryShareWhereAttributes
-      order: NoteCategoryShareOrderInput
-    ): [NoteCategoryShare!]
-
-    NoteCategorySubscriptionById(id: ID!): NoteCategorySubscription
-    NoteCategorySubscription(
-      limit: Int
-      where: NoteCategorySubscriptionWhereAttributes
-      order: NoteCategorySubscriptionOrderInput
-    ): [NoteCategorySubscription!]
-
-    OrganizationById(id: ID!): Organization
-    Organization(
+    Check_insThemeById(id: ID!): Check_insTheme
+    Check_insTheme(
       limit: Int
 
-      order: OrganizationOrderInput
-    ): [Organization!]
+      order: Check_insThemeOrderInput
+    ): [Check_insTheme!]
 
-    OrganizationStatisticsById(id: ID!): OrganizationStatistics
-    OrganizationStatistics(
+    GroupsEventById(id: ID!): GroupsEvent
+    GroupsEvent(
+      limit: Int
+      where: GroupsEventWhereAttributes
+      order: GroupsEventOrderInput
+    ): [GroupsEvent!]
+
+    GroupsGroupById(id: ID!): GroupsGroup
+    GroupsGroup(
+      limit: Int
+      where: GroupsGroupWhereAttributes
+      order: GroupsGroupOrderInput
+    ): [GroupsGroup!]
+
+    GroupsGroupTypeById(id: ID!): GroupsGroupType
+    GroupsGroupType(
+      limit: Int
+      where: GroupsGroupTypeWhereAttributes
+      order: GroupsGroupTypeOrderInput
+    ): [GroupsGroupType!]
+
+    GroupsPersonById(id: ID!): GroupsPerson
+    GroupsPerson(
+      limit: Int
+      where: GroupsPersonWhereAttributes
+      order: GroupsPersonOrderInput
+    ): [GroupsPerson!]
+
+    GroupsTagGroupById(id: ID!): GroupsTagGroup
+    GroupsTagGroup(
+      limit: Int
+      where: GroupsTagGroupWhereAttributes
+      order: GroupsTagGroupOrderInput
+    ): [GroupsTagGroup!]
+
+    PeopleAddressById(id: ID!): PeopleAddress
+    PeopleAddress(
+      limit: Int
+      where: PeopleAddressWhereAttributes
+      order: PeopleAddressOrderInput
+    ): [PeopleAddress!]
+
+    PeopleAnniversaryCouplesById(id: ID!): PeopleAnniversaryCouples
+    PeopleAnniversaryCouples(
       limit: Int
 
-      order: OrganizationStatisticsOrderInput
-    ): [OrganizationStatistics!]
+      order: PeopleAnniversaryCouplesOrderInput
+    ): [PeopleAnniversaryCouples!]
 
-    PeopleImportById(id: ID!): PeopleImport
-    PeopleImport(
+    PeopleAppById(id: ID!): PeopleApp
+    PeopleApp(
       limit: Int
-      where: PeopleImportWhereAttributes
-      order: PeopleImportOrderInput
-    ): [PeopleImport!]
+      where: PeopleAppWhereAttributes
+      order: PeopleAppOrderInput
+    ): [PeopleApp!]
 
-    PeopleImportConflictById(id: ID!): PeopleImportConflict
-    PeopleImportConflict(
-      limit: Int
-      where: PeopleImportConflictWhereAttributes
-      order: PeopleImportConflictOrderInput
-    ): [PeopleImportConflict!]
-
-    PeopleImportHistoryById(id: ID!): PeopleImportHistory
-    PeopleImportHistory(
-      limit: Int
-      where: PeopleImportHistoryWhereAttributes
-      order: PeopleImportHistoryOrderInput
-    ): [PeopleImportHistory!]
-
-    PersonById(id: ID!): Person
-    Person(
-      limit: Int
-      where: PersonWhereAttributes
-      order: PersonOrderInput
-    ): [Person!]
-
-    PersonAppById(id: ID!): PersonApp
-    PersonApp(
+    PeopleBackgroundCheckById(id: ID!): PeopleBackgroundCheck
+    PeopleBackgroundCheck(
       limit: Int
 
-      order: PersonAppOrderInput
-    ): [PersonApp!]
+      order: PeopleBackgroundCheckOrderInput
+    ): [PeopleBackgroundCheck!]
 
-    PersonMergerById(id: ID!): PersonMerger
-    PersonMerger(
-      limit: Int
-      where: PersonMergerWhereAttributes
-      order: PersonMergerOrderInput
-    ): [PersonMerger!]
-
-    PhoneNumberById(id: ID!): PhoneNumber
-    PhoneNumber(
-      limit: Int
-      where: PhoneNumberWhereAttributes
-      order: PhoneNumberOrderInput
-    ): [PhoneNumber!]
-
-    PlatformNotificationById(id: ID!): PlatformNotification
-    PlatformNotification(
+    PeopleBirthdayPeopleById(id: ID!): PeopleBirthdayPeople
+    PeopleBirthdayPeople(
       limit: Int
 
-      order: PlatformNotificationOrderInput
-    ): [PlatformNotification!]
+      order: PeopleBirthdayPeopleOrderInput
+    ): [PeopleBirthdayPeople!]
 
-    ReportById(id: ID!): Report
-    Report(
+    PeopleCampusById(id: ID!): PeopleCampus
+    PeopleCampus(
       limit: Int
-      where: ReportWhereAttributes
-      order: ReportOrderInput
-    ): [Report!]
+      where: PeopleCampusWhereAttributes
+      order: PeopleCampusOrderInput
+    ): [PeopleCampus!]
 
-    RuleById(id: ID!): Rule
-    Rule(limit: Int, where: RuleWhereAttributes, order: RuleOrderInput): [Rule!]
-
-    SchoolOptionById(id: ID!): SchoolOption
-    SchoolOption(
-      limit: Int
-      where: SchoolOptionWhereAttributes
-      order: SchoolOptionOrderInput
-    ): [SchoolOption!]
-
-    ServiceTimeById(id: ID!): ServiceTime
-    ServiceTime(
+    PeopleCarrierById(id: ID!): PeopleCarrier
+    PeopleCarrier(
       limit: Int
 
-      order: ServiceTimeOrderInput
-    ): [ServiceTime!]
+      order: PeopleCarrierOrderInput
+    ): [PeopleCarrier!]
 
-    SocialProfileById(id: ID!): SocialProfile
-    SocialProfile(
+    PeopleEmailById(id: ID!): PeopleEmail
+    PeopleEmail(
       limit: Int
-      where: SocialProfileWhereAttributes
-      order: SocialProfileOrderInput
-    ): [SocialProfile!]
+      where: PeopleEmailWhereAttributes
+      order: PeopleEmailOrderInput
+    ): [PeopleEmail!]
 
-    TabById(id: ID!): Tab
-    Tab(limit: Int, where: TabWhereAttributes, order: TabOrderInput): [Tab!]
-
-    WorkflowById(id: ID!): Workflow
-    Workflow(
+    PeopleFieldDatumById(id: ID!): PeopleFieldDatum
+    PeopleFieldDatum(
       limit: Int
-      where: WorkflowWhereAttributes
-      order: WorkflowOrderInput
-    ): [Workflow!]
+      where: PeopleFieldDatumWhereAttributes
+      order: PeopleFieldDatumOrderInput
+    ): [PeopleFieldDatum!]
 
-    WorkflowCardById(id: ID!): WorkflowCard
-    WorkflowCard(
+    PeopleFieldDefinitionById(id: ID!): PeopleFieldDefinition
+    PeopleFieldDefinition(
       limit: Int
-      where: WorkflowCardWhereAttributes
-      order: WorkflowCardOrderInput
-    ): [WorkflowCard!]
+      where: PeopleFieldDefinitionWhereAttributes
+      order: PeopleFieldDefinitionOrderInput
+    ): [PeopleFieldDefinition!]
 
-    WorkflowCardActivityById(id: ID!): WorkflowCardActivity
-    WorkflowCardActivity(
+    PeopleFormById(id: ID!): PeopleForm
+    PeopleForm(
+      limit: Int
+      where: PeopleFormWhereAttributes
+      order: PeopleFormOrderInput
+    ): [PeopleForm!]
+
+    PeopleHouseholdById(id: ID!): PeopleHousehold
+    PeopleHousehold(
+      limit: Int
+      where: PeopleHouseholdWhereAttributes
+      order: PeopleHouseholdOrderInput
+    ): [PeopleHousehold!]
+
+    PeopleInactiveReasonById(id: ID!): PeopleInactiveReason
+    PeopleInactiveReason(
+      limit: Int
+      where: PeopleInactiveReasonWhereAttributes
+      order: PeopleInactiveReasonOrderInput
+    ): [PeopleInactiveReason!]
+
+    PeopleListById(id: ID!): PeopleList
+    PeopleList(
+      limit: Int
+      where: PeopleListWhereAttributes
+      order: PeopleListOrderInput
+    ): [PeopleList!]
+
+    PeopleListCategoryById(id: ID!): PeopleListCategory
+    PeopleListCategory(
+      limit: Int
+      where: PeopleListCategoryWhereAttributes
+      order: PeopleListCategoryOrderInput
+    ): [PeopleListCategory!]
+
+    PeopleMaritalStatusById(id: ID!): PeopleMaritalStatus
+    PeopleMaritalStatus(
+      limit: Int
+      where: PeopleMaritalStatusWhereAttributes
+      order: PeopleMaritalStatusOrderInput
+    ): [PeopleMaritalStatus!]
+
+    PeopleMessageById(id: ID!): PeopleMessage
+    PeopleMessage(
+      limit: Int
+      where: PeopleMessageWhereAttributes
+      order: PeopleMessageOrderInput
+    ): [PeopleMessage!]
+
+    PeopleMessageGroupById(id: ID!): PeopleMessageGroup
+    PeopleMessageGroup(
+      limit: Int
+      where: PeopleMessageGroupWhereAttributes
+      order: PeopleMessageGroupOrderInput
+    ): [PeopleMessageGroup!]
+
+    PeopleNamePrefixById(id: ID!): PeopleNamePrefix
+    PeopleNamePrefix(
+      limit: Int
+      where: PeopleNamePrefixWhereAttributes
+      order: PeopleNamePrefixOrderInput
+    ): [PeopleNamePrefix!]
+
+    PeopleNameSuffixById(id: ID!): PeopleNameSuffix
+    PeopleNameSuffix(
+      limit: Int
+      where: PeopleNameSuffixWhereAttributes
+      order: PeopleNameSuffixOrderInput
+    ): [PeopleNameSuffix!]
+
+    PeopleNoteById(id: ID!): PeopleNote
+    PeopleNote(
+      limit: Int
+      where: PeopleNoteWhereAttributes
+      order: PeopleNoteOrderInput
+    ): [PeopleNote!]
+
+    PeopleNoteCategoryById(id: ID!): PeopleNoteCategory
+    PeopleNoteCategory(
+      limit: Int
+      where: PeopleNoteCategoryWhereAttributes
+      order: PeopleNoteCategoryOrderInput
+    ): [PeopleNoteCategory!]
+
+    PeopleNoteCategorySubscriptionById(id: ID!): PeopleNoteCategorySubscription
+    PeopleNoteCategorySubscription(
+      limit: Int
+      where: PeopleNoteCategorySubscriptionWhereAttributes
+      order: PeopleNoteCategorySubscriptionOrderInput
+    ): [PeopleNoteCategorySubscription!]
+
+    PeopleOrganizationStatisticsById(id: ID!): PeopleOrganizationStatistics
+    PeopleOrganizationStatistics(
       limit: Int
 
-      order: WorkflowCardActivityOrderInput
-    ): [WorkflowCardActivity!]
+      order: PeopleOrganizationStatisticsOrderInput
+    ): [PeopleOrganizationStatistics!]
 
-    WorkflowCardNoteById(id: ID!): WorkflowCardNote
-    WorkflowCardNote(
+    PeoplePeopleImportById(id: ID!): PeoplePeopleImport
+    PeoplePeopleImport(
+      limit: Int
+      where: PeoplePeopleImportWhereAttributes
+      order: PeoplePeopleImportOrderInput
+    ): [PeoplePeopleImport!]
+
+    PeoplePersonById(id: ID!): PeoplePerson
+    PeoplePerson(
+      limit: Int
+      where: PeoplePersonWhereAttributes
+      order: PeoplePersonOrderInput
+    ): [PeoplePerson!]
+
+    PeoplePersonMergerById(id: ID!): PeoplePersonMerger
+    PeoplePersonMerger(
+      limit: Int
+      where: PeoplePersonMergerWhereAttributes
+      order: PeoplePersonMergerOrderInput
+    ): [PeoplePersonMerger!]
+
+    PeoplePhoneNumberById(id: ID!): PeoplePhoneNumber
+    PeoplePhoneNumber(
+      limit: Int
+      where: PeoplePhoneNumberWhereAttributes
+      order: PeoplePhoneNumberOrderInput
+    ): [PeoplePhoneNumber!]
+
+    PeopleReportById(id: ID!): PeopleReport
+    PeopleReport(
+      limit: Int
+      where: PeopleReportWhereAttributes
+      order: PeopleReportOrderInput
+    ): [PeopleReport!]
+
+    PeopleSchoolOptionById(id: ID!): PeopleSchoolOption
+    PeopleSchoolOption(
+      limit: Int
+      where: PeopleSchoolOptionWhereAttributes
+      order: PeopleSchoolOptionOrderInput
+    ): [PeopleSchoolOption!]
+
+    PeopleSocialProfileById(id: ID!): PeopleSocialProfile
+    PeopleSocialProfile(
+      limit: Int
+      where: PeopleSocialProfileWhereAttributes
+      order: PeopleSocialProfileOrderInput
+    ): [PeopleSocialProfile!]
+
+    PeopleTabById(id: ID!): PeopleTab
+    PeopleTab(
+      limit: Int
+      where: PeopleTabWhereAttributes
+      order: PeopleTabOrderInput
+    ): [PeopleTab!]
+
+    PeopleWorkflowById(id: ID!): PeopleWorkflow
+    PeopleWorkflow(
+      limit: Int
+      where: PeopleWorkflowWhereAttributes
+      order: PeopleWorkflowOrderInput
+    ): [PeopleWorkflow!]
+
+    ServicesAttachmentTypeById(id: ID!): ServicesAttachmentType
+    ServicesAttachmentType(
       limit: Int
 
-      order: WorkflowCardNoteOrderInput
-    ): [WorkflowCardNote!]
+      order: ServicesAttachmentTypeOrderInput
+    ): [ServicesAttachmentType!]
 
-    WorkflowCategoryById(id: ID!): WorkflowCategory
-    WorkflowCategory(
-      limit: Int
-      where: WorkflowCategoryWhereAttributes
-      order: WorkflowCategoryOrderInput
-    ): [WorkflowCategory!]
-
-    WorkflowShareById(id: ID!): WorkflowShare
-    WorkflowShare(
-      limit: Int
-      where: WorkflowShareWhereAttributes
-      order: WorkflowShareOrderInput
-    ): [WorkflowShare!]
-
-    WorkflowStepById(id: ID!): WorkflowStep
-    WorkflowStep(
-      limit: Int
-      where: WorkflowStepWhereAttributes
-      order: WorkflowStepOrderInput
-    ): [WorkflowStep!]
-
-    WorkflowStepAssigneeSummaryById(id: ID!): WorkflowStepAssigneeSummary
-    WorkflowStepAssigneeSummary(
+    ServicesChatById(id: ID!): ServicesChat
+    ServicesChat(
       limit: Int
 
-      order: WorkflowStepAssigneeSummaryOrderInput
-    ): [WorkflowStepAssigneeSummary!]
+      order: ServicesChatOrderInput
+    ): [ServicesChat!]
+
+    ServicesEmailTemplateById(id: ID!): ServicesEmailTemplate
+    ServicesEmailTemplate(
+      limit: Int
+
+      order: ServicesEmailTemplateOrderInput
+    ): [ServicesEmailTemplate!]
+
+    ServicesFolderById(id: ID!): ServicesFolder
+    ServicesFolder(
+      limit: Int
+
+      order: ServicesFolderOrderInput
+    ): [ServicesFolder!]
+
+    ServicesMediaById(id: ID!): ServicesMedia
+    ServicesMedia(
+      limit: Int
+      where: ServicesMediaWhereAttributes
+      order: ServicesMediaOrderInput
+    ): [ServicesMedia!]
+
+    ServicesOrganizationById(id: ID!): ServicesOrganization
+    ServicesOrganization(
+      limit: Int
+
+      order: ServicesOrganizationOrderInput
+    ): [ServicesOrganization!]
+
+    ServicesPersonById(id: ID!): ServicesPerson
+    ServicesPerson(
+      limit: Int
+      where: ServicesPersonWhereAttributes
+      order: ServicesPersonOrderInput
+    ): [ServicesPerson!]
+
+    ServicesReportTemplateById(id: ID!): ServicesReportTemplate
+    ServicesReportTemplate(
+      limit: Int
+
+      order: ServicesReportTemplateOrderInput
+    ): [ServicesReportTemplate!]
+
+    ServicesSeriesById(id: ID!): ServicesSeries
+    ServicesSeries(
+      limit: Int
+      where: ServicesSeriesWhereAttributes
+      order: ServicesSeriesOrderInput
+    ): [ServicesSeries!]
+
+    ServicesServiceTypeById(id: ID!): ServicesServiceType
+    ServicesServiceType(
+      limit: Int
+      where: ServicesServiceTypeWhereAttributes
+      order: ServicesServiceTypeOrderInput
+    ): [ServicesServiceType!]
+
+    ServicesSongById(id: ID!): ServicesSong
+    ServicesSong(
+      limit: Int
+      where: ServicesSongWhereAttributes
+      order: ServicesSongOrderInput
+    ): [ServicesSong!]
+
+    ServicesTagGroupById(id: ID!): ServicesTagGroup
+    ServicesTagGroup(
+      limit: Int
+      where: ServicesTagGroupWhereAttributes
+      order: ServicesTagGroupOrderInput
+    ): [ServicesTagGroup!]
+
+    ServicesTeamById(id: ID!): ServicesTeam
+    ServicesTeam(
+      limit: Int
+      where: ServicesTeamWhereAttributes
+      order: ServicesTeamOrderInput
+    ): [ServicesTeam!]
+
+    ResourcesAttachmentById(id: ID!): ResourcesAttachment
+    ResourcesAttachment(
+      limit: Int
+      where: ResourcesAttachmentWhereAttributes
+      order: ResourcesAttachmentOrderInput
+    ): [ResourcesAttachment!]
+
+    ResourcesConflictById(id: ID!): ResourcesConflict
+    ResourcesConflict(
+      limit: Int
+
+      order: ResourcesConflictOrderInput
+    ): [ResourcesConflict!]
+
+    ResourcesEventById(id: ID!): ResourcesEvent
+    ResourcesEvent(
+      limit: Int
+      where: ResourcesEventWhereAttributes
+      order: ResourcesEventOrderInput
+    ): [ResourcesEvent!]
+
+    ResourcesEventInstanceById(id: ID!): ResourcesEventInstance
+    ResourcesEventInstance(
+      limit: Int
+      where: ResourcesEventInstanceWhereAttributes
+      order: ResourcesEventInstanceOrderInput
+    ): [ResourcesEventInstance!]
+
+    ResourcesEventResourceRequestById(id: ID!): ResourcesEventResourceRequest
+    ResourcesEventResourceRequest(
+      limit: Int
+      where: ResourcesEventResourceRequestWhereAttributes
+      order: ResourcesEventResourceRequestOrderInput
+    ): [ResourcesEventResourceRequest!]
+
+    ResourcesFeedById(id: ID!): ResourcesFeed
+    ResourcesFeed(
+      limit: Int
+      where: ResourcesFeedWhereAttributes
+      order: ResourcesFeedOrderInput
+    ): [ResourcesFeed!]
+
+    ResourcesPersonById(id: ID!): ResourcesPerson
+    ResourcesPerson(
+      limit: Int
+      where: ResourcesPersonWhereAttributes
+      order: ResourcesPersonOrderInput
+    ): [ResourcesPerson!]
+
+    ResourcesReportTemplateById(id: ID!): ResourcesReportTemplate
+    ResourcesReportTemplate(
+      limit: Int
+
+      order: ResourcesReportTemplateOrderInput
+    ): [ResourcesReportTemplate!]
+
+    ResourcesResourceById(id: ID!): ResourcesResource
+    ResourcesResource(
+      limit: Int
+      where: ResourcesResourceWhereAttributes
+      order: ResourcesResourceOrderInput
+    ): [ResourcesResource!]
+
+    ResourcesResourceApprovalGroupById(id: ID!): ResourcesResourceApprovalGroup
+    ResourcesResourceApprovalGroup(
+      limit: Int
+      where: ResourcesResourceApprovalGroupWhereAttributes
+      order: ResourcesResourceApprovalGroupOrderInput
+    ): [ResourcesResourceApprovalGroup!]
+
+    ResourcesResourceBookingById(id: ID!): ResourcesResourceBooking
+    ResourcesResourceBooking(
+      limit: Int
+      where: ResourcesResourceBookingWhereAttributes
+      order: ResourcesResourceBookingOrderInput
+    ): [ResourcesResourceBooking!]
+
+    ResourcesResourceFolderById(id: ID!): ResourcesResourceFolder
+    ResourcesResourceFolder(
+      limit: Int
+      where: ResourcesResourceFolderWhereAttributes
+      order: ResourcesResourceFolderOrderInput
+    ): [ResourcesResourceFolder!]
+
+    ResourcesResourceQuestionById(id: ID!): ResourcesResourceQuestion
+    ResourcesResourceQuestion(
+      limit: Int
+      where: ResourcesResourceQuestionWhereAttributes
+      order: ResourcesResourceQuestionOrderInput
+    ): [ResourcesResourceQuestion!]
+
+    ResourcesRoomSetupById(id: ID!): ResourcesRoomSetup
+    ResourcesRoomSetup(
+      limit: Int
+      where: ResourcesRoomSetupWhereAttributes
+      order: ResourcesRoomSetupOrderInput
+    ): [ResourcesRoomSetup!]
+
+    ResourcesTagById(id: ID!): ResourcesTag
+    ResourcesTag(
+      limit: Int
+      where: ResourcesTagWhereAttributes
+      order: ResourcesTagOrderInput
+    ): [ResourcesTag!]
+
+    ResourcesTagGroupById(id: ID!): ResourcesTagGroup
+    ResourcesTagGroup(
+      limit: Int
+      where: ResourcesTagGroupWhereAttributes
+      order: ResourcesTagGroupOrderInput
+    ): [ResourcesTagGroup!]
+
+    GivingBatchById(id: ID!): GivingBatch
+    GivingBatch(
+      limit: Int
+      where: GivingBatchWhereAttributes
+      order: GivingBatchOrderInput
+    ): [GivingBatch!]
+
+    GivingBatchGroupById(id: ID!): GivingBatchGroup
+    GivingBatchGroup(
+      limit: Int
+      where: GivingBatchGroupWhereAttributes
+      order: GivingBatchGroupOrderInput
+    ): [GivingBatchGroup!]
+
+    GivingCampusById(id: ID!): GivingCampus
+    GivingCampus(
+      limit: Int
+
+      order: GivingCampusOrderInput
+    ): [GivingCampus!]
+
+    GivingDonationById(id: ID!): GivingDonation
+    GivingDonation(
+      limit: Int
+      where: GivingDonationWhereAttributes
+      order: GivingDonationOrderInput
+    ): [GivingDonation!]
+
+    GivingFundById(id: ID!): GivingFund
+    GivingFund(
+      limit: Int
+      where: GivingFundWhereAttributes
+      order: GivingFundOrderInput
+    ): [GivingFund!]
+
+    GivingLabelById(id: ID!): GivingLabel
+    GivingLabel(
+      limit: Int
+      where: GivingLabelWhereAttributes
+      order: GivingLabelOrderInput
+    ): [GivingLabel!]
+
+    GivingPaymentSourceById(id: ID!): GivingPaymentSource
+    GivingPaymentSource(
+      limit: Int
+
+      order: GivingPaymentSourceOrderInput
+    ): [GivingPaymentSource!]
+
+    GivingPersonById(id: ID!): GivingPerson
+    GivingPerson(
+      limit: Int
+      where: GivingPersonWhereAttributes
+      order: GivingPersonOrderInput
+    ): [GivingPerson!]
+
+    GivingRecurringDonationById(id: ID!): GivingRecurringDonation
+    GivingRecurringDonation(
+      limit: Int
+
+      order: GivingRecurringDonationOrderInput
+    ): [GivingRecurringDonation!]
   }
 
   enum sortEnum {

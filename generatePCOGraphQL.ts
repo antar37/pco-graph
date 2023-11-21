@@ -1,6 +1,13 @@
+// eslint-disable
+// @ts-nocheck
+
 const { buildSchema } = require("graphql");
 const fs = require("fs");
-const vertices = require("./vertices.json");
+const vertices = require("./allEntities.json");
+
+const capitalize = function (string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 
 function getGraphQLType(value: string) {
   if (value === "string") {
@@ -16,39 +23,99 @@ function getGraphQLType(value: string) {
   }
 }
 
-const generateQueries = (jsonApiSpec: { resources: any[] }) => {
-  // const queries = {};
-  const queries = jsonApiSpec.resources
-    .map(
-      (resource: {
-        relationships: { can_include: { data: any[] } };
-        attributes: { path: any; name: any };
-      }) => {
-        const includesArray = resource.relationships.can_include.data.map(
-          (e: { attributes: { name: any } }) => e.attributes.name
-        );
+type Resource = {
+  name: string;
+  data: {
+    attributes: { name: any };
+    relationships: {
+      attributes: { data: any };
+      outbound_edges: { data: any };
+      can_query: { data: any };
+    };
+  };
+};
 
-        const orderString =
-          'const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${order?.field !== undefined ? order?.field : ""}`';
-        const urlString =
-          "`" +
-          `${resource.attributes.path}` +
-          "?per_page=${limit}&include=${includes}${whereArg}${orderArg}`,";
-        const urlByIdString =
-          "`" +
-          `${resource.attributes.path}` +
-          "/${id}?per_page=${limit}&include=${includes}`,";
-        const query = `
-          ${
-            resource.attributes.name
-          }: async (parent, params, context, info) => {
+const generateQueries = (jsonApiSpec: { resources: Resource[] }) => {
+  // const queries = {};
+  const data = jsonApiSpec.resources;
+
+  const topLevelQueries = data.filter((e) =>
+    e.data.relationships.inbound_edges.data.find(
+      ({ relationships }) => relationships.tail.data.id === "organization"
+    )
+  );
+  const childLevelQueries = data.filter(
+    (e) =>
+      !e.data.relationships.inbound_edges.data.find(
+        ({ relationships }) => relationships.tail.data.id === "organization"
+      )
+  );
+
+  let children = {};
+  childLevelQueries
+    .filter(
+      (e) =>
+        !e.data.relationships.inbound_edges.data.find(
+          ({ relationships }) => relationships.tail.data.id === "organization"
+        )
+    )
+    .map((e) => {
+      e.data.relationships.inbound_edges.data.map((inbound) => {
+        let path = inbound.attributes.path;
+
+        console.log(inbound.relationships.tail);
+        let url = path.split("/").slice(0, -2).join("/");
+        let entity = path.split("/").slice(-1).join("");
+
+        const entityName = `${capitalize(e.name)}${capitalize(
+          inbound.relationships.tail.data.attributes.name
+        )}`;
+        const entityChildName = `${capitalize(e.name)}${capitalize(
+          inbound.attributes.name
+        )}`;
+
+        children[entityName] = {
+          ...children[entityName],
+          [entityChildName]: {
+            ...e,
+            url,
+            entity,
+          },
+        };
+      });
+    });
+
+  const parentQueryResolvers = topLevelQueries
+    .map((resource: Resource) => {
+      const includesArray = resource.data.relationships.can_include.data.map(
+        (e: { attributes: { name: any } }) => e.attributes.name
+      );
+      const data = resource.data;
+      const name = `${capitalize(resource.name)}${data.attributes.name}`;
+      const orderString =
+        'const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${order?.field !== undefined ? order?.field : ""}`';
+      const urlString =
+        "`" +
+        `${data.attributes.path}` +
+        "?per_page=${limit}&include=${includes}${whereArg}${orderArg}`,";
+      const urlByIdString =
+        "`" +
+        `${data.attributes.path}` +
+        "/${id}?per_page=${limit}&include=${includes}`,";
+      const query = `
+          ${name}: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
             const { limit = 10, where, order } = params;
             const whereArg = where ? formatWhere(where) : "&where[status]=active";
             ${orderString};
             const includes = getRelatedFieldNames(info, ${JSON.stringify(
               includesArray
             )}).join(",");
-  
+              
             let response = await getJSONfromUrl(${urlString}
               {
                 method: "GET",
@@ -60,7 +127,7 @@ const generateQueries = (jsonApiSpec: { resources: any[] }) => {
               }
             );
   
-            let result = response.data.map((e) => {
+            let result = response.data.map((e: { attributes: any; id: any }) => {
               const relatedData = zipRelatedData(response, e, ${JSON.stringify(
                 includesArray
               )});
@@ -76,9 +143,12 @@ const generateQueries = (jsonApiSpec: { resources: any[] }) => {
   
             return result || [];
             },
-            ${
-              resource.attributes.name
-            }ById: async (parent, params, context, info) => {
+            ${name}ById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
               const { id, limit = 10 } = params;
               const includes = getRelatedFieldNames(info, ${JSON.stringify(
                 includesArray
@@ -95,7 +165,7 @@ const generateQueries = (jsonApiSpec: { resources: any[] }) => {
                 }
               );
       
-              let result = response.data.map((e) => {
+              let result = response.data.map((e: { attributes: any; id: any }) => {
                 const relatedData = zipRelatedData(response, e, ${JSON.stringify(
                   includesArray
                 )});
@@ -112,14 +182,82 @@ const generateQueries = (jsonApiSpec: { resources: any[] }) => {
               return result || null;
             },
       `;
-        return query;
-      }
-    )
+      return query;
+    })
     .join("\n");
 
-  return queries;
+  const childQueryResolvers = Object.entries(children).map(
+    ([parentKey, parentValue]) => {
+      const childQueries = Object.entries(parentValue).map(([key, value]) => {
+        const includesArray = value.data.relationships.can_include.data.map(
+          (e: { attributes: { name: any } }) => e.attributes.name
+        );
+
+        const orderString =
+          'const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${order?.field !== undefined ? order?.field : ""}`';
+
+        return `
+        
+        ${key}: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          
+          const url = parent?.links?.self + "/${value.entity}" 
+          const { limit = 10, where, order } = params;
+          const whereArg = where ? formatWhere(where) : "&where[status]=active";
+          ${orderString};
+          const includes = getRelatedFieldNames(info, ${JSON.stringify(
+            includesArray
+          )}).join(",");
+            
+          let response = await getJSONfromUrl(url,
+            {
+              method: "GET",
+              headers: {
+                Authorization:
+                  "Basic " +
+                  btoa(process.env.PCO_APP_ID + ":" + process.env.PCO_SECRET),
+              },
+            }
+          );
+
+          let result = response.data.map((e: { attributes: any; id: any }) => {
+            const relatedData = zipRelatedData(response, e, ${JSON.stringify(
+              includesArray
+            )});
+            return {
+              ...e,
+              attributes: {
+                ...e.attributes,
+                id: e.id,
+              },
+              relationships: relatedData,
+            };
+          })
+          return result || null;
+        }
+          `;
+      });
+
+      const query = `
+      ${parentKey}: {
+       relationships :(parent: any) => parent
+      },
+      ${parentKey}Relationships: {
+        ${childQueries}
+      }
+    `;
+      return query;
+    }
+  );
+
+  return { parentQueryResolvers, childQueryResolvers };
 };
 
+const getChildQuery = (children: any) => {};
 const sanitizeTypes = (type: any) => {
   switch (type) {
     case "Optionable":
@@ -147,32 +285,22 @@ const sanitizeTypes = (type: any) => {
       return type;
   }
 };
-const generateTypes = (entity: {
-  attributes: { name: any };
-  relationships: {
-    attributes: { data: any };
-    outbound_edges: { data: any };
-    can_query: { data: any };
-  };
-}) => {
-  const name = entity.attributes.name;
-  const attributes = entity.relationships.attributes.data;
-  const relationships = entity.relationships.outbound_edges.data;
-  const queryParams = entity.relationships.can_query.data;
+
+const generateTypes = ({ name, data }: Resource) => {
+  const typeName = `${capitalize(name)}${data.attributes.name}`;
+  const attributes = data.relationships.attributes.data;
+  const relationships = data.relationships.outbound_edges.data;
+  const queryParams = data.relationships.can_query.data;
   const relationshipsString = relationships.length
     ? `
-    type ${name}Relationships {
+    type ${typeName}Relationships {
     ${relationships
-      .filter(({ attributes }: { attributes: any }) => attributes.name)
+      .filter(({ attributes }) => attributes.name)
       .map(
-        ({
-          relationships,
-          attributes,
-        }: {
-          relationships: any;
-          attributes: any;
-        }) =>
-          `${attributes.name}: [${relationships.head.data.attributes.name}]
+        ({ relationships, attributes }) =>
+          `${capitalize(name)}${capitalize(attributes.name)}: [${capitalize(
+            name
+          )}${capitalize(relationships.head.data.attributes.name)}]
           `
       )
       .join("")}
@@ -182,12 +310,12 @@ const generateTypes = (entity: {
 
   const whereString = queryParams.length
     ? `
-    input ${name}WhereAttributes {
+    input ${typeName}WhereAttributes {
       ${queryParams
         .map(
-          ({ attributes }: { attributes: any }) => `${
-            attributes.name
-          }: ${getGraphQLType(attributes.type)}
+          ({ attributes }) => `${attributes.name}: ${getGraphQLType(
+            attributes.type
+          )}
           `
         )
         .join("")}
@@ -195,72 +323,74 @@ const generateTypes = (entity: {
     : "";
   return ` 
   
-    enum ${name}OrderByEnum {
+    enum ${typeName}OrderByEnum {
       ${attributes
         .map(
-          ({ attributes }: { attributes: any }) => `${attributes.name}
+          ({ attributes }) => `${attributes.name}
       `
         )
         .join("")}
     }
   
-    input ${name}OrderInput {
+    input ${typeName}OrderInput {
       """ this will append a (-) to the field name if desc """
       sort: sortEnum = asc
-      field: ${name}OrderByEnum 
+      field: ${typeName}OrderByEnum 
     }
     
     ${whereString}
     ${relationshipsString}
-    type ${name}Attributes {
+    type ${typeName}Attributes {
       ${attributes
         .map(
-          ({ attributes }: { attributes: any }) =>
+          ({ attributes }) =>
             `
       """ example: ${attributes.type_annotation.example} """
-            ${attributes.name}: ${getGraphQLType(
-              attributes.type_annotation.name
-            )}
+      ${attributes.name}: ${getGraphQLType(attributes.type_annotation.name)}
             `
         )
         .join("")}
     }
   
-    type ${name} {
+    type ${typeName} {
       id: ID!
-      attributes: ${name}Attributes
-      ${relationships.length ? `relationships: ${name}Relationships` : ""}
+      attributes: ${typeName}Attributes
+      ${relationships.length ? `relationships: ${typeName}Relationships` : ""}
     }
     `;
 };
 
-function generateGraphQLSchema(jsonApiSpec: { resources: any }) {
-  const types = jsonApiSpec.resources
+const getEntityName = (entity: Resource) =>
+  `${capitalize(entity.name)}${entity.data.attributes.name}`;
+
+function generateGraphQLSchema(jsonApiSpec: { resources: Resource[] }) {
+  const resources = jsonApiSpec.resources;
+  const topLevelQueries = resources.filter((e) =>
+    e.data.relationships.inbound_edges.data.find(
+      ({ relationships }) => relationships.tail.data.id === "organization"
+    )
+  );
+
+  const types = resources
     .map(
-      (entity: any) => `
+      (entity) => `
         ${generateTypes(entity)}`
     )
     .join("");
 
-  const whereString = (entity: {
-    relationships: { can_query: { data: string | any[] } };
-    attributes: { name: any };
-  }) =>
-    entity.relationships.can_query.data.length
-      ? `where: ${entity.attributes.name}WhereAttributes,`
+  const whereString = (entity: Resource) =>
+    entity.data.relationships.can_query.data.length
+      ? `where: ${getEntityName(entity)}WhereAttributes,`
       : "";
-  const queries = jsonApiSpec.resources
+  const queries = topLevelQueries
     .map(
-      (entity: {
-        relationships: { can_query: { data: string | any[] } };
-        attributes: { name: any };
-      }) => `
-      ${entity.attributes.name}ById(id: ID!): ${entity.attributes.name}
-      ${entity.attributes.name}(
+      (entity) => `
+      ${getEntityName(entity)}ById(id: ID!): ${getEntityName(entity)}
+      ${getEntityName(entity)}(
           limit: Int, 
           ${whereString(entity)}
-          order: ${entity.attributes.name}OrderInput
-          ): [${entity.attributes.name}!]
+          order: ${getEntityName(entity)}OrderInput
+          ): [${getEntityName(entity)}!]
       `
     )
     .join("");
@@ -277,17 +407,16 @@ function generateGraphQLSchema(jsonApiSpec: { resources: any }) {
       }
       
     `;
-  console.log(schemaDefinition);
+  fs.writeFileSync("schemaDefinition.graphql", schemaDefinition);
 
   const schema = buildSchema(schemaDefinition);
-
   const generatedResolvers = generateQueries(jsonApiSpec);
   return { schema, resolvers: generatedResolvers, schemaDefinition };
 }
 
 const getJSONfromUrl = async (
   url: RequestInfo | URL,
-  init?: RequestInit | undefined
+  init: RequestInit | undefined
 ) => {
   const response = await fetch(url, init);
   const json = await response.json();
@@ -301,6 +430,6 @@ const { schema, resolvers, schemaDefinition } = generateGraphQLSchema({
 fs.writeFileSync("schema.graphql", schemaDefinition);
 
 fs.writeFileSync(
-  "resolvers.js",
-  `export const resolvers = { Query:  {${resolvers}} }`
+  "resolvers.ts",
+  `export const resolvers = { Query:  {${resolvers.parentQueryResolvers}}, ${resolvers.childQueryResolvers}  }`
 );
