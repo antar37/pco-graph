@@ -37,13 +37,21 @@ This project automates the creation of a GraphQL schema and resolvers based on t
 
 ## Usage
 
-1. Run the script to generate the GraphQL schema and resolvers:
+1. Run the script to get the most updated JSON API spec and generate the GraphQL schema and resolvers:
 
    ```sh
    pnpm generate
    ```
 
-2. The generated schema and resolvers will be saved in the `src/app/graphql` directory.
+   The generated schema and resolvers will be saved in the `src/app/graphql` directory.
+
+2. Run graphQl server
+
+```sh
+    pnpm dev
+```
+
+navigate to `/graphql`
 
 ## Contributing
 
