@@ -115,25 +115,6 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
             },
       
 
-          CalendarJobStatus: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/calendar/v2/job_statuses", params, info, [], context);
-
-            },
-            CalendarJobStatusById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/calendar/v2/job_statuses", params, info, [], context);
-            },
-      
-
           CalendarPerson: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
@@ -324,364 +305,193 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
             },
       
 
-          CheckinsCheckIn: async (
+          Check_insCheckIn: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/check_ins", params, info, ["check_in_times","checked_in_at","checked_in_by","checked_out_by","event","event_period","event_times","locations","options","person"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/check_ins", params, info, ["check_in_times","checked_in_at","checked_in_by","checked_out_by","event","event_period","event_times","locations","options","person"], context);
 
             },
-            CheckinsCheckInById: async (
+            Check_insCheckInById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/check_ins", params, info, ["check_in_times","checked_in_at","checked_in_by","checked_out_by","event","event_period","event_times","locations","options","person"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/check_ins", params, info, ["check_in_times","checked_in_at","checked_in_by","checked_out_by","event","event_period","event_times","locations","options","person"], context);
             },
       
 
-          CheckinsEvent: async (
+          Check_insEvent: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/events", params, info, ["attendance_types"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/events", params, info, ["attendance_types","event_periods"], context);
 
             },
-            CheckinsEventById: async (
+            Check_insEventById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/events", params, info, ["attendance_types"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/events", params, info, ["attendance_types","event_periods"], context);
             },
       
 
-          CheckinsEventTime: async (
+          Check_insEventTime: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/event_times", params, info, ["event","event_period","headcounts"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/event_times", params, info, ["event","event_period","headcounts"], context);
 
             },
-            CheckinsEventTimeById: async (
+            Check_insEventTimeById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/event_times", params, info, ["event","event_period","headcounts"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/event_times", params, info, ["event","event_period","headcounts"], context);
             },
       
 
-          CheckinsHeadcount: async (
+          Check_insHeadcount: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/headcounts", params, info, ["attendance_type","event_time"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/headcounts", params, info, ["attendance_type","event_time"], context);
 
             },
-            CheckinsHeadcountById: async (
+            Check_insHeadcountById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/headcounts", params, info, ["attendance_type","event_time"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/headcounts", params, info, ["attendance_type","event_time"], context);
             },
       
 
-          CheckinsLabel: async (
+          Check_insLabel: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/labels", params, info, [], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/labels", params, info, [], context);
 
             },
-            CheckinsLabelById: async (
+            Check_insLabelById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/labels", params, info, [], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/labels", params, info, [], context);
             },
       
 
-          CheckinsOption: async (
+          Check_insOption: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/options", params, info, ["label"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/options", params, info, ["label"], context);
 
             },
-            CheckinsOptionById: async (
+            Check_insOptionById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/options", params, info, ["label"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/options", params, info, ["label"], context);
             },
       
 
-          CheckinsPass: async (
+          Check_insPass: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/passes", params, info, ["person"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/passes", params, info, ["person"], context);
 
             },
-            CheckinsPassById: async (
+            Check_insPassById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/passes", params, info, ["person"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/passes", params, info, ["person"], context);
             },
       
 
-          CheckinsPerson: async (
+          Check_insPerson: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/people", params, info, ["organization"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/people", params, info, ["organization"], context);
 
             },
-            CheckinsPersonById: async (
+            Check_insPersonById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/people", params, info, ["organization"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/people", params, info, ["organization"], context);
             },
       
 
-          CheckinsStation: async (
+          Check_insStation: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/stations", params, info, ["event","location","print_station","theme"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/stations", params, info, ["event","location","print_station","theme"], context);
 
             },
-            CheckinsStationById: async (
+            Check_insStationById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/stations", params, info, ["event","location","print_station","theme"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/stations", params, info, ["event","location","print_station","theme"], context);
             },
       
 
-          CheckinsTheme: async (
+          Check_insTheme: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/themes", params, info, [], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/themes", params, info, [], context);
 
             },
-            CheckinsThemeById: async (
+            Check_insThemeById: async (
               parent: any,
               params: { limit?: 10 | undefined; id: string; where: any; order: any },
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/check-ins/v2/themes", params, info, [], context);
-            },
-      
-
-          GivingBatch: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/batches", params, info, ["batch_group","owner"], context);
-
-            },
-            GivingBatchById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/batches", params, info, ["batch_group","owner"], context);
-            },
-      
-
-          GivingBatchGroup: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/batch_groups", params, info, ["owner"], context);
-
-            },
-            GivingBatchGroupById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/batch_groups", params, info, ["owner"], context);
-            },
-      
-
-          GivingCampus: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/campuses", params, info, [], context);
-
-            },
-            GivingCampusById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/campuses", params, info, [], context);
-            },
-      
-
-          GivingDonation: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/donations", params, info, ["designations","labels","note","refund"], context);
-
-            },
-            GivingDonationById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/donations", params, info, ["designations","labels","note","refund"], context);
-            },
-      
-
-          GivingFund: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/funds", params, info, [], context);
-
-            },
-            GivingFundById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/funds", params, info, [], context);
-            },
-      
-
-          GivingLabel: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/labels", params, info, [], context);
-
-            },
-            GivingLabelById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/labels", params, info, [], context);
-            },
-      
-
-          GivingPaymentSource: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/payment_sources", params, info, [], context);
-
-            },
-            GivingPaymentSourceById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/payment_sources", params, info, [], context);
-            },
-      
-
-          GivingPerson: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/people", params, info, [], context);
-
-            },
-            GivingPersonById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/people", params, info, [], context);
-            },
-      
-
-          GivingRecurringDonation: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/recurring_donations", params, info, ["designations"], context);
-
-            },
-            GivingRecurringDonationById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/giving/v2/recurring_donations", params, info, ["designations"], context);
+              return fetchData("https://api.planningcenteronline.com/check_ins/v2/themes", params, info, [], context);
             },
       
 
@@ -720,25 +530,6 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
               info: any
             ) => {
               return fetchData("https://api.planningcenteronline.com/groups/v2/groups", params, info, ["enrollment","group_type","location"], context);
-            },
-      
-
-          GroupsGroupApplication: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/groups/v2/group_applications", params, info, ["group","person"], context);
-
-            },
-            GroupsGroupApplicationById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/groups/v2/group_applications", params, info, ["group","person"], context);
             },
       
 
@@ -1426,63 +1217,6 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
             },
       
 
-          PublishingChannel: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/publishing/v2/channels", params, info, ["channel_default_episode_resources","channel_default_times","current_episode"], context);
-
-            },
-            PublishingChannelById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/publishing/v2/channels", params, info, ["channel_default_episode_resources","channel_default_times","current_episode"], context);
-            },
-      
-
-          PublishingEpisode: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/publishing/v2/episodes", params, info, ["channel","episode_resources","episode_times","series"], context);
-
-            },
-            PublishingEpisodeById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/publishing/v2/episodes", params, info, ["channel","episode_resources","episode_times","series"], context);
-            },
-      
-
-          PublishingSeries: async (
-              parent: any,
-              params: { limit?: 10 | undefined; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/publishing/v2/series", params, info, ["channel"], context);
-
-            },
-            PublishingSeriesById: async (
-              parent: any,
-              params: { limit?: 10 | undefined; id: string; where: any; order: any },
-              context: any,
-              info: any
-            ) => {
-              return fetchData("https://api.planningcenteronline.com/publishing/v2/series", params, info, ["channel"], context);
-            },
-      
-
           ServicesAttachmentType: async (
               parent: any,
               params: { limit?: 10 | undefined; where: any; order: any },
@@ -1603,7 +1337,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/services/v2/people", params, info, ["emails","team_leaders"], context);
+              return fetchData("https://api.planningcenteronline.com/services/v2/people", params, info, ["team_leaders"], context);
 
             },
             ServicesPersonById: async (
@@ -1612,7 +1346,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
               context: any,
               info: any
             ) => {
-              return fetchData("https://api.planningcenteronline.com/services/v2/people", params, info, ["emails","team_leaders"], context);
+              return fetchData("https://api.planningcenteronline.com/services/v2/people", params, info, ["team_leaders"], context);
             },
       
 
@@ -1728,6 +1462,481 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
             ) => {
               return fetchData("https://api.planningcenteronline.com/services/v2/teams", params, info, ["people","person_team_position_assignments","service_type","team_leaders","team_positions"], context);
             },
+      
+
+          ResourcesAttachment: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/attachments", params, info, ["event"], context);
+
+            },
+            ResourcesAttachmentById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/attachments", params, info, ["event"], context);
+            },
+      
+
+          ResourcesConflict: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/conflicts", params, info, ["resolved_by","resource","winner"], context);
+
+            },
+            ResourcesConflictById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/conflicts", params, info, ["resolved_by","resource","winner"], context);
+            },
+      
+
+          ResourcesEvent: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/events", params, info, ["attachments","feed","owner","tags"], context);
+
+            },
+            ResourcesEventById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/events", params, info, ["attachments","feed","owner","tags"], context);
+            },
+      
+
+          ResourcesEventInstance: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/event_instances", params, info, ["event","event_times","resource_bookings","tags"], context);
+
+            },
+            ResourcesEventInstanceById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/event_instances", params, info, ["event","event_times","resource_bookings","tags"], context);
+            },
+      
+
+          ResourcesEventResourceRequest: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/event_resource_requests", params, info, ["created_by","event","resource","room_setup","updated_by"], context);
+
+            },
+            ResourcesEventResourceRequestById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/event_resource_requests", params, info, ["created_by","event","resource","room_setup","updated_by"], context);
+            },
+      
+
+          ResourcesFeed: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/feeds", params, info, [], context);
+
+            },
+            ResourcesFeedById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/feeds", params, info, [], context);
+            },
+      
+
+          ResourcesPerson: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/people", params, info, ["organization"], context);
+
+            },
+            ResourcesPersonById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/people", params, info, ["organization"], context);
+            },
+      
+
+          ResourcesReportTemplate: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/report_templates", params, info, [], context);
+
+            },
+            ResourcesReportTemplateById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/report_templates", params, info, [], context);
+            },
+      
+
+          ResourcesResource: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resources", params, info, ["resource_approval_groups","resource_folder","resource_questions","room_setups"], context);
+
+            },
+            ResourcesResourceById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resources", params, info, ["resource_approval_groups","resource_folder","resource_questions","room_setups"], context);
+            },
+      
+
+          ResourcesResourceApprovalGroup: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_approval_groups", params, info, ["people","resources"], context);
+
+            },
+            ResourcesResourceApprovalGroupById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_approval_groups", params, info, ["people","resources"], context);
+            },
+      
+
+          ResourcesResourceBooking: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_bookings", params, info, ["event_instance","event_resource_request","resource"], context);
+
+            },
+            ResourcesResourceBookingById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_bookings", params, info, ["event_instance","event_resource_request","resource"], context);
+            },
+      
+
+          ResourcesResourceFolder: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_folders", params, info, ["resources"], context);
+
+            },
+            ResourcesResourceFolderById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_folders", params, info, ["resources"], context);
+            },
+      
+
+          ResourcesResourceQuestion: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_questions", params, info, [], context);
+
+            },
+            ResourcesResourceQuestionById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/resource_questions", params, info, [], context);
+            },
+      
+
+          ResourcesRoomSetup: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/room_setups", params, info, ["containing_resource","resource_suggestions"], context);
+
+            },
+            ResourcesRoomSetupById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/room_setups", params, info, ["containing_resource","resource_suggestions"], context);
+            },
+      
+
+          ResourcesTag: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/tags", params, info, ["tag_group"], context);
+
+            },
+            ResourcesTagById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/tags", params, info, ["tag_group"], context);
+            },
+      
+
+          ResourcesTagGroup: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/tag_groups", params, info, ["events","tags"], context);
+
+            },
+            ResourcesTagGroupById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/resources/v2/tag_groups", params, info, ["events","tags"], context);
+            },
+      
+
+          GivingBatch: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/batches", params, info, ["batch_group","owner"], context);
+
+            },
+            GivingBatchById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/batches", params, info, ["batch_group","owner"], context);
+            },
+      
+
+          GivingBatchGroup: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/batch_groups", params, info, ["owner"], context);
+
+            },
+            GivingBatchGroupById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/batch_groups", params, info, ["owner"], context);
+            },
+      
+
+          GivingCampus: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/campuses", params, info, [], context);
+
+            },
+            GivingCampusById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/campuses", params, info, [], context);
+            },
+      
+
+          GivingDonation: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/donations", params, info, ["designations","labels","note","refund"], context);
+
+            },
+            GivingDonationById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/donations", params, info, ["designations","labels","note","refund"], context);
+            },
+      
+
+          GivingFund: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/funds", params, info, [], context);
+
+            },
+            GivingFundById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/funds", params, info, [], context);
+            },
+      
+
+          GivingLabel: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/labels", params, info, [], context);
+
+            },
+            GivingLabelById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/labels", params, info, [], context);
+            },
+      
+
+          GivingPaymentSource: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/payment_sources", params, info, [], context);
+
+            },
+            GivingPaymentSourceById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/payment_sources", params, info, [], context);
+            },
+      
+
+          GivingPerson: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/people", params, info, [], context);
+
+            },
+            GivingPersonById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/people", params, info, [], context);
+            },
+      
+
+          GivingRecurringDonation: async (
+              parent: any,
+              params: { limit?: 10 | undefined; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/recurring_donations", params, info, ["designations"], context);
+
+            },
+            GivingRecurringDonationById: async (
+              parent: any,
+              params: { limit?: 10 | undefined; id: string; where: any; order: any },
+              context: any,
+              info: any
+            ) => {
+              return fetchData("https://api.planningcenteronline.com/giving/v2/recurring_donations", params, info, ["designations"], context);
+            },
       }, 
       CalendarEvent: {
        relationships :(parent: any) => parent
@@ -1837,13 +2046,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsEvent: {
+      Check_insEvent: {
        relationships :(parent: any) => parent
       },
-      CheckinsEventRelationships: {
+      Check_insEventRelationships: {
         
 
-        CheckinsAttendance_types: async (
+        Check_insAttendance_types: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1854,7 +2063,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsEvent_labels: async (
+        Check_insEvent_labels: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1865,7 +2074,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsEvent_periods: async (
+        Check_insEvent_periods: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1876,7 +2085,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocations: async (
+        Check_insLocations: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1887,7 +2096,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsPerson_events: async (
+        Check_insPerson_events: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1899,13 +2108,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsHeadcount: {
+      Check_insHeadcount: {
        relationships :(parent: any) => parent
       },
-      CheckinsHeadcountRelationships: {
+      Check_insHeadcountRelationships: {
         
 
-        CheckinsAttendance_type: async (
+        Check_insAttendance_type: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1917,13 +2126,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsCheckIn: {
+      Check_insCheckIn: {
        relationships :(parent: any) => parent
       },
-      CheckinsCheckInRelationships: {
+      Check_insCheckInRelationships: {
         
 
-        CheckinsCheck_in_group: async (
+        Check_insCheck_in_group: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1934,7 +2143,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsCheck_in_times: async (
+        Check_insCheck_in_times: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1945,7 +2154,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsEvent_period: async (
+        Check_insEvent_period: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1956,7 +2165,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocations: async (
+        Check_insLocations: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1968,13 +2177,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsStation: {
+      Check_insStation: {
        relationships :(parent: any) => parent
       },
-      CheckinsStationRelationships: {
+      Check_insStationRelationships: {
         
 
-        CheckinsCheck_in_groups: async (
+        Check_insCheck_in_groups: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1985,7 +2194,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocation: async (
+        Check_insLocation: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -1997,13 +2206,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsLabel: {
+      Check_insLabel: {
        relationships :(parent: any) => parent
       },
-      CheckinsLabelRelationships: {
+      Check_insLabelRelationships: {
         
 
-        CheckinsEvent_labels: async (
+        Check_insEvent_labels: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2014,7 +2223,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocation_labels: async (
+        Check_insLocation_labels: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2026,13 +2235,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsCheckInGroup: {
+      Check_insCheckInGroup: {
        relationships :(parent: any) => parent
       },
-      CheckinsCheckInGroupRelationships: {
+      Check_insCheckInGroupRelationships: {
         
 
-        CheckinsEvent_period: async (
+        Check_insEvent_period: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2044,13 +2253,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsEventTime: {
+      Check_insEventTime: {
        relationships :(parent: any) => parent
       },
-      CheckinsEventTimeRelationships: {
+      Check_insEventTimeRelationships: {
         
 
-        CheckinsEvent_period: async (
+        Check_insEvent_period: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2061,7 +2270,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsAvailable_locations: async (
+        Check_insAvailable_locations: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2072,7 +2281,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocation_event_times: async (
+        Check_insLocation_event_times: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2084,13 +2293,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsLocationEventPeriod: {
+      Check_insLocationEventPeriod: {
        relationships :(parent: any) => parent
       },
-      CheckinsLocationEventPeriodRelationships: {
+      Check_insLocationEventPeriodRelationships: {
         
 
-        CheckinsEvent_period: async (
+        Check_insEvent_period: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2101,7 +2310,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocation: async (
+        Check_insLocation: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2113,13 +2322,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsLocationEventTime: {
+      Check_insLocationEventTime: {
        relationships :(parent: any) => parent
       },
-      CheckinsLocationEventTimeRelationships: {
+      Check_insLocationEventTimeRelationships: {
         
 
-        CheckinsLocation: async (
+        Check_insLocation: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2131,13 +2340,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsLocationLabel: {
+      Check_insLocationLabel: {
        relationships :(parent: any) => parent
       },
-      CheckinsLocationLabelRelationships: {
+      Check_insLocationLabelRelationships: {
         
 
-        CheckinsLocation: async (
+        Check_insLocation: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2149,13 +2358,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsLocation: {
+      Check_insLocation: {
        relationships :(parent: any) => parent
       },
-      CheckinsLocationRelationships: {
+      Check_insLocationRelationships: {
         
 
-        CheckinsLocations: async (
+        Check_insLocations: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2166,7 +2375,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsParent: async (
+        Check_insParent: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2177,7 +2386,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocation_event_periods: async (
+        Check_insLocation_event_periods: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2188,7 +2397,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocation_event_times: async (
+        Check_insLocation_event_times: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2199,7 +2408,7 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsLocation_labels: async (
+        Check_insLocation_labels: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2211,13 +2420,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsEventPeriod: {
+      Check_insEventPeriod: {
        relationships :(parent: any) => parent
       },
-      CheckinsEventPeriodRelationships: {
+      Check_insEventPeriodRelationships: {
         
 
-        CheckinsLocation_event_periods: async (
+        Check_insLocation_event_periods: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2229,13 +2438,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      CheckinsPerson: {
+      Check_insPerson: {
        relationships :(parent: any) => parent
       },
-      CheckinsPersonRelationships: {
+      Check_insPersonRelationships: {
         
 
-        CheckinsOrganization: async (
+        Check_insOrganization: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
@@ -2246,183 +2455,13 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        CheckinsPerson_events: async (
+        Check_insPerson_events: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
           info: any
         ) => {
           const url = parent?.links?.self + "/person_events"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      GivingDesignationRefund: {
-       relationships :(parent: any) => parent
-      },
-      GivingDesignationRefundRelationships: {
-        
-
-        GivingDesignation: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/designation"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      GivingDonation: {
-       relationships :(parent: any) => parent
-      },
-      GivingDonationRelationships: {
-        
-
-        GivingDesignations: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/designations"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        GivingNote: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/note"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        GivingRefund: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/refund"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      GivingRefund: {
-       relationships :(parent: any) => parent
-      },
-      GivingRefundRelationships: {
-        
-
-        GivingDesignation_refunds: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/designation_refunds"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      GivingPerson: {
-       relationships :(parent: any) => parent
-      },
-      GivingPersonRelationships: {
-        
-
-        GivingPayment_methods: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/payment_methods"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        GivingPledges: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/pledges"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      GivingRecurringDonation: {
-       relationships :(parent: any) => parent
-      },
-      GivingRecurringDonationRelationships: {
-        
-
-        GivingPayment_method: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/payment_method"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        GivingDesignations: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/designations"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      GivingPledgeCampaign: {
-       relationships :(parent: any) => parent
-      },
-      GivingPledgeCampaignRelationships: {
-        
-
-        GivingPledges: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/pledges"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      GivingPledge: {
-       relationships :(parent: any) => parent
-      },
-      GivingPledgeRelationships: {
-        
-
-        GivingPledge_campaign: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/pledge_campaign"
           return fetchData(url, params, info, [], context);
         }
           
@@ -3117,86 +3156,6 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           
       }
     ,
-      PublishingChannel: {
-       relationships :(parent: any) => parent
-      },
-      PublishingChannelRelationships: {
-        
-
-        PublishingChannel_default_episode_resources: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/channel_default_episode_resources"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        PublishingChannel_default_times: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/channel_default_times"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        PublishingNext_times: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/next_times"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        PublishingStatistics: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/statistics"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
-      PublishingEpisode: {
-       relationships :(parent: any) => parent
-      },
-      PublishingEpisodeRelationships: {
-        
-
-        PublishingEpisode_resources: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/episode_resources"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
-        PublishingEpisode_times: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/episode_times"
-          return fetchData(url, params, info, [], context);
-        }
-          
-      }
-    ,
       ServicesItem: {
        relationships :(parent: any) => parent
       },
@@ -3780,17 +3739,6 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
         }
           ,
 
-        ServicesEmails: async (
-          parent: any,
-          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
-          context: any,
-          info: any
-        ) => {
-          const url = parent?.links?.self + "/emails"
-          return fetchData(url, params, info, [], context);
-        }
-          ,
-
         ServicesPerson_team_position_assignments: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
@@ -4324,6 +4272,284 @@ const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:an
           info: any
         ) => {
           const url = parent?.links?.self + "/zooms"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      ResourcesEvent: {
+       relationships :(parent: any) => parent
+      },
+      ResourcesEventRelationships: {
+        
+
+        ResourcesEvent_connections: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/event_connections"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      ResourcesEventInstance: {
+       relationships :(parent: any) => parent
+      },
+      ResourcesEventInstanceRelationships: {
+        
+
+        ResourcesEvent_times: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/event_times"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      ResourcesPerson: {
+       relationships :(parent: any) => parent
+      },
+      ResourcesPersonRelationships: {
+        
+
+        ResourcesOrganization: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/organization"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      ResourcesResourceApprovalGroup: {
+       relationships :(parent: any) => parent
+      },
+      ResourcesResourceApprovalGroupRelationships: {
+        
+
+        ResourcesRequired_approvals: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/required_approvals"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      ResourcesResource: {
+       relationships :(parent: any) => parent
+      },
+      ResourcesResourceRelationships: {
+        
+
+        ResourcesRequired_approvals: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/required_approvals"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      ResourcesRoomSetup: {
+       relationships :(parent: any) => parent
+      },
+      ResourcesRoomSetupRelationships: {
+        
+
+        ResourcesResource_suggestions: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/resource_suggestions"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      GivingDesignationRefund: {
+       relationships :(parent: any) => parent
+      },
+      GivingDesignationRefundRelationships: {
+        
+
+        GivingDesignation: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/designation"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      GivingDonation: {
+       relationships :(parent: any) => parent
+      },
+      GivingDonationRelationships: {
+        
+
+        GivingDesignations: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/designations"
+          return fetchData(url, params, info, [], context);
+        }
+          ,
+
+        GivingNote: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/note"
+          return fetchData(url, params, info, [], context);
+        }
+          ,
+
+        GivingRefund: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/refund"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      GivingRefund: {
+       relationships :(parent: any) => parent
+      },
+      GivingRefundRelationships: {
+        
+
+        GivingDesignation_refunds: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/designation_refunds"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      GivingPerson: {
+       relationships :(parent: any) => parent
+      },
+      GivingPersonRelationships: {
+        
+
+        GivingPayment_methods: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/payment_methods"
+          return fetchData(url, params, info, [], context);
+        }
+          ,
+
+        GivingPledges: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/pledges"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      GivingRecurringDonation: {
+       relationships :(parent: any) => parent
+      },
+      GivingRecurringDonationRelationships: {
+        
+
+        GivingPayment_method: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/payment_method"
+          return fetchData(url, params, info, [], context);
+        }
+          ,
+
+        GivingDesignations: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/designations"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      GivingPledgeCampaign: {
+       relationships :(parent: any) => parent
+      },
+      GivingPledgeCampaignRelationships: {
+        
+
+        GivingPledges: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/pledges"
+          return fetchData(url, params, info, [], context);
+        }
+          
+      }
+    ,
+      GivingPledge: {
+       relationships :(parent: any) => parent
+      },
+      GivingPledgeRelationships: {
+        
+
+        GivingPledge_campaign: async (
+          parent: any,
+          params: { limit?: 10 | undefined; id?: string; where: any; order: any },
+          context: any,
+          info: any
+        ) => {
+          const url = parent?.links?.self + "/pledge_campaign"
           return fetchData(url, params, info, [], context);
         }
           
