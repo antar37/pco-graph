@@ -135,7 +135,6 @@ const generateQueries = (jsonApiSpec: { resources: Resource[] }) => {
       e.data.relationships.inbound_edges.data.map((inbound) => {
         let path = inbound.attributes.path;
 
-        console.log(inbound.relationships.tail);
         let url = path.split("/").slice(0, -2).join("/");
         let entity = path.split("/").slice(-1).join("");
 
@@ -334,26 +333,27 @@ const getEntityName = (entity: Resource) =>
 const generateGraphQLSchema = async (jsonApiSpec: {
   resources: Resource[];
 }) => {
-  await fetchAllVertices();
+  try {
+    await fetchAllVertices();
 
-  const resources = jsonApiSpec.resources;
+    const resources = jsonApiSpec.resources;
 
-  const topLevelQueries = resources.filter((e) =>
-    e.data.relationships?.inbound_edges?.data?.find(
-      ({ relationships }) => relationships.tail.data.id === "organization"
-    )
-  );
-  if (!topLevelQueries) return;
+    const topLevelQueries = resources.filter((e) =>
+      e.data.relationships?.inbound_edges?.data?.find(
+        ({ relationships }) => relationships.tail.data.id === "organization"
+      )
+    );
+    if (!topLevelQueries) return;
 
-  const types = resources.map((entity) => generateTypes(entity)).join("\n");
+    const types = resources.map((entity) => generateTypes(entity)).join("\n");
 
-  const whereString = (entity: Resource) =>
-    entity.data.relationships.can_query.data.length
-      ? `where: ${getEntityName(entity)}WhereAttributes,`
-      : "";
-  const queries = topLevelQueries
-    .map(
-      (entity) => `
+    const whereString = (entity: Resource) =>
+      entity.data.relationships.can_query.data.length
+        ? `where: ${getEntityName(entity)}WhereAttributes,`
+        : "";
+    const queries = topLevelQueries
+      .map(
+        (entity) => `
       ${getEntityName(entity)}ById(id: ID!): ${getEntityName(entity)}
       ${getEntityName(entity)}(
           limit: Int,
@@ -361,10 +361,10 @@ const generateGraphQLSchema = async (jsonApiSpec: {
           order: ${getEntityName(entity)}OrderInput
       ): [${getEntityName(entity)}!]
     `
-    )
-    .join("\n");
+      )
+      .join("\n");
 
-  const schemaDefinition = `
+    const schemaDefinition = `
     ${types}
     type Query {
       ${queries}
@@ -375,13 +375,10 @@ const generateGraphQLSchema = async (jsonApiSpec: {
       desc
     }
   `;
-
-  // Print the schema definition for debugging
-  console.log("Generated GraphQL Schema:", schemaDefinition);
-
-  try {
     const schema = buildSchema(schemaDefinition);
     const generatedResolvers = generateQueries(jsonApiSpec);
+    fs.writeFileSync("src/app/graphql/schema.graphql", schemaDefinition);
+
     return { schema, resolvers: generatedResolvers, schemaDefinition };
   } catch (error) {
     const errorLine = schemaDefinition.split("\n")[error.locations[0].line - 1];
@@ -391,29 +388,27 @@ const generateGraphQLSchema = async (jsonApiSpec: {
   }
 };
 
-const getJSONfromUrl = async (
-  url: RequestInfo | URL,
-  init: RequestInit | undefined
-) => {
-  const response = await fetch(url, init);
-  const json = await response.json();
-  return json.data;
-};
-
-try {
-  const { schema, resolvers, schemaDefinition } = generateGraphQLSchema({
+const generateFiles = async () => {
+  const { schema, resolvers, schemaDefinition } = await generateGraphQLSchema({
     resources: vertices,
   });
 
-  fs.writeFileSync("src/app/graphql/schema.graphql", schemaDefinition);
+  if (!schema || !resolvers || !schemaDefinition)
+    throw new Error(
+      `Error generating schema ${JSON.stringify({
+        schema,
+        resolvers,
+        schemaDefinition,
+      })}`
+    );
 
   fs.writeFileSync(
-    "src/app//graphql/resolvers.ts",
+    "src/app/graphql/resolvers.ts",
     'const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:any}}}):string[]|null=>{const data=item?.relationships?.[type]?.data;if(!data)return null;return data?.length?data?.map((f:{id:any})=>f.id):[data.id]};const getJSONfromUrl=async(url:RequestInfo|URL,options?:RequestInit):Promise<any>=>{const response=await fetch(url,options).then(res=>res.json()).catch(err=>{console.log(err)});if(response.errors)throw new Error(JSON.stringify({detail:response.errors[0].detail,url},null,4));return response};type RelatedData={included:{id:string}[]};const getRelatedData=(data:RelatedData,Ids:string[]=[]):{id:string}[]|null=>(Ids&&data.included.filter(({id})=>Ids?.includes(id)))||null;const getRelatedFieldNames=(info:{fieldNodes:{selectionSet:{selections:any[]}}[]},includesArray:string[]):string[]=>{const attributesArray=info?.fieldNodes[0].selectionSet?.selections?.find((e:any)=>e.name.value==="relationships");if(!attributesArray)return[];const selectedNodes=attributesArray.selectionSet?.selections?.filter((f:any)=>includesArray.includes(f.name.value));return selectedNodes.map((e:{name:{value:any}})=>e.name.value)};const zipRelatedData=(data:RelatedData,item:any,includesArray:(string|number)[]):{[key:string]:any}=>{const relatedData:{[key:string]:any}={};includesArray.map(type=>{const ids=getRelatedIds(type,item);relatedData[type]=getRelatedData(data,ids||[])||[]});return relatedData};const formatWhere=(where:{[s:string]:unknown}|ArrayLike<unknown>):string=>where?Object.entries(where).map(([key,value])=>`&where[${key}]=${value}`).join(""):"";const fetchData=async(endpoint:string,params:{limit?:number;where?:any;order?:any;id?:string},info:any,includesArray:string[],context:any):Promise<any>=>{const{limit=10,where,order,id}=params;const whereArg=where?formatWhere(where):"&where[status]=active";const orderArg=order?`&order=${order.sort==="desc"? "-":""}${order.field||""}`:"";const includes=getRelatedFieldNames(info,includesArray).join(",");const url=id?`${endpoint}/${id}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`:`${endpoint}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`;const response=await getJSONfromUrl(url,{method:"GET",headers:{Authorization:"Basic "+btoa(process.env.PCO_APP_ID+":"+process.env.PCO_SECRET),},});return response.data.map((e:{attributes:any;id:any})=>{const relatedData=zipRelatedData(response,e,includesArray);return{...e,attributes:{...e.attributes,id:e.id,},relationships:relatedData,};})||[];};' +
       `
 
   export const resolvers = { Query:  {${resolvers.parentQueryResolvers}}, ${resolvers.childQueryResolvers}  }`
   );
-} catch (error) {
-  console.error("Error generating schema:", error);
-}
+};
+generateFiles();
+
