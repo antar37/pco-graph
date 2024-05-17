@@ -92,16 +92,6 @@ const generateQueries = (jsonApiSpec: { resources: Resource[] }) => {
       );
       const data = resource.data;
       const name = `${capitalize(resource.name)}${data.attributes.name}`;
-      const orderString =
-        'const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${order?.field !== undefined ? order?.field : ""}`';
-      const urlString =
-        "`" +
-        `${data.attributes.path}` +
-        "?per_page=${limit}&include=${includes}${whereArg}${orderArg}`,";
-      const urlByIdString =
-        "`" +
-        `${data.attributes.path}` +
-        "/${id}?per_page=${limit}&include=${includes}`,";
       const query = `
           ${name}: async (
               parent: any,
@@ -109,39 +99,10 @@ const generateQueries = (jsonApiSpec: { resources: Resource[] }) => {
               context: any,
               info: any
             ) => {
-            const { limit = 10, where, order } = params;
-            const whereArg = where ? formatWhere(where) : "&where[status]=active";
-            ${orderString};
-            const includes = getRelatedFieldNames(info, ${JSON.stringify(
-              includesArray
-            )}).join(",");
-              
-            let response = await getJSONfromUrl(${urlString}
-              {
-                method: "GET",
-                headers: {
-                  Authorization:
-                    "Basic " +
-                    btoa(process.env.PCO_APP_ID + ":" + process.env.PCO_SECRET),
-                },
-              }
-            );
-  
-            let result = response.data.map((e: { attributes: any; id: any }) => {
-              const relatedData = zipRelatedData(response, e, ${JSON.stringify(
-                includesArray
-              )});
-              return {
-                ...e,
-                attributes: {
-                  ...e.attributes,
-                  id: e.id,
-                },
-                relationships: relatedData,
-              };
-            });
-  
-            return result || [];
+              return fetchData("${
+                data.attributes.path
+              }", params, info, ${JSON.stringify(includesArray)}, context);
+
             },
             ${name}ById: async (
               parent: any,
@@ -149,37 +110,9 @@ const generateQueries = (jsonApiSpec: { resources: Resource[] }) => {
               context: any,
               info: any
             ) => {
-              const { id, limit = 10 } = params;
-              const includes = getRelatedFieldNames(info, ${JSON.stringify(
-                includesArray
-              )}).join(",");
-          let response = await getJSONfromUrl(
-                ${urlByIdString}
-                {
-                  method: "GET",
-                  headers: {
-                    Authorization:
-                      "Basic " +
-                      btoa(process.env.PCO_APP_ID + ":" + process.env.PCO_SECRET),
-                  },
-                }
-              );
-      
-              let result = response.data.map((e: { attributes: any; id: any }) => {
-                const relatedData = zipRelatedData(response, e, ${JSON.stringify(
-                  includesArray
-                )});
-                return {
-                  ...e,
-                  attributes: {
-                    ...e.attributes,
-                    id: e.id,
-                  },
-                  relationships: relatedData,
-                };
-              });
-      
-              return result || null;
+              return fetchData("${
+                data.attributes.path
+              }", params, info, ${JSON.stringify(includesArray)}, context);
             },
       `;
       return query;
@@ -197,47 +130,15 @@ const generateQueries = (jsonApiSpec: { resources: Resource[] }) => {
           'const orderArg = `&order=${order?.sort === "desc" ? "-" : ""}${order?.field !== undefined ? order?.field : ""}`';
 
         return `
-        
+
         ${key}: async (
           parent: any,
           params: { limit?: 10 | undefined; id?: string; where: any; order: any },
           context: any,
           info: any
         ) => {
-          
-          const url = parent?.links?.self + "/${value.entity}" 
-          const { limit = 10, where, order } = params;
-          const whereArg = where ? formatWhere(where) : "&where[status]=active";
-          ${orderString};
-          const includes = getRelatedFieldNames(info, ${JSON.stringify(
-            includesArray
-          )}).join(",");
-            
-          let response = await getJSONfromUrl(url,
-            {
-              method: "GET",
-              headers: {
-                Authorization:
-                  "Basic " +
-                  btoa(process.env.PCO_APP_ID + ":" + process.env.PCO_SECRET),
-              },
-            }
-          );
-
-          let result = response.data.map((e: { attributes: any; id: any }) => {
-            const relatedData = zipRelatedData(response, e, ${JSON.stringify(
-              includesArray
-            )});
-            return {
-              ...e,
-              attributes: {
-                ...e.attributes,
-                id: e.id,
-              },
-              relationships: relatedData,
-            };
-          })
-          return result || null;
+          const url = parent?.links?.self + "/${value.entity}"
+          return fetchData(url, params, info, [], context);
         }
           `;
       });
@@ -321,8 +222,8 @@ const generateTypes = ({ name, data }: Resource) => {
         .join("")}
     }`
     : "";
-  return ` 
-  
+  return `
+
     enum ${typeName}OrderByEnum {
       ${attributes
         .map(
@@ -331,13 +232,13 @@ const generateTypes = ({ name, data }: Resource) => {
         )
         .join("")}
     }
-  
+
     input ${typeName}OrderInput {
       """ this will append a (-) to the field name if desc """
       sort: sortEnum = asc
-      field: ${typeName}OrderByEnum 
+      field: ${typeName}OrderByEnum
     }
-    
+
     ${whereString}
     ${relationshipsString}
     type ${typeName}Attributes {
@@ -351,7 +252,7 @@ const generateTypes = ({ name, data }: Resource) => {
         )
         .join("")}
     }
-  
+
     type ${typeName} {
       id: ID!
       attributes: ${typeName}Attributes
@@ -387,7 +288,7 @@ function generateGraphQLSchema(jsonApiSpec: { resources: Resource[] }) {
       (entity) => `
       ${getEntityName(entity)}ById(id: ID!): ${getEntityName(entity)}
       ${getEntityName(entity)}(
-          limit: Int, 
+          limit: Int,
           ${whereString(entity)}
           order: ${getEntityName(entity)}OrderInput
           ): [${getEntityName(entity)}!]
@@ -400,14 +301,13 @@ function generateGraphQLSchema(jsonApiSpec: { resources: Resource[] }) {
       type Query {
         ${queries}
       }
-  
+
       enum sortEnum {
         asc
         desc
       }
-      
+
     `;
-  fs.writeFileSync("schemaDefinition.graphql", schemaDefinition);
 
   const schema = buildSchema(schemaDefinition);
   const generatedResolvers = generateQueries(jsonApiSpec);
@@ -427,9 +327,13 @@ const { schema, resolvers, schemaDefinition } = generateGraphQLSchema({
   resources: vertices,
 });
 
-fs.writeFileSync("schema.graphql", schemaDefinition);
+fs.writeFileSync("src/app/graphql/schema.graphql", schemaDefinition);
 
 fs.writeFileSync(
-  "resolvers.ts",
-  `export const resolvers = { Query:  {${resolvers.parentQueryResolvers}}, ${resolvers.childQueryResolvers}  }`
+  "src/app/graphql/resolvers.ts",
+  'const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:any}}}):string[]|null=>{const data=item?.relationships?.[type]?.data;if(!data)return null;return data?.length?data?.map((f:{id:any})=>f.id):[data.id]};const getJSONfromUrl=async(url:RequestInfo|URL,options?:RequestInit):Promise<any>=>{const response=await fetch(url,options).then(res=>res.json()).catch(err=>{console.log(err)});if(response.errors)throw new Error(JSON.stringify({detail:response.errors[0].detail,url},null,4));return response};type RelatedData={included:{id:string}[]};const getRelatedData=(data:RelatedData,Ids:string[]=[]):{id:string}[]|null=>(Ids&&data.included.filter(({id})=>Ids?.includes(id)))||null;const getRelatedFieldNames=(info:{fieldNodes:{selectionSet:{selections:any[]}}[]},includesArray:string[]):string[]=>{const attributesArray=info?.fieldNodes[0].selectionSet?.selections?.find((e:any)=>e.name.value==="relationships");if(!attributesArray)return[];const selectedNodes=attributesArray.selectionSet?.selections?.filter((f:any)=>includesArray.includes(f.name.value));return selectedNodes.map((e:{name:{value:any}})=>e.name.value)};const zipRelatedData=(data:RelatedData,item:any,includesArray:(string|number)[]):{[key:string]:any}=>{const relatedData:{[key:string]:any}={};includesArray.map(type=>{const ids=getRelatedIds(type,item);relatedData[type]=getRelatedData(data,ids||[])||[]});return relatedData};const formatWhere=(where:{[s:string]:unknown}|ArrayLike<unknown>):string=>where?Object.entries(where).map(([key,value])=>`&where[${key}]=${value}`).join(""):"";const fetchData=async(endpoint:string,params:{limit?:number;where?:any;order?:any;id?:string},info:any,includesArray:string[],context:any):Promise<any>=>{const{limit=10,where,order,id}=params;const whereArg=where?formatWhere(where):"&where[status]=active";const orderArg=order?`&order=${order.sort==="desc"? "-":""}${order.field||""}`:"";const includes=getRelatedFieldNames(info,includesArray).join(",");const url=id?`${endpoint}/${id}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`:`${endpoint}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`;const response=await getJSONfromUrl(url,{method:"GET",headers:{Authorization:"Basic "+btoa(process.env.PCO_APP_ID+":"+process.env.PCO_SECRET),},});return response.data.map((e:{attributes:any;id:any})=>{const relatedData=zipRelatedData(response,e,includesArray);return{...e,attributes:{...e.attributes,id:e.id,},relationships:relatedData,};})||[];};' +
+    `
+
+  export const resolvers = { Query:  {${resolvers.parentQueryResolvers}}, ${resolvers.childQueryResolvers}  }`
 );
+

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "yarn ts-node generatePCOGraphQL"
+    "generate": "pnpm ts-node generatePCOGraphQL"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
@@ -33,3 +33,4 @@
     "ts-node": "^10.9.1"
   }
 }
+

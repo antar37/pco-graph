@@ -1,6 +1,8 @@
+import { readFileSync } from "fs";
+import gql from "graphql-tag";
 import { createSchema, createYoga } from "graphql-yoga";
-import { resolvers } from "./resolversTemplate";
-import typeDefs from "./typeDefs";
+import { resolvers } from "./resolvers";
+const typeDefs = gql(readFileSync("schema.graphql", "utf8"));
 
 const { handleRequest } = createYoga({
   schema: createSchema({
@@ -20,3 +22,4 @@ export {
   handleRequest as OPTIONS,
   handleRequest as POST,
 };
+
