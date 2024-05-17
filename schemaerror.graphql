@@ -1605,8 +1605,8 @@ name: String
     
     
       type CheckinsAttendanceTypeRelationships {
-        CheckinsEvent: [CheckinsEvent]
-CheckinsHeadcounts: [CheckinsHeadcount]
+        Check-insEvent: [Check-insEvent]
+Check-insHeadcounts: [Check-insHeadcount]
       }
     
 
@@ -1675,17 +1675,17 @@ updated_at: String
     
     
       type CheckinsCheckInRelationships {
-        CheckinsCheck_in_group: [CheckinsCheckInGroup]
-CheckinsCheck_in_times: [CheckinsCheckInTime]
-CheckinsChecked_in_at: [CheckinsStation]
-CheckinsChecked_in_by: [CheckinsPerson]
-CheckinsChecked_out_by: [CheckinsPerson]
-CheckinsEvent: [CheckinsEvent]
-CheckinsEvent_period: [CheckinsEventPeriod]
-CheckinsEvent_times: [CheckinsEventTime]
-CheckinsLocations: [CheckinsLocation]
-CheckinsOptions: [CheckinsOption]
-CheckinsPerson: [CheckinsPerson]
+        Check-insCheck_in_group: [Check-insCheckInGroup]
+Check-insCheck_in_times: [Check-insCheckInTime]
+Check-insChecked_in_at: [Check-insStation]
+Check-insChecked_in_by: [Check-insPerson]
+Check-insChecked_out_by: [Check-insPerson]
+Check-insEvent: [Check-insEvent]
+Check-insEvent_period: [Check-insEventPeriod]
+Check-insEvent_times: [Check-insEventTime]
+Check-insLocations: [Check-insLocation]
+Check-insOptions: [Check-insOption]
+Check-insPerson: [Check-insPerson]
       }
     
 
@@ -1773,9 +1773,9 @@ updated_at
     
     
       type CheckinsCheckInGroupRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsEvent_period: [CheckinsEventPeriod]
-CheckinsPrint_station: [CheckinsStation]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insEvent_period: [Check-insEventPeriod]
+Check-insPrint_station: [Check-insStation]
       }
     
 
@@ -1890,13 +1890,13 @@ name: String
     
     
       type CheckinsEventRelationships {
-        CheckinsAttendance_types: [CheckinsAttendanceType]
-CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsCurrent_event_times: [CheckinsEventTime]
-CheckinsEvent_labels: [CheckinsEventLabel]
-CheckinsEvent_periods: [CheckinsEventPeriod]
-CheckinsLocations: [CheckinsLocation]
-CheckinsPerson_events: [CheckinsPersonEvent]
+        Check-insAttendance_types: [Check-insAttendanceType]
+Check-insCheck_ins: [Check-insCheckIn]
+Check-insCurrent_event_times: [Check-insEventTime]
+Check-insEvent_labels: [Check-insEventLabel]
+Check-insEvent_periods: [Check-insEventPeriod]
+Check-insLocations: [Check-insLocation]
+Check-insPerson_events: [Check-insPersonEvent]
       }
     
 
@@ -1972,8 +1972,8 @@ updated_at
     
     
       type CheckinsEventLabelRelationships {
-        CheckinsEvent: [CheckinsEvent]
-CheckinsLabel: [CheckinsLabel]
+        Check-insEvent: [Check-insEvent]
+Check-insLabel: [Check-insLabel]
       }
     
 
@@ -2040,10 +2040,10 @@ starts_at: String
     
     
       type CheckinsEventPeriodRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsEvent: [CheckinsEvent]
-CheckinsEvent_times: [CheckinsEventTime]
-CheckinsLocation_event_periods: [CheckinsLocationEventPeriod]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insEvent: [Check-insEvent]
+Check-insEvent_times: [Check-insEventTime]
+Check-insLocation_event_periods: [Check-insLocationEventPeriod]
       }
     
 
@@ -2123,12 +2123,12 @@ updated_at: String
     
     
       type CheckinsEventTimeRelationships {
-        CheckinsAvailable_locations: [CheckinsLocation]
-CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsEvent: [CheckinsEvent]
-CheckinsEvent_period: [CheckinsEventPeriod]
-CheckinsHeadcounts: [CheckinsHeadcount]
-CheckinsLocation_event_times: [CheckinsLocationEventTime]
+        Check-insAvailable_locations: [Check-insLocation]
+Check-insCheck_ins: [Check-insCheckIn]
+Check-insEvent: [Check-insEvent]
+Check-insEvent_period: [Check-insEventPeriod]
+Check-insHeadcounts: [Check-insHeadcount]
+Check-insLocation_event_times: [Check-insLocationEventTime]
       }
     
 
@@ -2218,8 +2218,8 @@ updated_at: String
     
     
       type CheckinsHeadcountRelationships {
-        CheckinsAttendance_type: [CheckinsAttendanceType]
-CheckinsEvent_time: [CheckinsEventTime]
+        Check-insAttendance_type: [Check-insAttendanceType]
+Check-insEvent_time: [Check-insEventTime]
       }
     
 
@@ -2267,8 +2267,8 @@ updated_at
     
     
       type CheckinsLabelRelationships {
-        CheckinsEvent_labels: [CheckinsEventLabel]
-CheckinsLocation_labels: [CheckinsLocationLabel]
+        Check-insEvent_labels: [Check-insEventLabel]
+Check-insLocation_labels: [Check-insLocationLabel]
       }
     
 
@@ -2341,14 +2341,14 @@ created_at
     
     
       type CheckinsLocationRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsEvent: [CheckinsEvent]
-CheckinsLocation_event_periods: [CheckinsLocationEventPeriod]
-CheckinsLocation_event_times: [CheckinsLocationEventTime]
-CheckinsLocation_labels: [CheckinsLocationLabel]
-CheckinsLocations: [CheckinsLocation]
-CheckinsOptions: [CheckinsOption]
-CheckinsParent: [CheckinsLocation]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insEvent: [Check-insEvent]
+Check-insLocation_event_periods: [Check-insLocationEventPeriod]
+Check-insLocation_event_times: [Check-insLocationEventTime]
+Check-insLocation_labels: [Check-insLocationLabel]
+Check-insLocations: [Check-insLocation]
+Check-insOptions: [Check-insOption]
+Check-insParent: [Check-insLocation]
       }
     
 
@@ -2459,9 +2459,9 @@ updated_at
     
     
       type CheckinsLocationEventPeriodRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsEvent_period: [CheckinsEventPeriod]
-CheckinsLocation: [CheckinsLocation]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insEvent_period: [Check-insEventPeriod]
+Check-insLocation: [Check-insLocation]
       }
     
 
@@ -2521,9 +2521,9 @@ updated_at: String
     
     
       type CheckinsLocationEventTimeRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsEvent_time: [CheckinsEventTime]
-CheckinsLocation: [CheckinsLocation]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insEvent_time: [Check-insEventTime]
+Check-insLocation: [Check-insLocation]
       }
     
 
@@ -2579,8 +2579,8 @@ updated_at
     
     
       type CheckinsLocationLabelRelationships {
-        CheckinsLabel: [CheckinsLabel]
-CheckinsLocation: [CheckinsLocation]
+        Check-insLabel: [Check-insLabel]
+Check-insLocation: [Check-insLocation]
       }
     
 
@@ -2638,8 +2638,8 @@ updated_at
     
     
       type CheckinsOptionRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsLabel: [CheckinsLabel]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insLabel: [Check-insLabel]
       }
     
 
@@ -2693,16 +2693,16 @@ updated_at
     
     
       type CheckinsOrganizationRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsEvent_times: [CheckinsEventTime]
-CheckinsEvents: [CheckinsEvent]
-CheckinsHeadcounts: [CheckinsHeadcount]
-CheckinsLabels: [CheckinsLabel]
-CheckinsOptions: [CheckinsOption]
-CheckinsPasses: [CheckinsPass]
-CheckinsPeople: [CheckinsPerson]
-CheckinsStations: [CheckinsStation]
-CheckinsThemes: [CheckinsTheme]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insEvent_times: [Check-insEventTime]
+Check-insEvents: [Check-insEvent]
+Check-insHeadcounts: [Check-insHeadcount]
+Check-insLabels: [Check-insLabel]
+Check-insOptions: [Check-insOption]
+Check-insPasses: [Check-insPass]
+Check-insPeople: [Check-insPerson]
+Check-insStations: [Check-insStation]
+Check-insThemes: [Check-insTheme]
       }
     
 
@@ -2772,7 +2772,7 @@ updated_at
     
     
       type CheckinsPassRelationships {
-        CheckinsPerson: [CheckinsPerson]
+        Check-insPerson: [Check-insPerson]
       }
     
 
@@ -2850,10 +2850,10 @@ search_name: String
     
     
       type CheckinsPersonRelationships {
-        CheckinsCheck_ins: [CheckinsCheckIn]
-CheckinsOrganization: [CheckinsOrganization]
-CheckinsPasses: [CheckinsPass]
-CheckinsPerson_events: [CheckinsPersonEvent]
+        Check-insCheck_ins: [Check-insCheckIn]
+Check-insOrganization: [Check-insOrganization]
+Check-insPasses: [Check-insPass]
+Check-insPerson_events: [Check-insPersonEvent]
       }
     
 
@@ -2986,10 +2986,10 @@ created_at
     
     
       type CheckinsPersonEventRelationships {
-        CheckinsEvent: [CheckinsEvent]
-CheckinsFirst_check_in: [CheckinsCheckIn]
-CheckinsLast_check_in: [CheckinsCheckIn]
-CheckinsPerson: [CheckinsPerson]
+        Check-insEvent: [Check-insEvent]
+Check-insFirst_check_in: [Check-insCheckIn]
+Check-insLast_check_in: [Check-insCheckIn]
+Check-insPerson: [Check-insPerson]
       }
     
 
@@ -3109,12 +3109,12 @@ check_in_count
     
     
       type CheckinsStationRelationships {
-        CheckinsCheck_in_groups: [CheckinsCheckInGroup]
-CheckinsChecked_in_at_check_ins: [CheckinsCheckIn]
-CheckinsEvent: [CheckinsEvent]
-CheckinsLocation: [CheckinsLocation]
-CheckinsPrint_station: [CheckinsStation]
-CheckinsTheme: [CheckinsTheme]
+        Check-insCheck_in_groups: [Check-insCheckInGroup]
+Check-insChecked_in_at_check_ins: [Check-insCheckIn]
+Check-insEvent: [Check-insEvent]
+Check-insLocation: [Check-insLocation]
+Check-insPrint_station: [Check-insStation]
+Check-insTheme: [Check-insTheme]
       }
     
 

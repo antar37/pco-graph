@@ -3,16 +3,88 @@
 
 const { buildSchema } = require("graphql");
 const fs = require("fs");
-const vertices = require("./allEntities.json");
+const vertices = require("./vertices.json");
+const axios = require("axios");
+
+const entityTypes = [
+  "calendar",
+  "check-ins",
+  "giving",
+  "groups",
+  "people",
+  "publishing",
+  "services",
+];
+
+interface VertexDetail {
+  name: string;
+  // Add other properties here based on the response data structure
+}
+
+async function fetchVerticesForEntity(entity: string): Promise<VertexDetail[]> {
+  try {
+    const baseURL = `https://api.planningcenteronline.com/${entity}/v2/documentation`;
+
+    // Step 1: Get the latest version
+    const versionResponse = await axios.get(baseURL);
+    const latestVersion: string =
+      versionResponse.data.data.relationships.versions.data[0].id;
+    console.log(`Latest Version for ${entity}: ${latestVersion}`);
+
+    // Step 2: Get all vertices for the latest version
+    const verticesURL = `${baseURL}/${latestVersion}`;
+    const verticesResponse = await axios.get(verticesURL);
+
+    // Extracting vertices
+    const vertices = verticesResponse.data.data.relationships.vertices.data;
+    const verticesArray: string[] = vertices.map((vertex: any) => vertex.id);
+    console.log(`Vertices for ${entity}:`, verticesArray);
+
+    // Step 3: Get details for each vertex
+    const vertexDetailsPromises = verticesArray.map(
+      async (vertexId: string) => {
+        const vertexDetailURL = `${verticesURL}/vertices/${vertexId}`;
+        const vertexDetailResponse = await axios.get(vertexDetailURL);
+        return { name: entity, ...vertexDetailResponse.data } as VertexDetail;
+      }
+    );
+
+    const vertexDetails = await Promise.all(vertexDetailsPromises);
+    console.log(`Vertex Details for ${entity}:`, vertexDetails);
+
+    return vertexDetails;
+  } catch (error) {
+    console.error(`Error fetching vertices for ${entity}:`, error);
+    return [];
+  }
+}
+
+async function fetchAllVertices() {
+  const allVertices = [];
+
+  for (const entity of entityTypes) {
+    const vertexDetails = await fetchVerticesForEntity(entity);
+    allVertices.push(vertexDetails);
+  }
+
+  console.log("All Vertices:", allVertices);
+  fs.writeFileSync(
+    "vertices.json",
+    JSON.stringify(allVertices.flat(), null, 2)
+  );
+  return allVertices;
+}
 
 const capitalize = function (string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1).replace(/-/g, "");
 };
 
 function getGraphQLType(value: string) {
   if (value === "string") {
     return "String";
-  } else if (value === "number") {
+  } else if (value === "float") {
+    return "Int";
+  } else if (value === "number" || value === "integer") {
     return "Int";
   } else if (value === "boolean") {
     return "Boolean";
@@ -188,69 +260,64 @@ const sanitizeTypes = (type: any) => {
 };
 
 const generateTypes = ({ name, data }: Resource) => {
-  const typeName = `${capitalize(name)}${data.attributes.name}`;
+  const typeName = `${capitalize(name)}${data.attributes.name}`.replace(
+    /-/g,
+    ""
+  );
   const attributes = data.relationships.attributes.data;
   const relationships = data.relationships.outbound_edges.data;
   const queryParams = data.relationships.can_query.data;
+
   const relationshipsString = relationships.length
     ? `
-    type ${typeName}Relationships {
-    ${relationships
-      .filter(({ attributes }) => attributes.name)
-      .map(
-        ({ relationships, attributes }) =>
-          `${capitalize(name)}${capitalize(attributes.name)}: [${capitalize(
-            name
-          )}${capitalize(relationships.head.data.attributes.name)}]
-          `
-      )
-      .join("")}
+      type ${typeName}Relationships {
+        ${relationships
+          .map(
+            ({ relationships, attributes }) =>
+              `${capitalize(name)}${capitalize(attributes.name)}: [${capitalize(
+                name
+              )}${capitalize(relationships.head.data.attributes.name)}]`
+          )
+          .join("\n")}
       }
     `
     : "";
 
   const whereString = queryParams.length
     ? `
-    input ${typeName}WhereAttributes {
-      ${queryParams
-        .map(
-          ({ attributes }) => `${attributes.name}: ${getGraphQLType(
-            attributes.type
-          )}
-          `
-        )
-        .join("")}
-    }`
+      input ${typeName}WhereAttributes {
+        ${queryParams
+          .map(
+            ({ attributes }) =>
+              `${attributes.name}: ${getGraphQLType(attributes.type)}`
+          )
+          .join("\n")}
+      }
+    `
     : "";
-  return `
 
+  return `
     enum ${typeName}OrderByEnum {
-      ${attributes
-        .map(
-          ({ attributes }) => `${attributes.name}
-      `
-        )
-        .join("")}
+      ${attributes.map(({ attributes }) => attributes.name).join("\n")}
     }
 
     input ${typeName}OrderInput {
-      """ this will append a (-) to the field name if desc """
       sort: sortEnum = asc
       field: ${typeName}OrderByEnum
     }
 
     ${whereString}
     ${relationshipsString}
+
     type ${typeName}Attributes {
       ${attributes
         .map(
-          ({ attributes }) =>
-            `
-      """ example: ${attributes.type_annotation.example} """
-      ${attributes.name}: ${getGraphQLType(attributes.type_annotation.name)}
-            `
+          ({ attributes }) => `
+        """ example: ${attributes.type_annotation.example} """
+        ${attributes.name}: ${getGraphQLType(attributes.type_annotation.name)}
+      `
         )
-        .join("")}
+        .join("\n")}
     }
 
     type ${typeName} {
@@ -258,26 +325,27 @@ const generateTypes = ({ name, data }: Resource) => {
       attributes: ${typeName}Attributes
       ${relationships.length ? `relationships: ${typeName}Relationships` : ""}
     }
-    `;
+  `;
 };
 
 const getEntityName = (entity: Resource) =>
-  `${capitalize(entity.name)}${entity.data.attributes.name}`;
+  `${capitalize(entity.name)}${entity.data.attributes.name}`.replace(/-/g, "");
 
-function generateGraphQLSchema(jsonApiSpec: { resources: Resource[] }) {
+const generateGraphQLSchema = async (jsonApiSpec: {
+  resources: Resource[];
+}) => {
+  await fetchAllVertices();
+
   const resources = jsonApiSpec.resources;
+
   const topLevelQueries = resources.filter((e) =>
-    e.data.relationships.inbound_edges.data.find(
+    e.data.relationships?.inbound_edges?.data?.find(
       ({ relationships }) => relationships.tail.data.id === "organization"
     )
   );
+  if (!topLevelQueries) return;
 
-  const types = resources
-    .map(
-      (entity) => `
-        ${generateTypes(entity)}`
-    )
-    .join("");
+  const types = resources.map((entity) => generateTypes(entity)).join("\n");
 
   const whereString = (entity: Resource) =>
     entity.data.relationships.can_query.data.length
@@ -291,28 +359,37 @@ function generateGraphQLSchema(jsonApiSpec: { resources: Resource[] }) {
           limit: Int,
           ${whereString(entity)}
           order: ${getEntityName(entity)}OrderInput
-          ): [${getEntityName(entity)}!]
-      `
+      ): [${getEntityName(entity)}!]
+    `
     )
-    .join("");
+    .join("\n");
 
   const schemaDefinition = `
-      ${types}
-      type Query {
-        ${queries}
-      }
+    ${types}
+    type Query {
+      ${queries}
+    }
 
-      enum sortEnum {
-        asc
-        desc
-      }
+    enum sortEnum {
+      asc
+      desc
+    }
+  `;
 
-    `;
+  // Print the schema definition for debugging
+  console.log("Generated GraphQL Schema:", schemaDefinition);
 
-  const schema = buildSchema(schemaDefinition);
-  const generatedResolvers = generateQueries(jsonApiSpec);
-  return { schema, resolvers: generatedResolvers, schemaDefinition };
-}
+  try {
+    const schema = buildSchema(schemaDefinition);
+    const generatedResolvers = generateQueries(jsonApiSpec);
+    return { schema, resolvers: generatedResolvers, schemaDefinition };
+  } catch (error) {
+    const errorLine = schemaDefinition.split("\n")[error.locations[0].line - 1];
+    fs.writeFileSync("schemaerror.graphql", schemaDefinition);
+    console.error("Error building schema:", errorLine);
+    throw error;
+  }
+};
 
 const getJSONfromUrl = async (
   url: RequestInfo | URL,
@@ -323,17 +400,20 @@ const getJSONfromUrl = async (
   return json.data;
 };
 
-const { schema, resolvers, schemaDefinition } = generateGraphQLSchema({
-  resources: vertices,
-});
+try {
+  const { schema, resolvers, schemaDefinition } = generateGraphQLSchema({
+    resources: vertices,
+  });
 
-fs.writeFileSync("src/app/graphql/schema.graphql", schemaDefinition);
+  fs.writeFileSync("src/app/graphql/schema.graphql", schemaDefinition);
 
-fs.writeFileSync(
-  "src/app/graphql/resolvers.ts",
-  'const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:any}}}):string[]|null=>{const data=item?.relationships?.[type]?.data;if(!data)return null;return data?.length?data?.map((f:{id:any})=>f.id):[data.id]};const getJSONfromUrl=async(url:RequestInfo|URL,options?:RequestInit):Promise<any>=>{const response=await fetch(url,options).then(res=>res.json()).catch(err=>{console.log(err)});if(response.errors)throw new Error(JSON.stringify({detail:response.errors[0].detail,url},null,4));return response};type RelatedData={included:{id:string}[]};const getRelatedData=(data:RelatedData,Ids:string[]=[]):{id:string}[]|null=>(Ids&&data.included.filter(({id})=>Ids?.includes(id)))||null;const getRelatedFieldNames=(info:{fieldNodes:{selectionSet:{selections:any[]}}[]},includesArray:string[]):string[]=>{const attributesArray=info?.fieldNodes[0].selectionSet?.selections?.find((e:any)=>e.name.value==="relationships");if(!attributesArray)return[];const selectedNodes=attributesArray.selectionSet?.selections?.filter((f:any)=>includesArray.includes(f.name.value));return selectedNodes.map((e:{name:{value:any}})=>e.name.value)};const zipRelatedData=(data:RelatedData,item:any,includesArray:(string|number)[]):{[key:string]:any}=>{const relatedData:{[key:string]:any}={};includesArray.map(type=>{const ids=getRelatedIds(type,item);relatedData[type]=getRelatedData(data,ids||[])||[]});return relatedData};const formatWhere=(where:{[s:string]:unknown}|ArrayLike<unknown>):string=>where?Object.entries(where).map(([key,value])=>`&where[${key}]=${value}`).join(""):"";const fetchData=async(endpoint:string,params:{limit?:number;where?:any;order?:any;id?:string},info:any,includesArray:string[],context:any):Promise<any>=>{const{limit=10,where,order,id}=params;const whereArg=where?formatWhere(where):"&where[status]=active";const orderArg=order?`&order=${order.sort==="desc"? "-":""}${order.field||""}`:"";const includes=getRelatedFieldNames(info,includesArray).join(",");const url=id?`${endpoint}/${id}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`:`${endpoint}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`;const response=await getJSONfromUrl(url,{method:"GET",headers:{Authorization:"Basic "+btoa(process.env.PCO_APP_ID+":"+process.env.PCO_SECRET),},});return response.data.map((e:{attributes:any;id:any})=>{const relatedData=zipRelatedData(response,e,includesArray);return{...e,attributes:{...e.attributes,id:e.id,},relationships:relatedData,};})||[];};' +
-    `
+  fs.writeFileSync(
+    "src/app//graphql/resolvers.ts",
+    'const getRelatedIds=(type:string|number,item:{relationships:{[x:string]:{data:any}}}):string[]|null=>{const data=item?.relationships?.[type]?.data;if(!data)return null;return data?.length?data?.map((f:{id:any})=>f.id):[data.id]};const getJSONfromUrl=async(url:RequestInfo|URL,options?:RequestInit):Promise<any>=>{const response=await fetch(url,options).then(res=>res.json()).catch(err=>{console.log(err)});if(response.errors)throw new Error(JSON.stringify({detail:response.errors[0].detail,url},null,4));return response};type RelatedData={included:{id:string}[]};const getRelatedData=(data:RelatedData,Ids:string[]=[]):{id:string}[]|null=>(Ids&&data.included.filter(({id})=>Ids?.includes(id)))||null;const getRelatedFieldNames=(info:{fieldNodes:{selectionSet:{selections:any[]}}[]},includesArray:string[]):string[]=>{const attributesArray=info?.fieldNodes[0].selectionSet?.selections?.find((e:any)=>e.name.value==="relationships");if(!attributesArray)return[];const selectedNodes=attributesArray.selectionSet?.selections?.filter((f:any)=>includesArray.includes(f.name.value));return selectedNodes.map((e:{name:{value:any}})=>e.name.value)};const zipRelatedData=(data:RelatedData,item:any,includesArray:(string|number)[]):{[key:string]:any}=>{const relatedData:{[key:string]:any}={};includesArray.map(type=>{const ids=getRelatedIds(type,item);relatedData[type]=getRelatedData(data,ids||[])||[]});return relatedData};const formatWhere=(where:{[s:string]:unknown}|ArrayLike<unknown>):string=>where?Object.entries(where).map(([key,value])=>`&where[${key}]=${value}`).join(""):"";const fetchData=async(endpoint:string,params:{limit?:number;where?:any;order?:any;id?:string},info:any,includesArray:string[],context:any):Promise<any>=>{const{limit=10,where,order,id}=params;const whereArg=where?formatWhere(where):"&where[status]=active";const orderArg=order?`&order=${order.sort==="desc"? "-":""}${order.field||""}`:"";const includes=getRelatedFieldNames(info,includesArray).join(",");const url=id?`${endpoint}/${id}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`:`${endpoint}?per_page=${limit}&include=${includes}${whereArg}${orderArg}`;const response=await getJSONfromUrl(url,{method:"GET",headers:{Authorization:"Basic "+btoa(process.env.PCO_APP_ID+":"+process.env.PCO_SECRET),},});return response.data.map((e:{attributes:any;id:any})=>{const relatedData=zipRelatedData(response,e,includesArray);return{...e,attributes:{...e.attributes,id:e.id,},relationships:relatedData,};})||[];};' +
+      `
 
   export const resolvers = { Query:  {${resolvers.parentQueryResolvers}}, ${resolvers.childQueryResolvers}  }`
-);
-
+  );
+} catch (error) {
+  console.error("Error generating schema:", error);
+}
