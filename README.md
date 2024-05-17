@@ -11,7 +11,7 @@ This project automates the creation of a GraphQL schema and resolvers based on t
 ## Prerequisites
 
 - Node.js
-- npm (or yarn)
+- pnpm (or yarn)
 
 ## Setup
 
@@ -25,7 +25,7 @@ This project automates the creation of a GraphQL schema and resolvers based on t
 2. Install dependencies:
 
    ```sh
-   npm install
+   pnpm install
    ```
 
 3. Set up environment variables for Planning Center API credentials:
